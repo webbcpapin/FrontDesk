@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Frontdesk Bea Cukai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1e40af; --primary-dark: #1e3a8a; --secondary: #f59e0b;
+            --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+            --info: #3b82f6; --light: #f3f4f6; --dark: #1f2937;
+            --white: #ffffff; --gray: #6b7280; --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; min-height: 100vh; }
+
+        .sidebar {
+            width: 260px; background: var(--dark); color: white; position: fixed; height: 100vh;
+            padding: 1.5rem; overflow-y: auto; z-index: 100;
+        }
+        .sidebar-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-logo { width: 45px; height: 45px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 8px; transition: all 0.3s; }
+        .sidebar-menu a:hover, .sidebar-menu a.active { background: rgba(255,255,255,0.1); color: white; }
+        .sidebar-menu i { width: 20px; text-align: center; }
+
+        .main-content { margin-left: 260px; padding: 2rem; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .header-bar h1 { font-size: 1.75rem; color: var(--dark); }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        .user-avatar { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 1rem; }
+        .stat-icon { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
+        .stat-icon.blue { background: var(--info); }
+        .stat-icon.orange { background: var(--warning); }
+        .stat-icon.green { background: var(--success); }
+        .stat-icon.red { background: var(--danger); }
+        .stat-content h3 { font-size: 1.75rem; color: var(--dark); margin: 0; }
+        .stat-content p { color: var(--gray); margin: 0; font-size: 0.9rem; }
+
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .chart-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow); }
+        .chart-card h3 { font-size: 1.1rem; color: var(--dark); margin-bottom: 1rem; }
+        .chart-container { position: relative; height: 300px; }
+
+        .table-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow); }
+        .table-card h3 { font-size: 1.1rem; color: var(--dark); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th { text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--border); color: var(--gray); font-weight: 600; font-size: 0.85rem; }
+        .data-table td { padding: 0.75rem; border-bottom: 1px solid var(--border); color: var(--dark); }
+        .data-table tr:hover { background: var(--light); }
+        .status-badge { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .status-menunggu { background: #fef3c7; color: #92400e; }
+        .status-diproses { background: #dbeafe; color: #1e40af; }
+        .status-selesai { background: #d1fae5; color: #065f46; }
+        .status-ditolak { background: #fee2e2; color: #991b1b; }
+
+        .filter-bar { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .filter-input { padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-family: 'Inter', sans-serif; }
+        .btn-filter { padding: 0.5rem 1.5rem; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; position: relative; height: auto; }
+            .main-content { margin-left: 0; }
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">BC</div>
+            <div>
+                <h3 style="margin: 0; font-size: 1rem;">Bea Cukai</h3>
+                <small style="opacity: 0.7;">Pangkalpinang</small>
+            </div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" class="active"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-inbox"></i> Semua Layanan</a></li>
+            <li><a href="#"><i class="fas fa-clock"></i> Menunggu</a></li>
+            <li><a href="#"><i class="fas fa-spinner"></i> Diproses</a></li>
+            <li><a href="#"><i class="fas fa-check-circle"></i> Selesai</a></li>
+            <li><a href="#"><i class="fas fa-exclamation-triangle"></i> Overdue</a></li>
+            <li><a href="#"><i class="fas fa-users"></i> Petugas</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> Pengaturan</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="header-bar">
+            <h1>Dashboard Frontdesk</h1>
+            <div class="user-info">
+                <span style="color: var(--gray);">Admin</span>
+                <div class="user-avatar">A</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+                <div class="stat-content">
+                    <h3 id="totalHariIni">0</h3>
+                    <p>Kunjungan Hari Ini</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
+                <div class="stat-content">
+                    <h3 id="totalMenunggu">0</h3>
+                    <p>Menunggu</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-content">
+                    <h3 id="totalSelesai">0</h3>
+                    <p>Selesai Hari Ini</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-content">
+                    <h3 id="totalOverdue">0</h3>
+                    <p>Overdue</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Statistik Layanan</h3>
+                <div class="chart-container">
+                    <canvas id="layananChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>Status Layanan</h3>
+                <div class="chart-container">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <h3>
+                Daftar Layanan Terbaru
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn-filter" onclick="exportToExcel()">Export Excel</button>
+                </div>
+            </h3>
+            <div class="filter-bar">
+                <input type="text" class="filter-input" placeholder="Cari nama/HP..." id="searchInput">
+                <select class="filter-input" id="filterLayanan">
+                    <option value="">Semua Layanan</option>
+                    <option value="Layanan Informasi">Informasi</option>
+                    <option value="PPID">PPID</option>
+                    <option value="Pengaduan Masyarakat">Pengaduan</option>
+                    <option value="Janji Temu">Janji Temu</option>
+                    <option value="Klinik Ekspor">Klinik Ekspor</option>
+                    <option value="Buku Tamu">Buku Tamu</option>
+                </select>
+                <select class="filter-input" id="filterStatus">
+                    <option value="">Semua Status</option>
+                    <option value="Menunggu">Menunggu</option>
+                    <option value="Diproses">Diproses</option>
+                    <option value="Selesai">Selesai</option>
+                    <option value="Ditolak">Ditolak</option>
+                </select>
+                <button class="btn-filter" onclick="applyFilter()">Filter</button>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="data-table" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>ID Tiket</th>
+                            <th>Timestamp</th>
+                            <th>Layanan</th>
+                            <th>Nama</th>
+                            <th>HP</th>
+                            <th>Status</th>
+                            <th>PIC</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data akan diisi via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbxzzX0CvUyrvs_NmjpmdavXDV0kDIyRez0TR0NqqXtwD8Us7k06BPcnx4QCQ1F-mA6PTg/exec';
+        let allData = [];
+
+        async function loadDashboard() {
+            try {
+                // Load stats
+                const statsRes = await fetch(GAS_URL + '?action=getDashboard');
+                const statsData = await statsRes.json();
+
+                if (statsData.success) {
+                    document.getElementById('totalHariIni').textContent = statsData.data.totalHariIni;
+                    document.getElementById('totalMenunggu').textContent = statsData.data.menunggu;
+                    document.getElementById('totalSelesai').textContent = statsData.data.selesai;
+                    document.getElementById('totalOverdue').textContent = statsData.data.overdue;
+
+                    // Update charts
+                    updateCharts(statsData.data);
+                }
+
+                // Load table data
+                // Note: In production, create a dedicated API endpoint for paginated data
+                // This is a simplified version
+
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        function updateCharts(data) {
+            // Layanan Chart
+            const layananCtx = document.getElementById('layananChart').getContext('2d');
+            new Chart(layananCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data.perLayanan),
+                    datasets: [{
+                        label: 'Jumlah',
+                        data: Object.values(data.perLayanan),
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#ef4444', '#10b981', '#f59e0b', '#06b6d4'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Status Chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Menunggu', 'Diproses', 'Selesai', 'Ditolak'],
+                    datasets: [{
+                        data: [data.menunggu, data.diproses, data.selesai, data.ditolak],
+                        backgroundColor: ['#f59e0b', '#3b82f6', '#10b981', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            data.forEach(row => {
+                const statusClass = 'status-' + row.status.toLowerCase().replace(' ', '-');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${row.id_tiket}</strong></td>
+                    <td>${new Date(row.timestamp).toLocaleString('id-ID')}</td>
+                    <td>${row.jenis_layanan}</td>
+                    <td>${row.nama}</td>
+                    <td>${row.hp}</td>
+                    <td><span class="status-badge ${statusClass}">${row.status}</span></td>
+                    <td>${row.pic || '-'}</td>
+                    <td>
+                        <button onclick="updateStatus('${row.id_tiket}', 'Diproses')" style="background: var(--info); color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; margin-right: 0.25rem;">Proses</button>
+                        <button onclick="updateStatus('${row.id_tiket}', 'Selesai')" style="background: var(--success); color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; margin-right: 0.25rem;">Selesai</button>
+                        <button onclick="updateStatus('${row.id_tiket}', 'Ditolak')" style="background: var(--danger); color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer;">Tolak</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function updateStatus(idTiket, status) {
+            try {
+                const formData = new FormData();
+                formData.append('action', 'updateStatus');
+                formData.append('id_tiket', idTiket);
+                formData.append('status', status);
+
+                const response = await fetch(GAS_URL, { method: 'POST', body: formData });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Status berhasil diupdate!');
+                    loadDashboard();
+                }
+            } catch (error) {
+                alert('Gagal update status: ' + error.message);
+            }
+        }
+
+        function applyFilter() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const layanan = document.getElementById('filterLayanan').value;
+            const status = document.getElementById('filterStatus').value;
+
+            const filtered = allData.filter(row => {
+                const matchSearch = !search || row.nama.toLowerCase().includes(search) || row.hp.includes(search);
+                const matchLayanan = !layanan || row.jenis_layanan == layanan;
+                const matchStatus = !status || row.status == status;
+                return matchSearch && matchLayanan && matchStatus;
+            });
+
+            renderTable(filtered);
+        }
+
+        function exportToExcel() {
+            // Implementasi export ke Excel
+            alert('Fitur export akan mengunduh data dalam format Excel');
+        }
+
+        // Load on start
+        loadDashboard();
+
+        // Auto refresh setiap 5 menit
+        setInterval(loadDashboard, 300000);
+    </script>
+</body>
+</html>

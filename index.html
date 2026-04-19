@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontdesk Bea Cukai Pangkalpinang</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e40af; --primary-dark: #1e3a8a; --secondary: #f59e0b;
+            --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+            --info: #3b82f6; --light: #f3f4f6; --dark: #1f2937;
+            --white: #ffffff; --gray: #6b7280; --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; overflow-x: hidden; }
+        .header { background: var(--white); padding: 1rem 2rem; box-shadow: var(--shadow); position: fixed; width: 100%; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+        .logo-section { display: flex; align-items: center; gap: 1rem; }
+        .logo { width: 60px; height: 60px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 700; }
+        .brand-text h1 { font-size: 1.25rem; color: var(--primary-dark); font-weight: 700; margin: 0; }
+        .brand-text p { font-size: 0.875rem; color: var(--gray); margin: 0; }
+        .header-actions { display: flex; gap: 1rem; }
+        .btn-header { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+        .btn-dashboard { background: var(--primary); color: white; }
+        .btn-dashboard:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-status { background: var(--secondary); color: white; }
+        .main-container { padding-top: 100px; min-height: 100vh; display: flex; flex-direction: column; }
+        .hero { text-align: center; padding: 3rem 2rem; color: white; }
+        .hero h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .hero p { font-size: 1.25rem; opacity: 0.9; }
+        .services-section { padding: 2rem; max-width: 1400px; margin: 0 auto; width: 100%; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .service-card { background: var(--white); border-radius: 20px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--shadow-lg); border: 3px solid transparent; position: relative; overflow: hidden; }
+        .service-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: var(--service-color); }
+        .service-card:hover { transform: translateY(-10px); border-color: var(--service-color); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+        .service-icon { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; color: white; background: var(--service-color); }
+        .service-card h3 { font-size: 1.5rem; color: var(--dark); margin-bottom: 0.5rem; font-weight: 700; }
+        .service-card p { color: var(--gray); font-size: 0.95rem; line-height: 1.5; }
+        .service-badge { position: absolute; top: 1rem; right: 1rem; background: var(--service-color); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .service-informasi { --service-color: #3b82f6; } .service-ppid { --service-color: #8b5cf6; }
+        .service-pengaduan { --service-color: #ef4444; } .service-janji { --service-color: #10b981; }
+        .service-klinik { --service-color: #f59e0b; } .service-buku { --service-color: #06b6d4; }
+        .service-skm { --service-color: #ec4899; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; padding: 2rem; overflow-y: auto; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 20px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlide 0.3s ease; }
+        @keyframes modalSlide { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { padding: 2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, var(--modal-color) 0%, var(--modal-color-dark) 100%); color: white; border-radius: 20px 20px 0 0; }
+        .modal-title { display: flex; align-items: center; gap: 1rem; }
+        .modal-title i { font-size: 2rem; } .modal-title h2 { font-size: 1.5rem; margin: 0; }
+        .modal-close { background: rgba(255,255,255,0.2); border: none; width: 40px; height: 40px; border-radius: 50%; color: white; cursor: pointer; font-size: 1.25rem; transition: all 0.3s; }
+        .modal-close:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+        .modal-body { padding: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark); font-size: 0.9rem; }
+        .form-label .required { color: var(--danger); }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 0.875rem 1rem; border: 2px solid var(--border); border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 1rem; transition: all 0.3s; background: white; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--modal-color); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        .form-textarea { resize: vertical; min-height: 120px; }
+        .input-group { position: relative; }
+        .input-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--gray); }
+        .input-icon + .form-input { padding-left: 3rem; }
+        .history-indicator { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; display: none; }
+        .history-indicator.active { display: block; }
+        .file-upload { border: 2px dashed var(--border); border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .file-upload:hover { border-color: var(--modal-color); background: rgba(59,130,246,0.05); }
+        .file-upload i { font-size: 2rem; color: var(--gray); margin-bottom: 0.5rem; }
+        .file-upload p { color: var(--gray); margin: 0; }
+        .btn-submit { width: 100%; padding: 1rem; background: linear-gradient(135deg, var(--modal-color) 0%, var(--modal-color-dark) 100%); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .success-icon { width: 100px; height: 100px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 3rem; color: white; animation: scaleIn 0.5s ease; }
+        @keyframes scaleIn { 0% { transform: scale(0); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .ticket-number { background: var(--light); padding: 1rem 2rem; border-radius: 10px; font-size: 1.5rem; font-weight: 800; color: var(--dark); margin: 1rem 0; font-family: monospace; letter-spacing: 2px; }
+        .qr-code { width: 150px; height: 150px; background: var(--light); margin: 1rem auto; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--gray); }
+        .status-section { background: var(--white); margin: 2rem; border-radius: 20px; padding: 2rem; box-shadow: var(--shadow-lg); }
+        .status-header { text-align: center; margin-bottom: 2rem; }
+        .status-header h3 { font-size: 1.5rem; color: var(--dark); }
+        .status-search { max-width: 600px; margin: 0 auto; display: flex; gap: 1rem; }
+        .status-result { margin-top: 2rem; padding: 1.5rem; border-radius: 10px; display: none; }
+        .status-result.active { display: block; }
+        .footer { background: var(--dark); color: white; padding: 2rem; text-align: center; margin-top: auto; }
+        .footer p { margin: 0; opacity: 0.8; }
+        @media (max-width: 768px) { .hero h2 { font-size: 1.75rem; } .services-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } .header { padding: 1rem; } .brand-text h1 { font-size: 1rem; } }
+        .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--dark); color: white; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: var(--shadow-lg); display: none; align-items: center; gap: 0.75rem; z-index: 3000; animation: slideIn 0.3s ease; }
+        .toast.active { display: flex; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast.success { background: var(--success); } .toast.error { background: var(--danger); } .toast.warning { background: var(--warning); }
+        .ticket-display { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); z-index: 2500; text-align: center; display: none; min-width: 400px; }
+        .ticket-display.active { display: block; animation: ticketPop 0.5s ease; }
+        @keyframes ticketPop { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+        .ticket-number-big { font-size: 4rem; font-weight: 800; color: var(--primary); margin: 1rem 0; font-family: monospace; }
+        .overlay-dark { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2400; }
+        .overlay-dark.active { display: block; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-section">
+            <div class="logo">BC</div>
+            <div class="brand-text">
+                <h1>BEA CUKAI PANGKALPINANG</h1>
+                <p>Sistem Layanan Frontdesk Terintegrasi</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn-header btn-status" onclick="openStatusCheck()"><i class="fas fa-search"></i> Cek Status</button>
+            <button class="btn-header btn-dashboard" onclick="openDashboard()"><i class="fas fa-chart-line"></i> Dashboard</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <section class="hero">
+            <h2>Selamat Datang di Layanan Bea Cukai</h2>
+            <p>Silakan pilih layanan yang Anda butuhkan</p>
+        </section>
+
+        <section class="services-section">
+            <div class="services-grid">
+                <div class="service-card service-informasi" onclick="openModal('informasi')">
+                    <span class="service-badge">Populer</span>
+                    <div class="service-icon"><i class="fas fa-info-circle"></i></div>
+                    <h3>Layanan Informasi</h3>
+                    <p>Konsultasi umum Bea Cukai, tanya jawab proses kepabeanan, dan informasi tarif</p>
+                </div>
+                <div class="service-card service-ppid" onclick="openModal('ppid')">
+                    <div class="service-icon"><i class="fas fa-folder-open"></i></div>
+                    <h3>PPID</h3>
+                    <p>Permohonan informasi publik sesuai Undang-Undang Keterbukaan Informasi</p>
+                </div>
+                <div class="service-card service-pengaduan" onclick="openModal('pengaduan')">
+                    <span class="service-badge">Prioritas</span>
+                    <div class="service-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h3>Pengaduan Masyarakat</h3>
+                    <p>Sampaikan keluhan, aspirasi, atau laporan penyimpangan</p>
+                </div>
+                <div class="service-card service-janji" onclick="openModal('janji')">
+                    <div class="service-icon"><i class="fas fa-calendar-check"></i></div>
+                    <h3>Janji Temu</h3>
+                    <p>Jadwalkan pertemuan dengan petugas Bea Cukai</p>
+                </div>
+                <div class="service-card service-klinik" onclick="openModal('klinik')">
+                    <span class="service-badge">UMKM</span>
+                    <div class="service-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <h3>Klinik Ekspor</h3>
+                    <p>Bimbingan ekspor untuk UMKM dan pemula</p>
+                </div>
+                <div class="service-card service-buku" onclick="openModal('buku')">
+                    <div class="service-icon"><i class="fas fa-book"></i></div>
+                    <h3>Buku Tamu</h3>
+                    <p>Registrasi kunjungan dan pertemuan umum</p>
+                </div>
+                <div class="service-card service-skm" onclick="openSKM()">
+                    <div class="service-icon"><i class="fas fa-star"></i></div>
+                    <h3>Survey Kepuasan</h3>
+                    <p>Berikan penilaian atas pelayanan kami (Survei Kepuasan Masyarakat)</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="status-section" id="statusSection" style="display: none;">
+            <div class="status-header">
+                <h3><i class="fas fa-search"></i> Cek Status Layanan</h3>
+                <p>Masukkan nomor tiket atau nomor HP Anda</p>
+            </div>
+            <div class="status-search">
+                <input type="text" class="form-input" id="statusInput" placeholder="Contoh: BC-20240419-001 atau 08123456789">
+                <button class="btn-header btn-dashboard" onclick="checkStatus()"><i class="fas fa-search"></i> Cek</button>
+            </div>
+            <div id="statusResult" class="status-result"></div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2024 Bea Cukai Pangkalpinang. Layanan Prima, Eksportir Hebat</p>
+        </footer>
+    </div>
+
+    <!-- Modal Informasi -->
+    <div class="modal-overlay" id="modal-informasi">
+        <div class="modal">
+            <div class="modal-header" style="--modal-color: #3b82f6; --modal-color-dark: #1d4ed8;">
+                <div class="modal-title">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <h2>Form Layanan Informasi</h2>
+                        <small style="opacity: 0.9;">Konsultasi Umum Bea Cukai</small>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal('informasi')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-informasi" onsubmit="submitForm(event, 'informasi')">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nomor HP <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-phone input-icon"></i>
+                                <input type="tel" class="form-input" name="hp" id="hp-informasi" required placeholder="08xxxxxxxxxx" onblur="checkHistory(this.value, 'informasi')">
+                                <span class="history-indicator" id="history-informasi"><i class="fas fa-history"></i> Data ditemukan</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-input" name="nama" id="nama-informasi" required placeholder="Nama lengkap Anda">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <div class="input-group">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" class="form-input" name="email" id="email-informasi" placeholder="email@domain.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Instansi/Perusahaan</label>
+                            <div class="input-group">
+                                <i class="fas fa-building input-icon"></i>
+                                <input type="text" class="form-input" name="instansi" id="instansi-informasi" placeholder="Nama instansi">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Alamat</label>
+                        <textarea class="form-textarea" name="alamat" id="alamat-informasi" placeholder="Alamat lengkap"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Rincian Informasi yang Dibutuhkan <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="detail" required placeholder="Jelaskan detail informasi yang Anda butuhkan..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Cara Memperoleh Informasi</label>
+                            <select class="form-select" name="cara_peroleh">
+                                <option value="Langsung">Langsung di Kantor</option>
+                                <option value="Email">Email</option>
+                                <option value="Telepon">Telepon</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cara Pengiriman</label>
+                            <select class="form-select" name="cara_kirim">
+                                <option value="Ambil Langsung">Ambil Langsung</option>
+                                <option value="Email">Email</option>
+                                <option value="Pos">Pos</option>
+                                <option value="Faksimile">Faksimile</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Upload Dokumen Pendukung (Opsional)</label>
+                        <div class="file-upload" onclick="document.getElementById('file-informasi').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Klik atau drag file ke sini</p>
+                            <small style="color: var(--gray);">Maksimal 5MB (PDF, JPG, PNG)</small>
+                            <input type="file" id="file-informasi" name="lampiran" style="display: none;" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit" id="btn-informasi">
+                        <i class="fas fa-paper-plane"></i> Kirim Permohonan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal PPID -->
+    <div class="modal-overlay" id="modal-ppid">
+        <div class="modal">
+            <div class="modal-header" style="--modal-color: #8b5cf6; --modal-color-dark: #7c3aed;">
+                <div class="modal-title">
+                    <i class="fas fa-folder-open"></i>
+                    <div>
+                        <h2>Form PPID</h2>
+                        <small style="opacity: 0.9;">Permohonan Informasi Publik</small>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal('ppid')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-ppid" onsubmit="submitForm(event, 'ppid')">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nomor HP <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-phone input-icon"></i>
+                                <input type="tel" class="form-input" name="hp" id="hp-ppid" required placeholder="08xxxxxxxxxx" onblur="checkHistory(this.value, 'ppid')">
+                                <span class="history-indicator" id="history-ppid"><i class="fas fa-history"></i> Data ditemukan</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-input" name="nama" id="nama-ppid" required placeholder="Nama lengkap">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">NIK <span class="required">*</span></label>
+                            <input type="text" class="form-input" name="nik" required placeholder="16 digit NIK" maxlength="16">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">NPWP</label>
+                            <input type="text" class="form-input" name="npwp" placeholder="NPWP (jika ada)">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email <span class="required">*</span></label>
+                            <input type="email" class="form-input" name="email" id="email-ppid" required placeholder="email@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Pekerjaan</label>
+                            <input type="text" class="form-input" name="pekerjaan" id="pekerjaan-ppid" placeholder="Pekerjaan">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Alamat Lengkap <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="alamat" id="alamat-ppid" required placeholder="Alamat lengkap sesuai KTP"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Rincian Informasi yang Diminta <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="detail" required placeholder="Jelaskan dengan jelas informasi apa yang Anda butuhkan..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tujuan Penggunaan Informasi <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="tujuan" required placeholder="Jelaskan tujuan Anda membutuhkan informasi tersebut..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Upload Identitas (KTP/SIM/Passport) <span class="required">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('file-ppid').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Upload KTP/SIM/Passport</p>
+                            <small style="color: var(--gray);">Format: PDF/JPG/PNG, Max 5MB</small>
+                            <input type="file" id="file-ppid" name="lampiran" style="display: none;" accept=".pdf,.jpg,.jpeg,.png" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit" id="btn-ppid" style="--modal-color: #8b5cf6; --modal-color-dark: #7c3aed;">
+                        <i class="fas fa-paper-plane"></i> Ajukan Permohonan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pengaduan -->
+    <div class="modal-overlay" id="modal-pengaduan">
+        <div class="modal">
+            <div class="modal-header" style="--modal-color: #ef4444; --modal-color-dark: #dc2626;">
+                <div class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <h2>Form Pengaduan</h2>
+                        <small style="opacity: 0.9;">Layanan Pengaduan Masyarakat</small>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal('pengaduan')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-pengaduan" onsubmit="submitForm(event, 'pengaduan')">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nomor HP <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-phone input-icon"></i>
+                                <input type="tel" class="form-input" name="hp" id="hp-pengaduan" required placeholder="08xxxxxxxxxx" onblur="checkHistory(this.value, 'pengaduan')">
+                                <span class="history-indicator" id="history-pengaduan"><i class="fas fa-history"></i> Data ditemukan</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-input" name="nama" id="nama-pengaduan" required placeholder="Nama lengkap">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" name="email" id="email-pengaduan" placeholder="email@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Pekerjaan</label>
+                            <input type="text" class="form-input" name="pekerjaan" id="pekerjaan-pengaduan" placeholder="Pekerjaan">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Alamat Lengkap</label>
+                        <textarea class="form-textarea" name="alamat" id="alamat-pengaduan" placeholder="Alamat lengkap"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Kategori Pengaduan <span class="required">*</span></label>
+                            <select class="form-select" name="kategori" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="Pelayanan">Pelayanan</option>
+                                <option value="Kepabeanan">Kepabeanan</option>
+                                <option value="Cukai">Cukai</option>
+                                <option value="Penindakan">Penindakan</option>
+                                <option value="Korupsi/Fraud">Korupsi/Fraud</option>
+                                <option value="Gratifikasi">Gratifikasi</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cara Penyampaian</label>
+                            <select class="form-select" name="cara_penyampaian">
+                                <option value="Langsung">Langsung</option>
+                                <option value="Telepon">Telepon</option>
+                                <option value="Email">Email</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Judul Pengaduan <span class="required">*</span></label>
+                        <input type="text" class="form-input" name="judul" required placeholder="Judul singkat pengaduan">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lokasi Kejadian</label>
+                        <input type="text" class="form-input" name="lokasi" placeholder="Tempat/lokasi kejadian (jika ada)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tanggal Kejadian</label>
+                        <input type="date" class="form-input" name="tanggal_kejadian">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Uraian Lengkap (5W1H) <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="uraian" required placeholder="Jelaskan: What (Apa), Who (Siapa), When (Kapan), Where (Dimana), Why (Mengapa), How (Bagaimana)..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Upload Bukti/Dokumen (Opsional)</label>
+                        <div class="file-upload" onclick="document.getElementById('file-pengaduan').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Upload bukti pendukung</p>
+                            <small style="color: var(--gray);">Foto, dokumen, atau bukti lainnya</small>
+                            <input type="file" id="file-pengaduan" name="lampiran" style="display: none;" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit" id="btn-pengaduan" style="--modal-color: #ef4444; --modal-color-dark: #dc2626;">
+                        <i class="fas fa-paper-plane"></i> Kirim Pengaduan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Janji Temu -->
+    <div class="modal-overlay" id="modal-janji">
+        <div class="modal">
+            <div class="modal-header" style="--modal-color: #10b981; --modal-color-dark: #059669;">
+                <div class="modal-title">
+                    <i class="fas fa-calendar-check"></i>
+                    <div>
+                        <h2>Form Janji Temu</h2>
+                        <small style="opacity: 0.9;">Jadwalkan Pertemuan</small>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal('janji')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-janji" onsubmit="submitForm(event, 'janji')">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nomor HP <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-phone input-icon"></i>
+                                <input type="tel" class="form-input" name="hp" id="hp-janji" required placeholder="08xxxxxxxxxx" onblur="checkHistory(this.value, 'janji')">
+                                <span class="history-indicator" id="history-janji"><i class="fas fa-history"></i> Data ditemukan</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-input" name="nama" id="nama-janji" required placeholder="Nama lengkap">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Instansi/Perusahaan <span class="required">*</span></label>
+                            <input type="text" class="form-input" name="instansi" id="instansi-janji" required placeholder="Nama instansi">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" name="email" id="email-janji" placeholder="email@domain.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ingin Bertemu Dengan <span class="required">*</span></label>
+                        <input type="text" class="form-input" name="bertemu_dengan" required placeholder="Nama petugas/jabatan yang ingin ditemui">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Keperluan/Topik Pembahasan <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="keperluan" required placeholder="Jelaskan keperluan atau topik yang akan dibahas..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Tanggal Janji <span class="required">*</span></label>
+                            <input type="date" class="form-input" name="tanggal" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Waktu <span class="required">*</span></label>
+                            <select class="form-select" name="waktu" required>
+                                <option value="">Pilih Waktu</option>
+                                <option value="08:00-09:00">08:00 - 09:00</option>
+                                <option value="09:00-10:00">09:00 - 10:00</option>
+                                <option value="10:00-11:00">10:00 - 11:00</option>
+                                <option value="11:00-12:00">11:00 - 12:00</option>
+                                <option value="13:00-14:00">13:00 - 14:00</option>
+                                <option value="14:00-15:00">14:00 - 15:00</option>
+                                <option value="15:00-16:00">15:00 - 16:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit" id="btn-janji" style="--modal-color: #10b981; --modal-color-dark: #059669;">
+                        <i class="fas fa-calendar-check"></i> Ajukan Janji Temu
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Klinik Ekspor -->
+    <div class="modal-overlay" id="modal-klinik">
+        <div class="modal">
+            <div class="modal-header" style="--modal-color: #f59e0b; --modal-color-dark: #d97706;">
+                <div class="modal-title">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <div>
+                        <h2>Form Klinik Ekspor</h2>
+                        <small style="opacity: 0.9;">Bimbingan Ekspor UMKM</small>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal('klinik')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-klinik" onsubmit="submitForm(event, 'klinik')">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nomor HP <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-phone input-icon"></i>
+                                <input type="tel" class="form-input" name="hp" id="hp-klinik" required placeholder="08xxxxxxxxxx" onblur="checkHistory(this.value, 'klinik')">
+                                <span class="history-indicator" id="history-klinik"><i class="fas fa-history"></i> Data ditemukan</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Pemilik/Direktur <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-input" name="nama" id="nama-klinik" required placeholder="Nama lengkap">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nama Usaha/Perusahaan <span class="required">*</span></label>
+                        <input type="text" class="form-input" name="nama_usaha" required placeholder="Nama usaha/perusahaan">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" name="email" id="email-klinik" placeholder="email@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Domisili Usaha <span class="required">*</span></label>
+                            <select class="form-select" name="domisili" required>
+                                <option value="">Pilih Domisili</option>
+                                <option value="Bangka">Bangka</option>
+                                <option value="Belitung">Belitung</option>
+                                <option value="Bangka Barat">Bangka Barat</option>
+                                <option value="Bangka Tengah">Bangka Tengah</option>
+                                <option value="Bangka Selatan">Bangka Selatan</option>
+                                <option value="Belitung Timur">Belitung Timur</option>
+                                <option value="Pangkalpinang">Pangkalpinang</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Alamat Lengkap Usaha <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="alamat" id="alamat-klinik" required placeholder="Alamat lengkap usaha"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Tahap UMKM <span class="required">*</span></label>
+                            <select class="form-select" name="tahap_umkm" required>
+                                <option value="">Pilih Tahap</option>
+                                <option value="Calon Eksportir">Calon Eksportir (Belum Ekspor)</option>
+                                <option value="Eksportir Pemula">Eksportir Pemula (1-3x Ekspor)</option>
+                                <option value="Eksportir Aktif">Eksportir Aktif (>3x Ekspor)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Jenis Produk <span class="required">*</span></label>
+                            <input type="text" class="form-input" name="jenis_produk" required placeholder="Jenis produk yang diekspor/direncanakan">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Keperluan/Bimbingan <span class="required">*</span></label>
+                        <select class="form-select" name="keperluan" required>
+                            <option value="">Pilih Keperluan</option>
+                            <option value="Orientasi Ekspor">Orientasi Ekspor</option>
+                            <option value="Dokumen Ekspor">Dokumen Ekspor (PEB, Invoice, Packing List)</option>
+                            <option value="HS Code">Klasifikasi HS Code</option>
+                            <option value="Fasilitas">Fasilitas Kepabeanan/Perpajakan</option>
+                            <option value="AEO">AEO/Mitra Utama</option>
+                            <option value="Izin">Izin Edar/SNI</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Deskripsi Kebutuhan</label>
+                        <textarea class="form-textarea" name="deskripsi" placeholder="Jelaskan detail kebutuhan bimbingan..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit" id="btn-klinik" style="--modal-color: #f59e0b; --modal-color-dark: #d97706;">
+                        <i class="fas fa-hand-holding-usd"></i> Daftar Klinik Ekspor
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Buku Tamu -->
+    <div class="modal-overlay" id="modal-buku">
+        <div class="modal">
+            <div class="modal-header" style="--modal-color: #06b6d4; --modal-color-dark: #0891b2;">
+                <div class="modal-title">
+                    <i class="fas fa-book"></i>
+                    <div>
+                        <h2>Buku Tamu</h2>
+                        <small style="opacity: 0.9;">Registrasi Kunjungan</small>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal('buku')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-buku" onsubmit="submitForm(event, 'buku')">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nomor HP <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-phone input-icon"></i>
+                                <input type="tel" class="form-input" name="hp" id="hp-buku" required placeholder="08xxxxxxxxxx" onblur="checkHistory(this.value, 'buku')">
+                                <span class="history-indicator" id="history-buku"><i class="fas fa-history"></i> Data ditemukan</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap <span class="required">*</span></label>
+                            <div class="input-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-input" name="nama" id="nama-buku" required placeholder="Nama lengkap">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Instansi/Perusahaan</label>
+                            <input type="text" class="form-input" name="instansi" id="instansi-buku" placeholder="Nama instansi (opsional)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" name="email" id="email-buku" placeholder="email@domain.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Alamat</label>
+                        <textarea class="form-textarea" name="alamat" id="alamat-buku" placeholder="Alamat lengkap"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Bertemu Dengan <span class="required">*</span></label>
+                        <input type="text" class="form-input" name="bertemu_dengan" required placeholder="Nama/jabatan yang dituju">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Keperluan <span class="required">*</span></label>
+                        <textarea class="form-textarea" name="keperluan" required placeholder="Tujuan kunjungan..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Jumlah Rombongan</label>
+                            <input type="number" class="form-input" name="jumlah_rombongan" value="1" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tanggal Kunjungan <span class="required">*</span></label>
+                            <input type="date" class="form-input" name="tanggal" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit" id="btn-buku" style="--modal-color: #06b6d4; --modal-color-dark: #0891b2;">
+                        <i class="fas fa-book"></i> Catat Kunjungan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Display -->
+    <div class="overlay-dark" id="overlayTicket" onclick="closeTicket()"></div>
+    <div class="ticket-display" id="ticketDisplay">
+        <div class="success-icon"><i class="fas fa-check"></i></div>
+        <h3 style="color: var(--dark); margin-bottom: 0.5rem;">Pendaftaran Berhasil!</h3>
+        <p style="color: var(--gray); margin-bottom: 1rem;">Nomor Tiket Anda:</p>
+        <div class="ticket-number-big" id="ticketNumber">BC-20240419-001</div>
+        <div class="qr-code" id="qrCode">
+            <i class="fas fa-qrcode" style="font-size: 4rem; color: var(--gray);"></i>
+        </div>
+        <p style="color: var(--gray); font-size: 0.9rem; margin-top: 1rem;">
+            Screenshot atau foto nomor tiket ini<br>untuk mengecek status layanan
+        </p>
+        <button class="btn-submit" style="margin-top: 1.5rem; max-width: 200px;" onclick="closeTicket()">
+            <i class="fas fa-check"></i> Selesai
+        </button>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operasi berhasil</span>
+    </div>
+
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbxzzX0CvUyrvs_NmjpmdavXDV0kDIyRez0TR0NqqXtwD8Us7k06BPcnx4QCQ1F-mA6PTg/exec';
+
+        document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.min = new Date().toISOString().split('T')[0];
+        });
+
+        function openModal(type) {
+            document.getElementById('modal-' + type).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(type) {
+            document.getElementById('modal-' + type).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openSKM() {
+            window.open('https://forms.office.com/Pages/ResponsePage.aspx?id=ZrNv7SKD80aRXsTQN6RUqUHW-Z1OdaZHlGb3jAd0e1VUOVo1S1E3R0VVSTZJU0ZYSEk5TUdJMUJHMSQlQCNjPTEkJUAjdD1n', '_blank');
+        }
+
+        function openStatusCheck() {
+            var section = document.getElementById('statusSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+            if (section.style.display === 'block') section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openDashboard() {
+            showToast('Dashboard petugas - sedang mengalihkan...', 'warning');
+        }
+
+        async function checkHistory(hp, type) {
+            if (hp.length < 10) return;
+            try {
+                var response = await fetch(GAS_URL + '?action=checkHistory&hp=' + encodeURIComponent(hp));
+                var data = await response.json();
+                if (data.found) {
+                    document.getElementById('history-' + type).classList.add('active');
+                    if (data.data.nama) document.getElementById('nama-' + type).value = data.data.nama;
+                    if (data.data.email) document.getElementById('email-' + type).value = data.data.email;
+                    var instansiEl = document.getElementById('instansi-' + type);
+                    if (instansiEl && data.data.instansi) instansiEl.value = data.data.instansi;
+                    var alamatEl = document.getElementById('alamat-' + type);
+                    if (alamatEl && data.data.alamat) alamatEl.value = data.data.alamat;
+                    var pekerjaanEl = document.getElementById('pekerjaan-' + type);
+                    if (pekerjaanEl && data.data.pekerjaan) pekerjaanEl.value = data.data.pekerjaan;
+                    showToast('Data ditemukan! Form diisi otomatis.', 'success');
+                } else {
+                    document.getElementById('history-' + type).classList.remove('active');
+                }
+            } catch (error) {
+                console.error('Error checking history:', error);
+            }
+        }
+
+        async function submitForm(event, type) {
+            event.preventDefault();
+            var btn = document.getElementById('btn-' + type);
+            var originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div> Mengirim...';
+
+            var form = event.target;
+            var formData = new FormData(form);
+            formData.append('layanan', type);
+            formData.append('timestamp', new Date().toISOString());
+            var ticketNumber = generateTicketNumber();
+            formData.append('id_tiket', ticketNumber);
+
+            try {
+                var response = await fetch(GAS_URL, { method: 'POST', body: formData });
+                var result = await response.json();
+                if (result.success) {
+                    showTicket(ticketNumber);
+                    form.reset();
+                    closeModal(type);
+                    showToast('Data berhasil dikirim!', 'success');
+                } else {
+                    throw new Error(result.message || 'Gagal mengirim data');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Gagal mengirim: ' + error.message, 'error');
+                saveToLocal(formData, ticketNumber);
+                showTicket(ticketNumber);
+                form.reset();
+                closeModal(type);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }
+
+        function generateTicketNumber() {
+            var date = new Date();
+            var dateStr = date.toISOString().slice(0,10).replace(/-/g, '');
+            var random = Math.floor(Math.random() * 999).toString().padStart(3, '0');
+            return 'BC-' + dateStr + '-' + random;
+        }
+
+        function showTicket(number) {
+            document.getElementById('ticketNumber').textContent = number;
+            document.getElementById('overlayTicket').classList.add('active');
+            document.getElementById('ticketDisplay').classList.add('active');
+        }
+
+        function closeTicket() {
+            document.getElementById('overlayTicket').classList.remove('active');
+            document.getElementById('ticketDisplay').classList.remove('active');
+        }
+
+        function saveToLocal(formData, ticketNumber) {
+            var data = Object.fromEntries(formData.entries());
+            var pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+            pending.push(Object.assign({}, data, { ticketNumber: ticketNumber, savedAt: new Date().toISOString() }));
+            localStorage.setItem('pendingSubmissions', JSON.stringify(pending));
+        }
+
+        async function checkStatus() {
+            var input = document.getElementById('statusInput').value.trim();
+            if (!input) {
+                showToast('Masukkan nomor tiket atau HP', 'warning');
+                return;
+            }
+            var resultDiv = document.getElementById('statusResult');
+            resultDiv.innerHTML = '<p style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Mencari data...</p>';
+            resultDiv.classList.add('active');
+
+            try {
+                var response = await fetch(GAS_URL + '?action=checkStatus&query=' + encodeURIComponent(input));
+                var data = await response.json();
+
+                if (data.found) {
+                    var statusColors = {
+                        'Menunggu': '#f59e0b',
+                        'Diproses': '#3b82f6',
+                        'Selesai': '#10b981',
+                        'Ditolak': '#ef4444'
+                    };
+                    var color = statusColors[data.data.status] || '#6b7280';
+                    resultDiv.innerHTML = 
+                        '<div style="padding: 1.5rem; border-radius: 10px; background: ' + color + '15; border-left: 4px solid ' + color + ';">' +
+                            '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">' +
+                                '<h4 style="margin: 0; color: var(--dark);">Tiket: ' + data.data.id_tiket + '</h4>' +
+                                '<span style="background: ' + color + '; color: white; padding: 0.25rem 1rem; border-radius: 20px; font-weight: 600;">' + data.data.status + '</span>' +
+                            '</div>' +
+                            '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">' +
+                                '<div><small style="color: var(--gray);">Nama</small><p style="margin: 0; font-weight: 600;">' + data.data.nama + '</p></div>' +
+                                '<div><small style="color: var(--gray);">Layanan</small><p style="margin: 0; font-weight: 600;">' + data.data.jenis_layanan + '</p></div>' +
+                                '<div><small style="color: var(--gray);">Tanggal</small><p style="margin: 0; font-weight: 600;">' + new Date(data.data.timestamp).toLocaleDateString('id-ID') + '</p></div>' +
+                                '<div><small style="color: var(--gray);">PIC</small><p style="margin: 0; font-weight: 600;">' + (data.data.pic || '-') + '</p></div>' +
+                            '</div>' +
+                            (data.data.keterangan ? '<p style="margin: 0; color: var(--gray);"><strong>Keterangan:</strong> ' + data.data.keterangan + '</p>' : '') +
+                        '</div>';
+                } else {
+                    resultDiv.innerHTML = 
+                        '<div style="text-align: center; padding: 2rem; color: var(--gray);">' +
+                            '<i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem;"></i>' +
+                            '<p>Data tidak ditemukan. Periksa kembali nomor tiket atau HP Anda.</p>' +
+                        '</div>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 
+                    '<div style="text-align: center; padding: 2rem; color: var(--danger);">' +
+                        '<i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>' +
+                        '<p>Gagal memuat data. Silakan coba lagi.</p>' +
+                    '</div>';
+            }
+        }
+
+        function showToast(message, type) {
+            var toast = document.getElementById('toast');
+            var toastMessage = document.getElementById('toastMessage');
+            toast.className = 'toast ' + type + ' active';
+            toastMessage.textContent = message;
+            setTimeout(function() {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(function(modal) {
+                    modal.classList.remove('active');
+                });
+                document.body.style.overflow = 'auto';
+                closeTicket();
+            }
+        });
+
+        document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+
+        document.querySelectorAll('input[type="file"]').forEach(function(input) {
+            input.addEventListener('change', function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    var uploadDiv = e.target.closest('.file-upload');
+                    uploadDiv.innerHTML = 
+                        '<i class="fas fa-file-alt" style="color: var(--success); font-size: 2rem;"></i>' +
+                        '<p style="color: var(--dark); font-weight: 600;">' + file.name + '</p>' +
+                        '<small style="color: var(--gray);">' + (file.size / 1024 / 1024).toFixed(2) + ' MB</small>';
+                }
+            });
+        });
+
+        async function syncPending() {
+            var pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+            if (pending.length === 0) return;
+
+            for (var i = 0; i < pending.length; i++) {
+                try {
+                    var item = pending[i];
+                    var formData = new FormData();
+                    Object.keys(item).forEach(function(key) {
+                        if (key !== 'savedAt') formData.append(key, item[key]);
+                    });
+                    var response = await fetch(GAS_URL, { method: 'POST', body: formData });
+                    if (response.ok) {
+                        pending.splice(i, 1);
+                        i--;
+                    }
+                } catch (error) {
+                    console.error('Sync failed for item:', error);
+                }
+            }
+            localStorage.setItem('pendingSubmissions', JSON.stringify(pending));
+        }
+
+        window.addEventListener('load', syncPending);
+        window.addEventListener('online', syncPending);
+    </script>
+</body>
+</html>
