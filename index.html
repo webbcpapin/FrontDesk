@@ -49,7 +49,8 @@
         .hero h2 { font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:700; margin-bottom:0.5rem; background:linear-gradient(135deg, var(--white) 0%, var(--gold) 50%, var(--white) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
         .hero p { font-size:1.1rem; color:rgba(255,255,255,0.7); max-width:600px; margin:0 auto; }
         .hero-stats { display:flex; justify-content:center; gap:2rem; margin-top:2rem; flex-wrap:wrap; }
-        .hero-stat { background:var(--glass); backdrop-filter:blur(10px); border:1px solid var(--glass-border); border-radius:16px; padding:1rem 1.5rem; text-align:center; min-width:140px; }
+        .hero-stat { background:var(--glass); backdrop-filter:blur(10px); border:1px solid var(--glass-border); border-radius:16px; padding:1rem 1.5rem; text-align:center; min-width:140px; cursor:pointer; transition:all 0.3s; }
+        .hero-stat:hover { transform:translateY(-3px); border-color:var(--gold); box-shadow:0 10px 25px rgba(0,0,0,0.25); }
         .hero-stat .number { font-size:1.8rem; font-weight:800; color:var(--gold); }
         .hero-stat .label { font-size:0.75rem; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:1px; }
         .services-section { padding:2rem; max-width:1400px; margin:0 auto; }
@@ -275,10 +276,10 @@
             <h2>Selamat Datang di Layanan Bea Cukai</h2>
             <p>Silakan pilih layanan yang Anda butuhkan. Layanan kami gratis, tanpa dipungut biaya.</p>
             <div class="hero-stats">
-                <div class="hero-stat"><div class="number" id="statTotalLayanan">0</div><div class="label">Total Layanan</div></div>
-                <div class="hero-stat"><div class="number" id="statSKM">90.5</div><div class="label">IKM SKM T1 2026</div></div>
-                <div class="hero-stat"><div class="number" id="statMedia">77</div><div class="label">Konten Media Sosial</div></div>
-                <div class="hero-stat"><div class="number" id="statTamu">0</div><div class="label">Tamu Hari Ini</div></div>
+                <div class="hero-stat" onclick="openDashboardSection('overview')" title="Lihat ringkasan dashboard"><div class="number" id="statTotalLayanan">0</div><div class="label">Total Layanan</div></div>
+                <div class="hero-stat" onclick="openDashboardSection('skm')" title="Lihat detail SKM"><div class="number" id="statSKM">90.5</div><div class="label">IKM SKM T1 2026</div></div>
+                <div class="hero-stat" onclick="openDashboardSection('media')" title="Lihat detail media sosial"><div class="number" id="statMedia">77</div><div class="label">Konten Media Sosial</div></div>
+                <div class="hero-stat" onclick="openDashboardSection('buku-tamu')" title="Lihat daftar tamu hari ini"><div class="number" id="statTamu">0</div><div class="label">Tamu Hari Ini</div></div>
             </div>
         </section>
         <section class="services-section">
@@ -1246,7 +1247,7 @@
     // ============================================
     // CONFIGURATION - GANTI DENGAN URL WEBAPP ANDA
     // ============================================
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxGFT4Soh5cHFBgv6v_BH6sBHpcukMU0dW5a98L96qBHO8UWQX5ixZc9jsAL2qegNUqMg/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbx5tUXDD0Jy83zliEND6l060fJo7KvHcg5RHuub5cvyKciWA-vkah2-u37bHoK8erffYw/exec';
     const SKM_URL = 'https://forms.office.com/Pages/ResponsePage.aspx?id=ZrNv7SKD80aRXsTQN6RUqUHW-Z1OdaZHlGb3jAd0e1VUOVo1S1E3R0VVSTZJU0ZYSEk5TUdJMUJHMSQlQCNjPTEkJUAjdD1n';
     const ADMIN_PIN = 'bcadmin2026';
     let isAdminLoggedIn = false;
@@ -1261,10 +1262,186 @@
     let dashboardSKMCache = [];
     let dashboardMediaCache = [];
     let skmOverviewChartInst = null;
+    let mediaOverviewChartInst = null;
     let skmDetailChartInst = null;
     let skmPieChartInst = null;
     let mediaSosialChartInst = null;
     let trenMediaChartInst = null;
+
+    function jsonpRequest(url) {
+        return new Promise(function(resolve, reject) {
+            const callbackName = 'gasCallback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+            const separator = url.includes('?') ? '&' : '?';
+            const script = document.createElement('script');
+            const timeout = setTimeout(function() {
+                cleanup();
+                reject(new Error('Timeout koneksi GAS'));
+            }, 15000);
+
+            function cleanup() {
+                clearTimeout(timeout);
+                if (script.parentNode) script.parentNode.removeChild(script);
+                delete window[callbackName];
+            }
+
+            window[callbackName] = function(data) {
+                cleanup();
+                resolve({
+                    ok: true,
+                    json: function() { return Promise.resolve(data); }
+                });
+            };
+
+            script.onerror = function() {
+                cleanup();
+                reject(new Error('Gagal memuat data GAS'));
+            };
+            script.src = url + separator + 'callback=' + encodeURIComponent(callbackName);
+            document.head.appendChild(script);
+        });
+    }
+
+    async function apiFetch(url, options) {
+        const requestOptions = options || {};
+        try {
+            return await window.fetch(url, requestOptions);
+        } catch (error) {
+            if (!url.startsWith(GAS_URL)) throw error;
+
+            const method = (requestOptions.method || 'GET').toUpperCase();
+            if (method === 'GET') {
+                return jsonpRequest(url);
+            }
+
+            const fallbackParams = new URLSearchParams();
+            const queryString = url.split('?')[1] || '';
+            new URLSearchParams(queryString).forEach(function(value, key) {
+                fallbackParams.set(key, value);
+            });
+            const bodyText = requestOptions.body ? String(requestOptions.body) : '';
+            const contentType = String((requestOptions.headers && requestOptions.headers['Content-Type']) || '').toLowerCase();
+            if (contentType.includes('application/json')) {
+                try {
+                    const parsedBody = JSON.parse(bodyText);
+                    Object.keys(parsedBody).forEach(function(key) {
+                        fallbackParams.set(key, parsedBody[key]);
+                    });
+                } catch (e) {}
+            } else if (bodyText) {
+                new URLSearchParams(bodyText).forEach(function(value, key) {
+                    fallbackParams.set(key, value);
+                });
+            }
+
+            await window.fetch(url, {
+                method: method,
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: fallbackParams.toString()
+            });
+
+            return {
+                ok: true,
+                json: function() {
+                    return Promise.resolve({
+                        success: true,
+                        message: 'Permintaan dikirim ke GAS dengan mode kompatibilitas'
+                    });
+                }
+            };
+        }
+    }
+
+    function normalizeKey(value) {
+        const raw = String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const aliases = {
+            idtiket: 'id_tiket',
+            ticketnumber: 'id_tiket',
+            timestamp: 'timestamp',
+            nama: 'nama',
+            nohp: 'hp',
+            nomorhp: 'hp',
+            hp: 'hp',
+            email: 'email',
+            instansi: 'instansi',
+            alamat: 'alamat',
+            bertemudengan: 'bertemu_dengan',
+            bertemudenga: 'bertemu_dengan',
+            keperluan: 'keperluan',
+            jumlahrombongan: 'jumlah_rombongan',
+            jumlahrombo: 'jumlah_rombongan',
+            tanggalkunjungan: 'tanggal',
+            tanggalkunjun: 'tanggal',
+            tanggal: 'tanggal',
+            status: 'status',
+            waktupulang: 'waktu_pulang',
+            kategori: 'kategori',
+            detail: 'detail',
+            caraperoleh: 'cara_peroleh',
+            carakirim: 'cara_kirim',
+            lampiran: 'lampiran',
+            pekerjaan: 'pekerjaan',
+            carapenyampaian: 'cara_penyampaian',
+            judul: 'judul',
+            lokasi: 'lokasi',
+            tanggalkejadian: 'tanggal_kejadian',
+            uraian: 'uraian',
+            namausaha: 'nama_usaha',
+            domisili: 'domisili',
+            tahapumkm: 'tahap_umkm',
+            jenisproduk: 'jenis_produk',
+            deskripsi: 'deskripsi',
+            nik: 'nik',
+            npwp: 'npwp',
+            tujuan: 'tujuan',
+            waktu: 'waktu',
+            agenda: 'agenda',
+            tempat: 'tempat',
+            pic: 'pic',
+            unsur: 'unsur',
+            nilai: 'nilai',
+            bulan: 'bulan',
+            total: 'total',
+            feed: 'feed',
+            reels: 'reels',
+            jenis: 'jenis',
+            keterangan: 'keterangan'
+        };
+        return aliases[raw] || String(value || '').trim().replace(/\s+/g, '_').toLowerCase();
+    }
+
+    function normalizeRow(row) {
+        const normalized = {};
+        Object.keys(row || {}).forEach(function(key) {
+            normalized[key] = row[key];
+            normalized[normalizeKey(key)] = row[key];
+        });
+        if (!normalized.id_tiket && normalized.ticketNumber) normalized.id_tiket = normalized.ticketNumber;
+        if (!normalized.ticketNumber && normalized.id_tiket) normalized.ticketNumber = normalized.id_tiket;
+        return normalized;
+    }
+
+    function normalizeRows(rows) {
+        return (rows || []).map(normalizeRow);
+    }
+
+    function rowKey(row, prefix, index) {
+        return row.id_tiket || row.ticketNumber || row.hp || (prefix + '_' + index);
+    }
+
+    function getDateKey(value) {
+        if (!value) return '';
+        if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+        const date = new Date(value);
+        if (!isNaN(date.getTime())) {
+            return date.toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+        }
+        return String(value).split('T')[0];
+    }
+
+    function todayKey() {
+        return getDateKey(new Date());
+    }
 
     // ============================================
     // INITIALIZATION
@@ -1275,7 +1452,7 @@
         }, 2000);
         createParticles();
         // Set default dates
-        const today = new Date().toISOString().split('T')[0];
+        const today = todayKey();
         document.querySelectorAll('input[type="date"]').forEach(function(input) {
             if (!input.id || !input.id.includes('filter')) {
                 input.min = today;
@@ -1289,6 +1466,9 @@
         renderDetailInformasiTable();
         loadDashboardData();
         setInterval(loadDashboardData, 30000);
+        // Sinkronisasi data lokal ke server setiap 60 detik
+        syncLocalData();
+        setInterval(syncLocalData, 60000);
     });
 
     function createParticles() {
@@ -1382,14 +1562,41 @@
     async function loadAdminData(sheetName) {
         showToast('Memuat data ' + sheetName + '...', 'warning');
         try {
-            const response = await fetch(GAS_URL + '?action=getData&sheet=' + sheetName);
+            const response = await apiFetch(GAS_URL + '?action=getData&sheet=' + sheetName);
             const data = await response.json();
             if (data.success) {
-                adminDataCache[sheetName] = data.data || [];
+                const serverData = normalizeRows(data.data || []);
+                // Gabungkan dengan data lokal
+                const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+                const layananMap = {
+                    'BukuTamu': 'buku',
+                    'LayananInformasi': 'informasi',
+                    'Pengaduan': 'pengaduan',
+                    'KlinikEkspor': 'klinik',
+                    'JanjiTemu': 'janji',
+                    'PPID': 'ppid',
+                    'Agenda': 'agenda',
+                    'SKM': 'skm',
+                    'MediaSosial': 'mediasosial'
+                };
+                const localData = normalizeRows(pending.filter(function(item) {
+                    return item.layanan === layananMap[sheetName];
+                }));
+
+                // Merge: prioritaskan data lokal jika tiket sama
+                const mergedMap = {};
+                serverData.forEach(function(row, index) {
+                    mergedMap[rowKey(row, 'server', index)] = row;
+                });
+                localData.forEach(function(row, index) {
+                    mergedMap[rowKey(row, 'local', index)] = row;
+                });
+                adminDataCache[sheetName] = Object.values(mergedMap);
                 adminDataCache[sheetName].forEach(function(row, idx) { row._rowIndex = idx; });
+
                 renderAdminTable(sheetName, adminDataCache[sheetName]);
                 updateAdminStats(sheetName, adminDataCache[sheetName]);
-                showToast('Data ' + sheetName + ' berhasil dimuat (' + data.data.length + ' baris)', 'success');
+                showToast('Data ' + sheetName + ' berhasil dimuat (' + adminDataCache[sheetName].length + ' baris)', 'success');
             } else {
                 showToast('Gagal memuat data: ' + (data.message || 'Unknown error'), 'error');
                 // Fallback to local
@@ -1404,7 +1611,7 @@
 
     function loadLocalAdminData(sheetName) {
         const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
-        const filtered = pending.filter(item => item.layanan === sheetName.toLowerCase().replace('layanan', '').replace('ekspor', ''));
+        const filtered = normalizeRows(pending.filter(item => item.layanan === sheetName.toLowerCase().replace('layanan', '').replace('ekspor', '')));
         adminDataCache[sheetName] = filtered;
         renderAdminTable(sheetName, filtered);
         updateAdminStats(sheetName, filtered);
@@ -1581,9 +1788,9 @@
     }
 
     function updateAdminStats(sheetName, data) {
-        const today = new Date().toISOString().split('T')[0];
+        const today = todayKey();
         const todayData = data.filter(function(row) {
-            const rowDate = (row.tanggal || row.timestamp || '').split('T')[0];
+            const rowDate = getDateKey(row.tanggal || row.timestamp);
             return rowDate === today;
         });
 
@@ -1633,7 +1840,7 @@
         if (stats.mendatang) {
             const el = document.getElementById(stats.mendatang);
             if (el) el.textContent = data.filter(function(r) {
-                return (r.tanggal || '').split('T')[0] > today;
+                return getDateKey(r.tanggal) > today;
             }).length;
         }
         if (stats.rata) {
@@ -1658,7 +1865,7 @@
         const newStatus = currentStatus === 'Hadir' ? 'Pulang' : 'Hadir';
 
         try {
-            const response = await fetch(GAS_URL + '?action=updateStatus&sheet=' + sheetName + '&tiket=' + encodeURIComponent(id_tiket) + '&status=' + newStatus);
+            const response = await apiFetch(GAS_URL + '?action=updateStatus&sheet=' + sheetName + '&tiket=' + encodeURIComponent(id_tiket) + '&status=' + newStatus);
             const result = await response.json();
             if (result.success) {
                 row.status = newStatus;
@@ -1684,7 +1891,7 @@
         if (!row) return;
 
         try {
-            const response = await fetch(GAS_URL + '?action=updateStatus&sheet=' + sheetName + '&tiket=' + encodeURIComponent(id_tiket) + '&status=' + newStatus);
+            const response = await apiFetch(GAS_URL + '?action=updateStatus&sheet=' + sheetName + '&tiket=' + encodeURIComponent(id_tiket) + '&status=' + newStatus);
             const result = await response.json();
             if (result.success) {
                 row.status = newStatus;
@@ -1737,7 +1944,7 @@
         if (!row) { closeEditModal(); return; }
 
         try {
-            const response = await fetch(GAS_URL + '?action=editRow&sheet=' + editingSheet + '&tiket=' + encodeURIComponent(editingRow), {
+            const response = await apiFetch(GAS_URL + '?action=editRow&sheet=' + editingSheet + '&tiket=' + encodeURIComponent(editingRow), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updates)
@@ -1771,7 +1978,7 @@
     // ============================================
     function openAddAgendaModal() {
         document.getElementById('addAgendaModalOverlay').classList.add('active');
-        document.getElementById('addAgendaTanggal').value = new Date().toISOString().split('T')[0];
+        document.getElementById('addAgendaTanggal').value = todayKey();
         document.getElementById('addAgendaWaktu').value = '';
         document.getElementById('addAgendaNama').value = '';
         document.getElementById('addAgendaTempat').value = '';
@@ -1798,15 +2005,19 @@
             return;
         }
         try {
-            await fetch(GAS_URL, {
+            const response = await apiFetch(GAS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(params).toString(),
-                mode: 'no-cors'
+                body: new URLSearchParams(params).toString()
             });
-            showToast('Agenda berhasil ditambahkan', 'success');
-            closeAddAgendaModal();
-            loadAdminData('Agenda');
+            const result = await response.json();
+            if (result.success) {
+                showToast('Agenda berhasil ditambahkan', 'success');
+                closeAddAgendaModal();
+                loadAdminData('Agenda');
+            } else {
+                showToast('Gagal: ' + (result.message || ''), 'error');
+            }
         } catch (e) {
             showToast('Gagal menambah agenda', 'error');
         }
@@ -1835,15 +2046,19 @@
             return;
         }
         try {
-            await fetch(GAS_URL, {
+            const response = await apiFetch(GAS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(params).toString(),
-                mode: 'no-cors'
+                body: new URLSearchParams(params).toString()
             });
-            showToast('Data SKM berhasil ditambahkan', 'success');
-            closeAddSKMModal();
-            loadAdminData('SKM');
+            const result = await response.json();
+            if (result.success) {
+                showToast('Data SKM berhasil ditambahkan', 'success');
+                closeAddSKMModal();
+                loadAdminData('SKM');
+            } else {
+                showToast('Gagal: ' + (result.message || ''), 'error');
+            }
         } catch (e) {
             showToast('Gagal menambah data SKM', 'error');
         }
@@ -1878,15 +2093,19 @@
             return;
         }
         try {
-            await fetch(GAS_URL, {
+            const response = await apiFetch(GAS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(params).toString(),
-                mode: 'no-cors'
+                body: new URLSearchParams(params).toString()
             });
-            showToast('Data Media Sosial berhasil ditambahkan', 'success');
-            closeAddMediaModal();
-            loadAdminData('MediaSosial');
+            const result = await response.json();
+            if (result.success) {
+                showToast('Data Media Sosial berhasil ditambahkan', 'success');
+                closeAddMediaModal();
+                loadAdminData('MediaSosial');
+            } else {
+                showToast('Gagal: ' + (result.message || ''), 'error');
+            }
         } catch (e) {
             showToast('Gagal menambah data Media Sosial', 'error');
         }
@@ -1896,7 +2115,7 @@
         if (!confirm('Yakin ingin menghapus data ini?')) return;
 
         try {
-            const response = await fetch(GAS_URL + '?action=deleteRow&sheet=' + sheetName + '&tiket=' + encodeURIComponent(id_tiket));
+            const response = await apiFetch(GAS_URL + '?action=deleteRow&sheet=' + sheetName + '&tiket=' + encodeURIComponent(id_tiket));
             const result = await response.json();
             const data = adminDataCache[sheetName];
             const idx = data.findIndex(function(r) { return r.id_tiket === id_tiket; });
@@ -1945,7 +2164,7 @@
         const dateInput = document.getElementById(dateFilterId);
         if (dateInput && dateInput.value) {
             data = data.filter(function(row) {
-                const rowDate = (row.tanggal || row.timestamp || '').split('T')[0];
+                const rowDate = getDateKey(row.tanggal || row.timestamp);
                 return rowDate === dateInput.value;
             });
         }
@@ -1973,10 +2192,10 @@
 
         for (const sheet of sheets) {
             try {
-                const response = await fetch(GAS_URL + '?action=getData&sheet=' + sheet);
+                const response = await apiFetch(GAS_URL + '?action=getData&sheet=' + sheet);
                 const data = await response.json();
                 if (data.success && data.data) {
-                    data.data.forEach(function(row) {
+                    normalizeRows(data.data).forEach(function(row) {
                         row._sheet = sheet;
                         row._layanan = sheet.toLowerCase().replace('layanan', '').replace('ekspor', '');
                         allTickets.push(row);
@@ -1985,7 +2204,7 @@
             } catch (e) {
                 // Use local data
                 const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
-                pending.forEach(function(row) {
+                normalizeRows(pending).forEach(function(row) {
                     row._sheet = sheet;
                     row._layanan = sheet.toLowerCase().replace('layanan', '').replace('ekspor', '');
                     allTickets.push(row);
@@ -2021,7 +2240,7 @@
             const layananLabels = { 'buku': 'Buku Tamu', 'informasi': 'Layanan Info', 'pengaduan': 'Pengaduan', 'klinik': 'Klinik Ekspor', 'janji': 'Janji Temu', 'ppid': 'PPID' };
 
             html += '<tr><td style="padding:0.75rem;">' + (actualIndex + 1) + '</td>' +
-                '<td style="padding:0.75rem;">' + (row.tanggal || row.timestamp || '-').split('T')[0] + '</td>' +
+                '<td style="padding:0.75rem;">' + (getDateKey(row.tanggal || row.timestamp) || '-') + '</td>' +
                 '<td style="padding:0.75rem;font-family:monospace;color:var(--gold);">' + (row.id_tiket || '-') + '</td>' +
                 '<td style="padding:0.75rem;">' + (layananLabels[row._layanan] || row._sheet) + '</td>' +
                 '<td style="padding:0.75rem;">' + (row.nama || '-') + '</td>' +
@@ -2057,7 +2276,7 @@
         const sheetName = row._sheet;
 
         try {
-            const response = await fetch(GAS_URL + '?action=updateStatus&sheet=' + sheetName + '&tiket=' + encodeURIComponent(id_tiket) + '&status=' + newStatus);
+            const response = await apiFetch(GAS_URL + '?action=updateStatus&sheet=' + sheetName + '&tiket=' + encodeURIComponent(id_tiket) + '&status=' + newStatus);
             const result = await response.json();
             if (result.success) {
                 row.status = newStatus;
@@ -2132,7 +2351,7 @@
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = sheetName + '_' + new Date().toISOString().split('T')[0] + '.csv';
+        link.download = sheetName + '_' + todayKey() + '.csv';
         link.click();
         showToast('File CSV berhasil diunduh', 'success');
     }
@@ -2161,10 +2380,11 @@
         btn.innerHTML = '<div class="spinner"></div> Mencari...';
 
         try {
-            const response = await fetch(GAS_URL + '?action=cekTiket&tiket=' + encodeURIComponent(input));
+            const response = await apiFetch(GAS_URL + '?action=cekTiket&tiket=' + encodeURIComponent(input));
             const data = await response.json();
 
             if (data.found) {
+                data.data = normalizeRow(data.data || {});
                 renderTiketResult(data, resultDiv);
             } else {
                 const localData = searchLocalTicket(input);
@@ -2189,7 +2409,7 @@
 
     function searchLocalTicket(input) {
         const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
-        return pending.find(function(item) {
+        return normalizeRows(pending).find(function(item) {
             return (item.id_tiket && item.id_tiket === input) || (item.hp && item.hp === input);
         });
     }
@@ -2316,15 +2536,37 @@
                 plainData[key] = value;
             });
 
-            await fetch(GAS_URL, {
+            const response = await apiFetch(GAS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(plainData).toString(),
-                mode: 'no-cors'
+                body: new URLSearchParams(plainData).toString()
             });
 
-            showToast('Data berhasil dikirim! Tiket: ' + ticketNumber, 'success');
-            setTimeout(loadDashboardData, 2000);
+            const result = await response.json();
+
+            if (result.success) {
+                showToast('Data berhasil dikirim! Tiket: ' + ticketNumber, 'success');
+                // Langsung refresh dashboard dan admin
+                loadDashboardData();
+                // Jika admin panel terbuka, refresh data admin
+                if (document.getElementById('adminPanelOverlay').classList.contains('active')) {
+                    const sheetMap = {
+                        'buku': 'BukuTamu',
+                        'informasi': 'LayananInformasi',
+                        'pengaduan': 'Pengaduan',
+                        'klinik': 'KlinikEkspor',
+                        'janji': 'JanjiTemu',
+                        'ppid': 'PPID'
+                    };
+                    if (sheetMap[type]) {
+                        loadAdminData(sheetMap[type]);
+                    }
+                }
+                // Hapus dari localStorage jika berhasil disimpan ke server
+                removeFromLocal(ticketNumber);
+            } else {
+                showToast('Server: ' + (result.message || 'Gagal menyimpan'), 'warning');
+            }
         } catch (error) {
             console.log('Server error (disimpan lokal):', error);
             showToast('Tiket: ' + ticketNumber + ' (tersimpan lokal, akan sinkron ulang)', 'warning');
@@ -2380,6 +2622,58 @@
         localStorage.setItem('pendingSubmissions', JSON.stringify(pending));
     }
 
+    function removeFromLocal(ticketNumber) {
+        let pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+        pending = pending.filter(function(item) {
+            return item.id_tiket !== ticketNumber && item.ticketNumber !== ticketNumber;
+        });
+        localStorage.setItem('pendingSubmissions', JSON.stringify(pending));
+    }
+
+    // Sinkronisasi data lokal ke server secara otomatis
+    async function syncLocalData() {
+        const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+        if (pending.length === 0) return;
+
+        let successCount = 0;
+        let failedItems = [];
+
+        for (const item of pending) {
+            try {
+                const plainData = {};
+                Object.keys(item).forEach(function(key) {
+                    if (key !== 'ticketNumber' && key !== 'savedAt') {
+                        plainData[key] = item[key];
+                    }
+                });
+
+                const response = await apiFetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(plainData).toString()
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    successCount++;
+                } else {
+                    failedItems.push(item);
+                }
+            } catch (error) {
+                failedItems.push(item);
+            }
+        }
+
+        localStorage.setItem('pendingSubmissions', JSON.stringify(failedItems));
+        if (successCount > 0) {
+            showToast(successCount + ' data lokal berhasil disinkronkan ke server', 'success');
+            loadDashboardData();
+            if (document.getElementById('adminPanelOverlay').classList.contains('active')) {
+                loadAdminData(currentAdminSheet);
+            }
+        }
+    }
+
     async function checkHistory(hp, type) {
         if (hp.length < 10) return;
         const history = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
@@ -2427,7 +2721,7 @@
         document.getElementById('dashboardOverlay').classList.remove('active');
         document.body.style.overflow = 'auto';
     }
-    function switchTab(tabName) {
+    function activateDashboardTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(function(tab) {
             tab.style.display = 'none';
         });
@@ -2435,11 +2729,22 @@
         document.querySelectorAll('.nav-tab').forEach(function(nav) {
             nav.classList.remove('active');
         });
-        event.target.classList.add('active');
+        const activeNav = document.querySelector('.nav-tab[onclick="switchTab(\'' + tabName + '\')"]');
+        if (activeNav) activeNav.classList.add('active');
         setTimeout(initCharts, 100);
         if (tabName === 'agenda') loadAgendaData();
         if (tabName === 'skm') renderDashboardSKM();
         if (tabName === 'media') renderDashboardMedia();
+    }
+    function switchTab(tabName) {
+        activateDashboardTab(tabName);
+    }
+    function openDashboardSection(tabName) {
+        document.getElementById('dashboardOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        loadDashboardData().then(function() {
+            activateDashboardTab(tabName);
+        });
     }
 
     // ============================================
@@ -2447,12 +2752,28 @@
     // ============================================
     async function loadDashboardData() {
         try {
-            const response = await fetch(GAS_URL + '?action=getDashboard');
+            const response = await apiFetch(GAS_URL + '?action=getDashboard');
             const data = await response.json();
             if (data.success) {
-                dashboardBukuTamuCache = data.bukuTamu || [];
+                // Gabungkan data server dengan data lokal (pending)
+                const serverBukuTamu = normalizeRows(data.bukuTamu || []);
+                const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+                const localBukuTamu = normalizeRows(pending.filter(function(item) { return item.layanan === 'buku'; }));
+
+                // Merge: prioritaskan data lokal jika tiket sama (lebih baru)
+                const mergedMap = {};
+                serverBukuTamu.forEach(function(row, index) {
+                    mergedMap[rowKey(row, 'server_buku', index)] = row;
+                });
+                localBukuTamu.forEach(function(row, index) {
+                    mergedMap[rowKey(row, 'local_buku', index)] = row;
+                });
+                dashboardBukuTamuCache = Object.values(mergedMap);
+
                 updateDashboardStats(data);
                 renderTamuListFromServer(dashboardBukuTamuCache);
+            } else {
+                loadLocalDashboardData();
             }
         } catch (error) {
             console.log('Gagal load dari server, menggunakan data lokal');
@@ -2461,51 +2782,68 @@
         }
 
         try {
-            const skmRes = await fetch(GAS_URL + '?action=getData&sheet=SKM');
+            const skmRes = await apiFetch(GAS_URL + '?action=getData&sheet=SKM');
             const skmData = await skmRes.json();
-            if (skmData.success) dashboardSKMCache = skmData.data || [];
+            if (skmData.success) dashboardSKMCache = normalizeRows(skmData.data || []);
         } catch(e) { dashboardSKMCache = []; }
 
         try {
-            const mediaRes = await fetch(GAS_URL + '?action=getData&sheet=MediaSosial');
+            const mediaRes = await apiFetch(GAS_URL + '?action=getData&sheet=MediaSosial');
             const mediaData = await mediaRes.json();
-            if (mediaData.success) dashboardMediaCache = mediaData.data || [];
+            if (mediaData.success) dashboardMediaCache = normalizeRows(mediaData.data || []);
         } catch(e) { dashboardMediaCache = []; }
     }
 
     function updateDashboardStats(data) {
-        document.getElementById('statTamu').textContent = data.totalTamuHariIni || 0;
+        const today = todayKey();
+
+        // Hitung statistik tamu hari ini dari merged cache
+        const todayTamu = dashboardBukuTamuCache.filter(function(t) {
+            const tDate = getDateKey(t.tanggal || t.timestamp);
+            return tDate === today;
+        });
+        const totalTamuHariIni = todayTamu.length;
+        const hadir = todayTamu.filter(function(t) { return (t.status || 'Hadir') === 'Hadir'; }).length;
+        const pulang = todayTamu.filter(function(t) { return t.status === 'Pulang'; }).length;
+
+        document.getElementById('statTamu').textContent = totalTamuHariIni;
         document.getElementById('statTotalLayanan').textContent = data.totalLayanan || 0;
 
         const dashTotalTamu = document.getElementById('dashTotalTamu');
         const dashTamuHadir = document.getElementById('dashTamuHadir');
         const dashTamuPulang = document.getElementById('dashTamuPulang');
+        const dashTotalBulan = document.getElementById('dashTotalBulan');
 
-        if (dashTotalTamu) dashTotalTamu.textContent = data.totalTamuHariIni || 0;
-
-        const bukuTamu = data.bukuTamu || [];
-        const hadir = bukuTamu.filter(function(t) { return (t.status || 'Hadir') === 'Hadir'; }).length;
-        const pulang = bukuTamu.filter(function(t) { return t.status === 'Pulang'; }).length;
-
+        if (dashTotalTamu) dashTotalTamu.textContent = totalTamuHariIni;
         if (dashTamuHadir) dashTamuHadir.textContent = hadir;
         if (dashTamuPulang) dashTamuPulang.textContent = pulang;
+        if (dashTotalBulan) dashTotalBulan.textContent = dashboardBukuTamuCache.length;
     }
 
     function loadLocalDashboardData() {
         const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
-        const today = new Date().toISOString().split('T')[0];
+        const today = todayKey();
 
-        const todaySubmissions = pending.filter(function(item) {
-            const itemDate = (item.timestamp || item.savedAt || '').split('T')[0];
+        const bukuTamu = normalizeRows(pending.filter(function(item) { return item.layanan === 'buku'; }));
+        const todayTamu = bukuTamu.filter(function(item) {
+            const itemDate = getDateKey(item.tanggal || item.timestamp || item.savedAt);
             return itemDate === today;
         });
 
-        const bukuTamu = pending.filter(function(item) { return item.layanan === 'buku'; });
+        const hadir = todayTamu.filter(function(t) { return (t.status || 'Hadir') === 'Hadir'; }).length;
+        const pulang = todayTamu.filter(function(t) { return t.status === 'Pulang'; }).length;
 
-        document.getElementById('statTamu').textContent = todaySubmissions.length;
+        document.getElementById('statTamu').textContent = todayTamu.length;
+        document.getElementById('statTotalLayanan').textContent = pending.length;
 
         const dashTotalTamu = document.getElementById('dashTotalTamu');
-        if (dashTotalTamu) dashTotalTamu.textContent = todaySubmissions.length;
+        if (dashTotalTamu) dashTotalTamu.textContent = todayTamu.length;
+        const dashTamuHadir = document.getElementById('dashTamuHadir');
+        if (dashTamuHadir) dashTamuHadir.textContent = hadir;
+        const dashTamuPulang = document.getElementById('dashTamuPulang');
+        if (dashTamuPulang) dashTamuPulang.textContent = pulang;
+        const dashTotalBulan = document.getElementById('dashTotalBulan');
+        if (dashTotalBulan) dashTotalBulan.textContent = bukuTamu.length;
 
         renderTamuListFromLocal(bukuTamu);
     }
@@ -2522,26 +2860,26 @@
 
         if (dashboardBukuTamuCache.length > 0) {
             const filtered = dashboardBukuTamuCache.filter(function(tamu) {
-                const tamuDate = (tamu.tanggal || tamu.timestamp || '').split('T')[0];
+                const tamuDate = getDateKey(tamu.tanggal || tamu.timestamp);
                 return tamuDate === selectedDate;
             });
             renderTamuListFromServer(filtered);
         } else {
             const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
-            const bukuTamu = pending.filter(function(item) {
-                return item.layanan === 'buku' && (item.tanggal || item.timestamp || '').split('T')[0] === selectedDate;
-            });
+            const bukuTamu = normalizeRows(pending.filter(function(item) {
+                return item.layanan === 'buku' && getDateKey(item.tanggal || item.timestamp) === selectedDate;
+            }));
             renderTamuListFromLocal(bukuTamu, true);
         }
     }
 
     function resetFilterBukuTamu() {
-        document.getElementById('filterTanggalBuku').value = new Date().toISOString().split('T')[0];
+        document.getElementById('filterTanggalBuku').value = todayKey();
         if (dashboardBukuTamuCache.length > 0) {
             renderTamuListFromServer(dashboardBukuTamuCache);
         } else {
             const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
-            const bukuTamu = pending.filter(function(item) { return item.layanan === 'buku'; });
+            const bukuTamu = normalizeRows(pending.filter(function(item) { return item.layanan === 'buku'; }));
             renderTamuListFromLocal(bukuTamu, true);
         }
     }
@@ -2553,9 +2891,9 @@
         const container = document.getElementById('tamuList');
         if (!container) return;
 
-        const today = document.getElementById('filterTanggalBuku').value || new Date().toISOString().split('T')[0];
+        const today = document.getElementById('filterTanggalBuku').value || todayKey();
         const todayData = tamuData.filter(function(tamu) {
-            const tamuDate = (tamu.tanggal || tamu.timestamp || '').split('T')[0];
+            const tamuDate = getDateKey(tamu.tanggal || tamu.timestamp);
             return tamuDate === today;
         });
 
@@ -2614,9 +2952,24 @@
         btn.textContent = newStatus;
         btn.className = 'tamu-status ' + (newStatus === 'Hadir' ? 'hadir' : 'pulang');
 
+        // Update localStorage
+        if (tiket) {
+            const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+            const item = pending.find(function(item) { return item.id_tiket === tiket || item.ticketNumber === tiket; });
+            if (item) {
+                item.status = newStatus;
+                localStorage.setItem('pendingSubmissions', JSON.stringify(pending));
+            }
+            // Update dashboard cache
+            const cacheItem = dashboardBukuTamuCache.find(function(item) { return item.id_tiket === tiket || item.ticketNumber === tiket; });
+            if (cacheItem) {
+                cacheItem.status = newStatus;
+            }
+        }
+
         if (tiket) {
             try {
-                await fetch(GAS_URL + '?action=updateStatus&sheet=BukuTamu&tiket=' + encodeURIComponent(tiket) + '&status=' + newStatus);
+                await apiFetch(GAS_URL + '?action=updateStatus&sheet=BukuTamu&tiket=' + encodeURIComponent(tiket) + '&status=' + newStatus);
                 showToast('Status diubah menjadi ' + newStatus, 'success');
             } catch (error) {
                 showToast('Status diubah (lokal): ' + newStatus, 'warning');
@@ -2663,10 +3016,10 @@
         container.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin" style="font-size:2rem;"></i><p>Memuat agenda...</p></div>';
 
         try {
-            const response = await fetch(GAS_URL + '?action=getAgenda');
+            const response = await apiFetch(GAS_URL + '?action=getAgenda');
             const data = await response.json();
             if (data.success) {
-                renderAgendaList(data.data || []);
+                renderAgendaList(normalizeRows(data.data || []));
             } else {
                 renderAgendaList([]);
             }
@@ -2679,12 +3032,12 @@
         const container = document.getElementById('agendaList');
         if (!container) return;
 
-        const today = new Date().toISOString().split('T')[0];
+        const today = todayKey();
         const todayAgenda = [];
         const nextAgenda = [];
 
         agendaData.forEach(function(item) {
-            const itemDate = (item.tanggal || '').split('T')[0];
+            const itemDate = getDateKey(item.tanggal);
             if (itemDate === today) {
                 todayAgenda.push(item);
             } else if (itemDate > today) {
@@ -2800,6 +3153,21 @@
     // CHARTS
     // ============================================
     function initCharts() {
+        if (typeof Chart === 'undefined') {
+            console.warn('Chart.js belum tersedia. Dashboard tetap dapat digunakan tanpa grafik.');
+            return;
+        }
+        document.querySelectorAll('canvas').forEach(function(canvas) {
+            const existingChart = Chart.getChart ? Chart.getChart(canvas) : null;
+            if (existingChart) existingChart.destroy();
+        });
+        skmOverviewChartInst = null;
+        mediaOverviewChartInst = null;
+        skmDetailChartInst = null;
+        skmPieChartInst = null;
+        mediaSosialChartInst = null;
+        trenMediaChartInst = null;
+
         var skmOverviewCtx = document.getElementById('skmOverviewChart');
         if (skmOverviewCtx) {
             if (skmOverviewChartInst) skmOverviewChartInst.destroy();
