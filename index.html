@@ -1455,8 +1455,8 @@
         const today = todayKey();
         document.querySelectorAll('input[type="date"]').forEach(function(input) {
             if (!input.id || !input.id.includes('filter')) {
-                input.min = today;
-                input.value = today;
+                input.removeAttribute('min');
+                if (!input.value) input.value = today;
             }
         });
         document.getElementById('filterTanggalBuku').value = today;
