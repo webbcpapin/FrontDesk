@@ -76,6 +76,7 @@
         .service-skm { --service-color:#ec4899; --service-color-dark:#db2777; --service-glow:rgba(236,72,153,0.4); }
         .service-cek { --service-color:#10b981; --service-color-dark:#059669; --service-glow:rgba(16,185,129,0.4); }
         .service-imei { --service-color:#6366f1; --service-color-dark:#4f46e5; --service-glow:rgba(99,102,241,0.4); }
+        .service-ngingetken { --service-color:#14b8a6; --service-color-dark:#0f766e; --service-glow:rgba(20,184,166,0.4); }
         .skm-section { padding:2rem; max-width:1400px; margin:0 auto; }
         .skm-card { background:linear-gradient(135deg, rgba(236,72,153,0.2) 0%, rgba(139,92,246,0.2) 100%); backdrop-filter:blur(20px); border:1px solid rgba(236,72,153,0.3); border-radius:24px; padding:2rem; text-align:center; cursor:pointer; transition:all 0.4s; position:relative; overflow:hidden; }
         .skm-card:hover { transform:translateY(-5px); box-shadow:0 20px 40px rgba(236,72,153,0.3); }
@@ -292,6 +293,7 @@
                 <div class="service-card service-janji" onclick="openModal('janji')"><div class="service-icon"><i class="fas fa-calendar-check"></i></div><h3>Janji Temu</h3><p>Jadwalkan pertemuan dengan petugas Bea Cukai sesuai kebutuhan</p></div>
                 <div class="service-card service-ppid" onclick="openModal('ppid')"><div class="service-icon"><i class="fas fa-folder-open"></i></div><h3>PPID</h3><p>Permohonan informasi publik sesuai Undang-Undang Keterbukaan Informasi</p></div>
                 <div class="service-card service-imei" onclick="window.open('https://webbcpapin.github.io/IMEI/', '_blank')"><span class="service-badge">Online</span><div class="service-icon"><i class="fas fa-mobile-alt"></i></div><h3>Registrasi IMEI</h3><p>Layanan registrasi IMEI untuk perangkat elektronik Anda</p></div>
+                <div class="service-card service-ngingetken" onclick="window.open('https://webbcpapin.github.io/ngingetken/', '_blank')"><span class="service-badge">Online</span><div class="service-icon"><i class="fas fa-bell"></i></div><h3>Aplikasi Ngingetken</h3><p>Layanan pengingat dan informasi digital Bea Cukai Pangkalpinang</p></div>
                 <div class="service-card service-cek" onclick="openCekTiket()"><span class="service-badge">Tracking</span><div class="service-icon"><i class="fas fa-search"></i></div><h3>Cek Status Tiket</h3><p>Cek status layanan Anda dengan nomor tiket atau nomor HP</p></div>
                 <div class="service-card service-skm" onclick="toggleSKM()"><span class="service-badge">Survey</span><div class="service-icon"><i class="fas fa-star"></i></div><h3>Survey Kepuasan</h3><p>Scan QR Code untuk mengisi Survei Kepuasan Masyarakat (SKM)</p><div class="qr-display" id="qrDisplay"><div id="qrCodeContainer"></div></div><div class="skm-preview" id="skmPreview"><i class="fas fa-qrcode"></i></div></div>
             </div>
@@ -1247,7 +1249,7 @@
     // ============================================
     // CONFIGURATION - GANTI DENGAN URL WEBAPP ANDA
     // ============================================
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbx5tUXDD0Jy83zliEND6l060fJo7KvHcg5RHuub5cvyKciWA-vkah2-u37bHoK8erffYw/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbx_Cpbp9KQ5F6frswGyjd0645ylBKQacdv0bkfj3Dx0GMeORzr8W-0bw7BY_LEugcbV_g/exec';
     const SKM_URL = 'https://forms.office.com/Pages/ResponsePage.aspx?id=ZrNv7SKD80aRXsTQN6RUqUHW-Z1OdaZHlGb3jAd0e1VUOVo1S1E3R0VVSTZJU0ZYSEk5TUdJMUJHMSQlQCNjPTEkJUAjdD1n';
     const ADMIN_PIN = 'bcadmin2026';
     let isAdminLoggedIn = false;
@@ -1261,6 +1263,7 @@
     let dashboardBukuTamuCache = [];
     let dashboardSKMCache = [];
     let dashboardMediaCache = [];
+    let historyCache = {};
     let skmOverviewChartInst = null;
     let mediaOverviewChartInst = null;
     let skmDetailChartInst = null;
@@ -1356,6 +1359,11 @@
         const raw = String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
         const aliases = {
             idtiket: 'id_tiket',
+            idticket: 'id_tiket',
+            nomortiket: 'id_tiket',
+            notiket: 'id_tiket',
+            nomor: 'id_tiket',
+            tiket: 'id_tiket',
             ticketnumber: 'id_tiket',
             timestamp: 'timestamp',
             nama: 'nama',
@@ -1423,6 +1431,10 @@
 
     function normalizeRows(rows) {
         return (rows || []).map(normalizeRow);
+    }
+
+    function normalizePhone(value) {
+        return String(value || '').replace(/\D/g, '').replace(/^62/, '0');
     }
 
     function rowKey(row, prefix, index) {
@@ -2674,24 +2686,65 @@
         }
     }
 
-    async function checkHistory(hp, type) {
-        if (hp.length < 10) return;
-        const history = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
-        const found = history.find(function(item) { return item.hp === hp; });
+    function fillHistoryFields(type, source) {
+        const form = document.getElementById('form-' + type);
+        if (!form || !source) return false;
 
-        if (found) {
-            document.getElementById('history-' + type).classList.add('active');
-            if (found.nama) document.getElementById('nama-' + type).value = found.nama;
-            if (found.email) document.getElementById('email-' + type).value = found.email;
-            const instansiEl = document.getElementById('instansi-' + type);
-            if (instansiEl && found.instansi) instansiEl.value = found.instansi;
-            const alamatEl = document.getElementById('alamat-' + type);
-            if (alamatEl && found.alamat) alamatEl.value = found.alamat;
-            const pekerjaanEl = document.getElementById('pekerjaan-' + type);
-            if (pekerjaanEl && found.pekerjaan) pekerjaanEl.value = found.pekerjaan;
-            showToast('Data ditemukan! Form diisi otomatis.', 'success');
-        } else {
-            document.getElementById('history-' + type).classList.remove('active');
+        const data = normalizeRow(source);
+        const reusableFields = ['hp', 'nama', 'email', 'instansi', 'alamat', 'pekerjaan', 'nik', 'npwp', 'nama_usaha'];
+        let filled = false;
+
+        reusableFields.forEach(function(field) {
+            const input = form.querySelector('[name="' + field + '"]');
+            if (input && data[field] && !input.value) {
+                input.value = data[field];
+                filled = true;
+            }
+        });
+
+        return filled;
+    }
+
+    async function checkHistory(hp, type) {
+        const normalizedHp = normalizePhone(hp);
+        const indicator = document.getElementById('history-' + type);
+        if (normalizedHp.length < 10) {
+            if (indicator) indicator.classList.remove('active');
+            return;
+        }
+
+        const localHistory = normalizeRows(JSON.parse(localStorage.getItem('pendingSubmissions') || '[]'));
+        const localFound = localHistory.slice().reverse().find(function(item) {
+            return normalizePhone(item.hp) === normalizedHp;
+        });
+
+        if (localFound) {
+            if (indicator) indicator.classList.add('active');
+            fillHistoryFields(type, localFound);
+            showToast('Data riwayat lokal ditemukan. Form diisi otomatis.', 'success');
+            return;
+        }
+
+        if (historyCache[normalizedHp]) {
+            if (indicator) indicator.classList.add('active');
+            fillHistoryFields(type, historyCache[normalizedHp]);
+            showToast('Data riwayat ditemukan. Form diisi otomatis.', 'success');
+            return;
+        }
+
+        try {
+            const response = await apiFetch(GAS_URL + '?action=getHistory&hp=' + encodeURIComponent(normalizedHp));
+            const result = await response.json();
+            if (result.success && result.found && result.data) {
+                historyCache[normalizedHp] = normalizeRow(result.data);
+                if (indicator) indicator.classList.add('active');
+                fillHistoryFields(type, historyCache[normalizedHp]);
+                showToast('Data riwayat server ditemukan. Form diisi otomatis.', 'success');
+            } else if (indicator) {
+                indicator.classList.remove('active');
+            }
+        } catch (error) {
+            if (indicator) indicator.classList.remove('active');
         }
     }
 
