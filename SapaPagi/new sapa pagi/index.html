@@ -1,0 +1,3145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAPA DJBC - Direktorat Jenderal Bea dan Cukai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a5f4a;
+            --primary-light: #2d8a6e;
+            --primary-dark: #124d3d;
+            --secondary: #d4a853;
+            --accent: #c9a84c;
+            --gold: #f0c040;
+            --bg: #f5f3ee;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.1);
+            --gradient: linear-gradient(135deg, #1a5f4a 0%, #2d8a6e 100%);
+            --gradient-gold: linear-gradient(135deg, #d4a853 0%, #c9a84c 100%);
+            --gradient-red: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            --indigo: #4f46e5;
+            --indigo-light: #6366f1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient);
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.92);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            padding: 0.35rem;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .header-btn {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .tts-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.75rem;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+        }
+
+        /* Schedule List */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+            background: var(--bg);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .schedule-item:hover, .schedule-item.active {
+            border-color: var(--primary);
+            background: rgba(26, 95, 74, 0.05);
+        }
+
+        .schedule-item.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .schedule-item.active .schedule-time,
+        .schedule-item.active .schedule-label,
+        .schedule-item.active .schedule-desc {
+            color: white;
+        }
+
+        .schedule-time {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 55px;
+        }
+
+        .schedule-info {
+            flex: 1;
+        }
+
+        .schedule-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .schedule-desc {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .schedule-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+        }
+
+        .schedule-status.ready { background: var(--secondary); }
+        .schedule-status.playing { background: #22c55e; animation: pulse-dot 1.5s infinite; }
+        .schedule-status.pending { background: #f59e0b; }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .schedule-edit-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255,255,255,0.3);
+            color: white;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .schedule-item:hover .schedule-edit-btn {
+            display: flex;
+        }
+
+        /* Add Schedule Button */
+        .add-schedule-btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .add-schedule-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(26, 95, 74, 0.03);
+        }
+
+        /* Upload Section */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary);
+            background: rgba(26, 95, 74, 0.02);
+        }
+
+        .upload-zone i {
+            font-size: 2rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-zone p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .music-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .music-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem;
+            border-radius: 10px;
+            background: var(--bg);
+            font-size: 0.85rem;
+        }
+
+        .music-item i { color: var(--primary); }
+
+        .music-item .remove-btn {
+            margin-left: auto;
+            color: #ef4444;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Content Tabs */
+        .content-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .content-tab {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 16px;
+            background: var(--card-bg);
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+        }
+
+        .content-tab i { font-size: 1.5rem; }
+
+        .content-tab.active {
+            background: var(--gradient);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .content-tab:hover:not(.active) {
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* Player Card */
+        .player-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .player-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .player-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Voice Info */
+        .voice-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .voice-info i {
+            color: #059669;
+            font-size: 1.2rem;
+        }
+
+        .voice-info-text { flex: 1; }
+
+        .voice-info-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .voice-info-desc {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* Content Display */
+        .content-area {
+            margin-bottom: 1.5rem;
+        }
+
+        .content-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .content-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 1.6rem;
+            text-align: right;
+            direction: rtl;
+            color: var(--primary);
+            line-height: 2;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(26, 95, 74, 0.03);
+            border-radius: 12px;
+        }
+
+        .content-text {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: var(--text);
+            white-space: pre-wrap;
+        }
+
+        .content-source {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Audio Visualizer */
+        .visualizer-container {
+            background: linear-gradient(135deg, #f8f6f1 0%, #e8e4dc 100%);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .visualizer-canvas {
+            width: 100%;
+            height: 80px;
+            border-radius: 12px;
+            background: rgba(26, 95, 74, 0.05);
+            margin-bottom: 1rem;
+        }
+
+        /* Player Controls */
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .play-main {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(26, 95, 74, 0.3);
+        }
+
+        .play-main:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(26, 95, 74, 0.4);
+        }
+
+        .play-main.playing {
+            background: var(--gradient-gold);
+            animation: pulse-play 2s infinite;
+        }
+
+        @keyframes pulse-play {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 168, 83, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(212, 168, 83, 0); }
+        }
+
+        .progress-section { flex: 1; }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .volume-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .volume-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 4px;
+            border-radius: 2px;
+            background: #e2e8f0;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Mix Controls */
+        .mix-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .mix-control {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .mix-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .mix-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            outline: none;
+        }
+
+        .mix-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .mix-slider.voice::-webkit-slider-thumb { background: var(--primary); }
+        .mix-slider.music::-webkit-slider-thumb { background: var(--secondary); }
+
+        /* Action Buttons */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            background: var(--card-bg);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn i {
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary);
+            background: rgba(26, 95, 74, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .action-btn.generating {
+            background: var(--gradient);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .action-btn.generating i {
+            color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* History */
+        .history-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .history-grid {
+            display: grid;
+            gap: 0.75rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: var(--bg);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .history-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .history-item.doa { border-left-color: var(--primary); }
+        .history-item.apresiasi { border-left-color: var(--secondary); }
+        .history-item.motivasi { border-left-color: #dc2626; }
+        .history-item.indonesia-raya { border-left-color: #dc2626; }
+
+        .history-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(26, 95, 74, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .history-info { flex: 1; }
+
+        .history-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .history-meta {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .history-play {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Indonesia Raya Special */
+        .indonesia-raya {
+            background: var(--gradient-red);
+            color: white;
+        }
+
+        .indonesia-raya .schedule-time,
+        .indonesia-raya .schedule-label,
+        .indonesia-raya .schedule-desc {
+            color: white;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 550px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            background: var(--bg);
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.35rem;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--gradient);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .save-btn.danger {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        }
+
+        /* Schedule Edit Modal */
+        .schedule-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .voice-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .voice-option {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .voice-option:hover {
+            border-color: var(--indigo-light);
+        }
+
+        .voice-option.selected {
+            border-color: var(--indigo);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .voice-option-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .voice-option-desc {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .free-badge {
+            display: inline-block;
+            padding: 0.15rem 0.4rem;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success { background: var(--primary); }
+        .toast.error { background: #dc2626; }
+        .toast.info { background: var(--indigo); }
+
+        /* Now Playing Bar */
+        .now-playing {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            padding: 1rem 1.5rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .now-playing.active { display: flex; }
+
+        .np-info { flex: 1; }
+
+        .np-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .np-category {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .np-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .np-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Loading */
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar { order: 2; }
+            .action-grid { grid-template-columns: repeat(2, 1fr); }
+            .voice-selector { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .action-grid { grid-template-columns: 1fr; }
+            .mix-controls { grid-template-columns: 1fr; }
+            .schedule-form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 3px;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon"><img src="assets/logo-bc.png" alt="Logo Direktorat Jenderal Bea dan Cukai"></div>
+                <div class="logo-text">
+                    <h1>SAPA DJBC</h1>
+                    <p>Direktorat Jenderal Bea dan Cukai</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="tts-badge" id="ttsBadge">
+                    <i class="fas fa-volume-high"></i>
+                    <span>Voice Indonesia Gratis</span>
+                </div>
+                <button class="header-btn" onclick="openSettings()">
+                    <i class="fas fa-cog"></i> Pengaturan
+                </button>
+                <button class="header-btn" onclick="openUploadModal()">
+                    <i class="fas fa-music"></i> Upload Musik
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Schedule -->
+            <div class="sidebar-card">
+                <div class="sidebar-title">
+                    <i class="fas fa-clock" style="color: var(--primary);"></i>
+                    Jadwal Pemutaran
+                </div>
+                <div class="schedule-list" id="scheduleList">
+                    <!-- Generated dynamically -->
+                </div>
+                <button class="add-schedule-btn" onclick="openAddScheduleModal()">
+                    <i class="fas fa-plus"></i> Tambah Jadwal
+                </button>
+            </div>
+
+            <!-- Background Music -->
+            <div class="sidebar-card">
+                <div class="sidebar-title">
+                    <i class="fas fa-music" style="color: var(--secondary);"></i>
+                    Background Music
+                </div>
+                <div class="upload-zone" onclick="document.getElementById('musicUpload').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Klik untuk upload MP3<br><small>Maks 5MB per file</small></p>
+                    <input type="file" id="musicUpload" accept="audio/mp3,audio/wav" multiple style="display:none;" onchange="handleMusicUpload(event)">
+                </div>
+                <div class="music-list" id="musicList">
+                    <div style="text-align: center; color: var(--text-light); font-size: 0.85rem; padding: 1rem;">
+                        Belum ada musik diupload
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto Schedule -->
+            <div class="sidebar-card">
+                <div class="sidebar-title">
+                    <i class="fas fa-robot" style="color: var(--primary);"></i>
+                    Otomatisasi
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0;">
+                    <span style="font-size: 0.9rem;">Auto-play terjadwal</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoToggle" checked onchange="toggleAuto()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;">
+                    Sistem akan otomatis memutar konten sesuai jadwal yang diatur
+                </p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Content Tabs -->
+            <div class="content-tabs" id="contentTabs">
+                <!-- Generated dynamically from editable categories -->
+            </div>
+
+            <!-- Player Card -->
+            <div class="player-card">
+                <div class="player-header">
+                    <div class="player-badge" id="playerBadge">
+                        <i class="fas fa-pray"></i>
+                        <span>Doa Pagi - 08:00</span>
+                    </div>
+                    <div class="player-actions">
+                        <button class="icon-btn" onclick="editContent()" title="Edit Teks">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn" onclick="downloadAudio()" title="Download">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="icon-btn" onclick="shareContent()" title="Bagikan">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Voice Info -->
+                <div class="voice-info" id="voiceInfo">
+                    <i class="fas fa-volume-high"></i>
+                    <div class="voice-info-text">
+                        <div class="voice-info-label" id="voiceLabel">Voice Indonesia - Google TTS</div>
+                        <div class="voice-info-desc" id="voiceDesc">Suara natural bahasa Indonesia - Gratis</div>
+                    </div>
+                </div>
+
+                <div class="content-area" id="contentArea">
+                    <div class="content-title" id="contentTitle">Doa Memulai Hari</div>
+                    <div class="content-arabic" id="contentArabic" style="display:none;"></div>
+                    <div class="content-text" id="contentText">
+                        <div class="loading-shimmer" style="height: 20px; width: 90%; margin-bottom: 10px;"></div>
+                        <div class="loading-shimmer" style="height: 20px; width: 70%; margin-bottom: 10px;"></div>
+                        <div class="loading-shimmer" style="height: 20px; width: 80%;"></div>
+                    </div>
+                    <div class="content-source" id="contentSource">
+                        <i class="fas fa-book"></i>
+                        <span>Memuat sumber...</span>
+                    </div>
+                </div>
+
+                <!-- Audio Visualizer -->
+                <div class="visualizer-container">
+                    <canvas class="visualizer-canvas" id="visualizer"></canvas>
+                    
+                    <div class="player-controls">
+                        <button class="play-main" id="playBtn" onclick="togglePlay()">
+                            <i class="fas fa-play" id="playIcon"></i>
+                        </button>
+                        <div class="progress-section">
+                            <div class="progress-bar" id="progressBar" onclick="seek(event)">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <div class="time-display">
+                                <span id="currentTime">0:00</span>
+                                <span id="totalTime">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="volume-section">
+                        <i class="fas fa-volume-down" style="color: var(--text-light);"></i>
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        <i class="fas fa-volume-up" style="color: var(--text-light);"></i>
+                    </div>
+
+                    <!-- Mix Controls -->
+                    <div class="mix-controls">
+                        <div class="mix-control">
+                            <div class="mix-label">
+                                <span>🔊 Volume Suara</span>
+                                <span id="voiceVolDisplay">80%</span>
+                            </div>
+                            <input type="range" class="mix-slider voice" id="voiceMix" min="0" max="100" value="80" onchange="updateMix()">
+                        </div>
+                        <div class="mix-control">
+                            <div class="mix-label">
+                                <span>🎵 Volume Musik</span>
+                                <span id="musicVolDisplay">25%</span>
+                            </div>
+                            <input type="range" class="mix-slider music" id="musicMix" min="0" max="100" value="25" onchange="updateMix()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-grid" style="margin-top: 1.5rem;">
+                    <button class="action-btn" id="generateBtn" onclick="generateContent()">
+                        <i class="fas fa-magic"></i>
+                        <span>Generate Baru</span>
+                    </button>
+                    <button class="action-btn" onclick="previewWithMusic()">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Preview + Musik</span>
+                    </button>
+                    <button class="action-btn" onclick="openUploadForCurrentCategory()">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload Audio</span>
+                    </button>
+                    <button class="action-btn" onclick="schedulePlayback()">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Jadwalkan</span>
+                    </button>
+                    <button class="action-btn" onclick="exportAudio()">
+                        <i class="fas fa-file-export"></i>
+                        <span>Export Audio</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- History -->
+            <div class="history-card">
+                <div class="sidebar-title" style="margin-bottom: 1rem;">
+                    <i class="fas fa-history" style="color: var(--primary);"></i>
+                    Riwayat Hari Ini
+                </div>
+                <div class="history-grid" id="historyGrid">
+                    <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                        <p>Belum ada konten hari ini</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Now Playing Bar -->
+    <div class="now-playing" id="nowPlaying">
+        <div class="np-info">
+            <div class="np-title" id="npTitle">Sedang Memutar...</div>
+            <div class="np-category" id="npCategory">Doa Pagi</div>
+        </div>
+        <div class="np-controls">
+            <button class="np-btn" onclick="togglePlay()">
+                <i class="fas fa-pause" id="npPlayIcon"></i>
+            </button>
+            <button class="np-btn" style="background: #dc2626;" onclick="stopPlayback()">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">⚙️ Pengaturan Aplikasi</h3>
+                <button class="modal-close" onclick="closeSettings()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Voice Selection -->
+            <div class="form-group">
+                <label class="form-label">🎙️ Pilih Suara Bahasa Indonesia</label>
+                <div class="voice-selector" id="voiceSelector">
+                    <div class="voice-option selected" data-voice="Google id-ID-Standard-A" onclick="selectVoice('Google id-ID-Standard-A')">
+                        <div class="voice-option-name">Google A <span class="free-badge">GRATIS</span></div>
+                        <div class="voice-option-desc">Wanita, natural, jelas</div>
+                    </div>
+                    <div class="voice-option" data-voice="Google id-ID-Standard-B" onclick="selectVoice('Google id-ID-Standard-B')">
+                        <div class="voice-option-name">Google B <span class="free-badge">GRATIS</span></div>
+                        <div class="voice-option-desc">Pria, formal, tegas</div>
+                    </div>
+                    <div class="voice-option" data-voice="Google id-ID-Standard-C" onclick="selectVoice('Google id-ID-Standard-C')">
+                        <div class="voice-option-name">Google C <span class="free-badge">GRATIS</span></div>
+                        <div class="voice-option-desc">Pria muda, santai</div>
+                    </div>
+                    <div class="voice-option" data-voice="Google id-ID-Wavenet-A" onclick="selectVoice('Google id-ID-Wavenet-A')">
+                        <div class="voice-option-name">WaveNet A <span class="free-badge">GRATIS</span></div>
+                        <div class="voice-option-desc">Wanita, sangat natural</div>
+                    </div>
+                    <div class="voice-option" data-voice="Google id-ID-Wavenet-B" onclick="selectVoice('Google id-ID-Wavenet-B')">
+                        <div class="voice-option-name">WaveNet B <span class="free-badge">GRATIS</span></div>
+                        <div class="voice-option-desc">Pria, sangat natural</div>
+                    </div>
+                    <div class="voice-option" data-voice="Microsoft Gadis" onclick="selectVoice('Microsoft Gadis')">
+                        <div class="voice-option-name">Gadis <span class="free-badge">GRATIS</span></div>
+                        <div class="voice-option-desc">Wanita Indonesia, lembut</div>
+                    </div>
+                </div>
+                <div class="form-hint">
+                    Semua suara di atas gratis menggunakan Web Speech API browser Anda.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Google Apps Script URL (Opsional untuk backup)</label>
+                <input type="text" class="form-input" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Provider Suara</label>
+                <select class="form-select" id="voiceProviderSelect">
+                    <option value="browser">Browser/Web Speech - gratis</option>
+                    <option value="elevenlabs">ElevenLabs API - paling natural</option>
+                </select>
+                <div class="form-hint">
+                    Rekomendasi terjangkau: tetap gunakan Browser untuk harian gratis; aktifkan ElevenLabs saat perlu suara lebih syahdu dan ekspresif.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">ElevenLabs API Key</label>
+                <input type="password" class="form-input" id="elevenLabsApiKeyInput" placeholder="xi-...">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">ElevenLabs Voice ID</label>
+                <input type="text" class="form-input" id="elevenLabsVoiceIdInput" placeholder="Contoh: EXAVITQu4vr4xnSDxMaL">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Model ElevenLabs</label>
+                <select class="form-select" id="elevenLabsModelSelect">
+                    <option value="eleven_multilingual_v2">Multilingual v2 - natural stabil</option>
+                    <option value="eleven_flash_v2_5">Flash v2.5 - hemat dan cepat</option>
+                    <option value="eleven_turbo_v2_5">Turbo v2.5 - cepat dan natural</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Kecepatan Bicara</label>
+                <select class="form-select" id="rateSelect">
+                    <option value="0.7">Lambat (0.7x) — Cocok untuk doa</option>
+                    <option value="0.85" selected>Normal (0.85x)</option>
+                    <option value="1.0">Cepat (1.0x)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Tinggi Suara (Pitch)</label>
+                <select class="form-select" id="pitchSelect">
+                    <option value="0.8">Rendah</option>
+                    <option value="1.0" selected>Normal</option>
+                    <option value="1.2">Tinggi</option>
+                </select>
+            </div>
+
+            <button class="save-btn" onclick="saveSettings()">
+                <i class="fas fa-save"></i> Simpan Pengaturan
+            </button>
+        </div>
+    </div>
+
+    <!-- Add/Edit Schedule Modal -->
+    <div class="modal-overlay" id="scheduleModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="scheduleModalTitle">➕ Tambah Jadwal</h3>
+                <button class="modal-close" onclick="closeScheduleModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <input type="hidden" id="scheduleEditId" value="">
+
+            <div class="schedule-form-row">
+                <div class="form-group">
+                    <label class="form-label">Waktu</label>
+                    <input type="time" class="form-input" id="scheduleTimeInput" value="08:00">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kategori</label>
+                    <select class="form-select" id="scheduleCategoryInput"></select>
+                </div>
+            </div>
+
+            <div class="form-group" id="customLabelGroup">
+                <label class="form-label">Judul Agenda</label>
+                <input type="text" class="form-input" id="scheduleCustomLabel" placeholder="Contoh: Pengumuman Pagi, Mars DJBC, atau Apresiasi Sore">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Durasi (detik)</label>
+                <input type="number" class="form-input" id="scheduleDurationInput" value="30" min="5" max="300">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Deskripsi</label>
+                <input type="text" class="form-input" id="scheduleDescInput" placeholder="Deskripsi singkat jadwal ini">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <input type="checkbox" id="scheduleEnabled" checked style="margin-right: 0.5rem;">
+                    Aktifkan jadwal ini
+                </label>
+            </div>
+
+            <button class="save-btn" onclick="saveSchedule()">
+                <i class="fas fa-check"></i> Simpan Jadwal
+            </button>
+            <button class="save-btn danger" id="deleteScheduleBtn" style="margin-top: 0.5rem; display:none;" onclick="deleteSchedule()">
+                <i class="fas fa-trash"></i> Hapus Jadwal
+            </button>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Upload Suara / Musik</h3>
+                <button class="modal-close" onclick="closeUploadModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Dashboard / Agenda</label>
+                <select class="form-select" id="musicCategory"></select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Jenis Audio</label>
+                <select class="form-select" id="audioRole">
+                    <option value="primary">Suara utama / lagu utama</option>
+                    <option value="background">Background music</option>
+                </select>
+            </div>
+
+            <div class="upload-zone" style="margin-bottom: 1rem;" id="dropZone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & drop file MP3/WAV<br>atau klik untuk pilih</p>
+                <input type="file" id="modalMusicUpload" accept="audio/mp3,audio/wav" multiple style="display:none;" onchange="handleModalUpload(event)">
+            </div>
+
+            <div id="uploadPreview" style="display:none; margin-bottom: 1rem;">
+                <audio controls id="previewAudio" style="width: 100%;"></audio>
+            </div>
+
+            <button class="save-btn" onclick="confirmUpload()">
+                <i class="fas fa-check"></i> Konfirmasi Upload
+            </button>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">✏️ Edit Konten</h3>
+                <button class="modal-close" onclick="closeEditModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Judul</label>
+                <input type="text" class="form-input" id="editTitle">
+            </div>
+
+            <div class="form-group" id="editArabicGroup">
+                <label class="form-label">Teks Arab (opsional)</label>
+                <textarea class="form-input" id="editArabic" rows="3" style="direction: rtl; font-family: 'Amiri', serif;"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Isi Konten</label>
+                <textarea class="form-input" id="editText" rows="6"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Sumber</label>
+                <input type="text" class="form-input" id="editSource">
+            </div>
+
+            <button class="save-btn" onclick="saveEdit()">
+                <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const CONFIG = {
+            VOICE: localStorage.getItem('ttsVoice') || 'Google id-ID-Standard-A',
+            VOICE_PROVIDER: localStorage.getItem('voiceProvider') || 'browser',
+            ELEVENLABS_API_KEY: localStorage.getItem('elevenLabsApiKey') || '',
+            ELEVENLABS_VOICE_ID: localStorage.getItem('elevenLabsVoiceId') || 'EXAVITQu4vr4xnSDxMaL',
+            ELEVENLABS_MODEL: localStorage.getItem('elevenLabsModel') || 'eleven_multilingual_v2',
+            SPEECH_RATE: parseFloat(localStorage.getItem('speechRate')) || 0.78,
+            SPEECH_PITCH: parseFloat(localStorage.getItem('speechPitch')) || 0.96,
+            GAS_URL: localStorage.getItem('gasUrl') || '',
+            AUTO_ENABLED: localStorage.getItem('autoEnabled') !== 'false'
+        };
+
+        // Default categories and schedules (editable)
+        const DEFAULT_CATEGORIES = {
+            'bell-pembuka': { id: 'bell-pembuka', label: 'Bell Pembuka', type: 'lagu', icon: 'fa-bell', desc: 'Nada pembuka sebelum rangkaian acara' },
+            'mars-djbc': { id: 'mars-djbc', label: 'Mars DJBC', type: 'lagu', icon: 'fa-music', desc: 'Mars Direktorat Jenderal Bea dan Cukai' },
+            'sapa-pagi': { id: 'sapa-pagi', label: 'Sapa Pagi', type: 'general', icon: 'fa-sun', desc: 'Sapaan pagi berbeda setiap hari' },
+            'doa': { id: 'doa', label: 'Doa', type: 'islami', icon: 'fa-pray', desc: 'Doa harian berbeda setiap hari' },
+            'motivasi': { id: 'motivasi', label: 'Motivasi', type: 'general', icon: 'fa-fire', desc: 'Motivasi kerja berbeda setiap hari' },
+            'lagu-tak-pernah-ku-ragu': { id: 'lagu-tak-pernah-ku-ragu', label: 'Tak Pernah Ku Ragu', type: 'lagu', icon: 'fa-music', desc: 'Lagu orisinal Tak Pernah Ku Ragu' },
+            'pengantar-indonesia-raya': { id: 'pengantar-indonesia-raya', label: 'Pengantar Indonesia Raya', type: 'general', icon: 'fa-flag', desc: 'Pengantar sebelum lagu Indonesia Raya' },
+            'indonesia-raya': { id: 'indonesia-raya', label: 'Indonesia Raya', type: 'lagu', icon: 'fa-flag', desc: 'Lagu kebangsaan Indonesia Raya' },
+            'sapa-sore': { id: 'sapa-sore', label: 'Sapa Sore', type: 'general', icon: 'fa-cloud-sun', desc: 'Sapaan sore berbeda setiap hari' },
+            'apresiasi': { id: 'apresiasi', label: 'Apresiasi', type: 'general', icon: 'fa-heart', desc: 'Apresiasi harian berbeda setiap hari' },
+            'mars-kemenkeu': { id: 'mars-kemenkeu', label: 'Mars Kementerian Keuangan', type: 'lagu', icon: 'fa-building-columns', desc: 'Mars Kementerian Keuangan' },
+            'lagu-karya-pegawai-bc': { id: 'lagu-karya-pegawai-bc', label: 'Lagu Karya Pegawai BC', type: 'lagu', icon: 'fa-music', desc: 'Rotasi lagu karya pegawai Bea Cukai' },
+            'lagu-orisinal': { id: 'lagu-orisinal', label: 'Lagu Orisinal / Mars', type: 'lagu', icon: 'fa-music', desc: 'Kategori tambahan untuk lagu orisinal satuan kerja' }
+        };
+
+        const DEFAULT_SCHEDULES = {
+            'pagi-01-bell': { id: 'pagi-01-bell', category: 'bell-pembuka', time: '08:00', label: 'Bell Pembuka', duration: 8, type: 'lagu', desc: 'Pembuka rangkaian pagi', enabled: true, sortOrder: 1 },
+            'pagi-02-mars-djbc': { id: 'pagi-02-mars-djbc', category: 'mars-djbc', time: '08:00', label: 'Mars DJBC', duration: 80, type: 'lagu', desc: 'Mars Direktorat Jenderal Bea dan Cukai', enabled: true, sortOrder: 2 },
+            'pagi-03-sapa-pagi': { id: 'pagi-03-sapa-pagi', category: 'sapa-pagi', time: '08:00', label: 'Sapa Pagi', duration: 35, type: 'general', desc: 'Sapaan pagi harian', enabled: true, sortOrder: 3 },
+            'pagi-04-doa': { id: 'pagi-04-doa', category: 'doa', time: '08:00', label: 'Doa', duration: 50, type: 'islami', desc: 'Doa harian', enabled: true, sortOrder: 4 },
+            'pagi-05-motivasi': { id: 'pagi-05-motivasi', category: 'motivasi', time: '08:00', label: 'Motivasi', duration: 40, type: 'general', desc: 'Motivasi kerja harian', enabled: true, sortOrder: 5 },
+            'pagi-06-tak-pernah-ku-ragu': { id: 'pagi-06-tak-pernah-ku-ragu', category: 'lagu-tak-pernah-ku-ragu', time: '08:00', label: 'Lagu Orisinal Tak Pernah Ku Ragu', duration: 180, type: 'lagu', desc: 'Penutup rangkaian pagi', enabled: true, sortOrder: 6 },
+            'siang-01-pengantar-indonesia-raya': { id: 'siang-01-pengantar-indonesia-raya', category: 'pengantar-indonesia-raya', time: '10:00', label: 'Pengantar Indonesia Raya', duration: 20, type: 'general', desc: 'Pengantar sebelum lagu kebangsaan', enabled: true, sortOrder: 1 },
+            'siang-02-indonesia-raya': { id: 'siang-02-indonesia-raya', category: 'indonesia-raya', time: '10:00', label: 'Lagu Indonesia Raya', duration: 100, type: 'lagu', desc: 'Lagu kebangsaan Indonesia Raya', enabled: true, sortOrder: 2 },
+            'sore-01-bell': { id: 'sore-01-bell', category: 'bell-pembuka', time: '16:45', label: 'Bell Pembuka', duration: 8, type: 'lagu', desc: 'Pembuka rangkaian sore', enabled: true, sortOrder: 1 },
+            'sore-02-sapa-sore': { id: 'sore-02-sapa-sore', category: 'sapa-sore', time: '16:45', label: 'Sapa Sore', duration: 35, type: 'general', desc: 'Sapaan sore harian', enabled: true, sortOrder: 2 },
+            'sore-03-apresiasi': { id: 'sore-03-apresiasi', category: 'apresiasi', time: '16:45', label: 'Apresiasi', duration: 40, type: 'general', desc: 'Apresiasi harian', enabled: true, sortOrder: 3 },
+            'sore-04-mars-kemenkeu': { id: 'sore-04-mars-kemenkeu', category: 'mars-kemenkeu', time: '16:45', label: 'Mars Kementerian Keuangan', duration: 90, type: 'lagu', desc: 'Mars Kementerian Keuangan', enabled: true, sortOrder: 4 },
+            'sore-05-lagu-karya-pegawai-bc': { id: 'sore-05-lagu-karya-pegawai-bc', category: 'lagu-karya-pegawai-bc', time: '16:45', label: 'Lagu Karya Pegawai Bea Cukai', duration: 180, type: 'lagu', desc: 'Rotasi lagu karya pegawai Bea Cukai', enabled: true, sortOrder: 5 }
+        };
+        let CATEGORIES = { ...DEFAULT_CATEGORIES, ...(JSON.parse(localStorage.getItem('categories')) || {}) };
+        let SCHEDULES = { ...DEFAULT_SCHEDULES, ...(JSON.parse(localStorage.getItem('schedules')) || {}) };
+        if (localStorage.getItem('scheduleVersion') !== 'sapa-djbc-2026-05-13') {
+            const legacyDefaultIds = ['sapa-pagi', 'lagu-orisinal', 'doa', 'motivasi', 'indonesia-raya', 'apresiasi', 'sapa-sore'];
+            const customSchedules = Object.fromEntries(
+                Object.entries(SCHEDULES).filter(([id]) => !DEFAULT_SCHEDULES[id] && !legacyDefaultIds.includes(id))
+            );
+            SCHEDULES = { ...DEFAULT_SCHEDULES, ...customSchedules };
+            CATEGORIES = { ...DEFAULT_CATEGORIES, ...CATEGORIES };
+            localStorage.setItem('categories', JSON.stringify(CATEGORIES));
+            localStorage.setItem('schedules', JSON.stringify(SCHEDULES));
+            localStorage.setItem('scheduleVersion', 'sapa-djbc-2026-05-13');
+        }
+
+        // Voice presets for Indonesian
+        const INDONESIAN_VOICES = {
+            'Google id-ID-Standard-A': { name: 'Google A', desc: 'Wanita, natural, jelas', gender: 'female' },
+            'Google id-ID-Standard-B': { name: 'Google B', desc: 'Pria, formal, tegas', gender: 'male' },
+            'Google id-ID-Standard-C': { name: 'Google C', desc: 'Pria muda, santai', gender: 'male' },
+            'Google id-ID-Wavenet-A': { name: 'WaveNet A', desc: 'Wanita, sangat natural', gender: 'female' },
+            'Google id-ID-Wavenet-B': { name: 'WaveNet B', desc: 'Pria, sangat natural', gender: 'male' },
+            'Microsoft Gadis': { name: 'Gadis', desc: 'Wanita Indonesia, lembut', gender: 'female' }
+        };
+
+        // ==================== STATE ====================
+        const state = {
+            currentCategory: 'sapa-pagi',
+            currentContent: null,
+            isPlaying: false,
+            audioContext: null,
+            activeMusic: null,
+            speechUtterance: null,
+            musicFiles: JSON.parse(localStorage.getItem('musicFiles') || '[]'),
+            history: [],
+            playbackQueueActive: false,
+            analyser: null,
+            dataArray: null,
+            animationId: null,
+            audioBuffer: null,
+            generatedToneNodes: [],
+            startTime: 0,
+            pauseTime: 0,
+            duration: 0
+        };
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            initAudioContext();
+            renderCategoryControls();
+            renderSchedules();
+            loadHistory();
+            renderMusicList();
+            setupVisualizer();
+            setupDropZones();
+            
+            loadTodayContent('sapa-pagi');
+            
+            if (CONFIG.AUTO_ENABLED) {
+                document.getElementById('autoToggle').checked = true;
+                checkSchedule();
+                setInterval(checkSchedule, 30000);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Load voices when available
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    console.log('Voices loaded:', window.speechSynthesis.getVoices().map(v => v.name));
+                };
+            }
+        });
+
+        function initAudioContext() {
+            if (!state.audioContext) {
+                state.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // ==================== SCHEDULE MANAGEMENT ====================
+        function saveCategories() {
+            localStorage.setItem('categories', JSON.stringify(CATEGORIES));
+        }
+
+        function getCategory(categoryId) {
+            return CATEGORIES[categoryId] || DEFAULT_CATEGORIES[categoryId] || {
+                id: categoryId,
+                label: categoryId,
+                type: 'general',
+                icon: 'fa-music',
+                desc: 'Kategori kustom'
+            };
+        }
+
+        function getPlayableCategories() {
+            const used = new Set(Object.values(SCHEDULES).map(s => s.category || s.id));
+            Object.keys(CATEGORIES).forEach(id => used.add(id));
+            return Array.from(used).map(id => getCategory(id));
+        }
+
+        function renderCategoryControls() {
+            const categories = getPlayableCategories();
+            const tabs = document.getElementById('contentTabs');
+            if (tabs) {
+                tabs.innerHTML = categories.map(cat => `
+                    <button class="content-tab ${cat.id === state.currentCategory ? 'active' : ''} ${cat.id === 'indonesia-raya' ? 'indonesia-raya' : ''}" data-category="${cat.id}" onclick="switchCategory('${cat.id}')">
+                        <i class="fas ${getIconForCategory(cat.id)}"></i>
+                        <span>${cat.label}</span>
+                    </button>
+                `).join('');
+            }
+
+            const scheduleCategory = document.getElementById('scheduleCategoryInput');
+            if (scheduleCategory) {
+                scheduleCategory.innerHTML = categories.map(cat => `<option value="${cat.id}">${cat.label}</option>`).join('') +
+                    '<option value="custom">Kategori Baru / Kustom</option>';
+            }
+
+            const musicCategory = document.getElementById('musicCategory');
+            if (musicCategory) {
+                musicCategory.innerHTML = categories.map(cat => `<option value="${cat.id}">${cat.label}</option>`).join('');
+            }
+        }
+
+        function renderSchedules() {
+            const list = document.getElementById('scheduleList');
+            const sorted = getSortedSchedules();
+            
+            list.innerHTML = sorted.map(s => `
+                <div class="schedule-item ${(s.category || s.id) === state.currentCategory ? 'active' : ''}" 
+                     data-schedule="${s.id}" 
+                     onclick="selectSchedule('${s.id}')"
+                     ${!s.enabled ? 'style="opacity:0.5;"' : ''}>
+                    <div class="schedule-time">${s.time}</div>
+                    <div class="schedule-info">
+                        <div class="schedule-label">${s.label}</div>
+                        <div class="schedule-desc">${s.desc}</div>
+                    </div>
+                    <div class="schedule-status ${s.enabled ? 'ready' : ''}" id="status-${s.id}"></div>
+                    <button class="schedule-edit-btn" onclick="event.stopPropagation(); openEditScheduleModal('${s.id}')" title="Edit jadwal">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function getSortedSchedules() {
+            const order = ['bell-pembuka', 'mars-djbc', 'sapa-pagi', 'doa', 'motivasi', 'lagu-tak-pernah-ku-ragu', 'pengantar-indonesia-raya', 'indonesia-raya', 'sapa-sore', 'apresiasi', 'mars-kemenkeu', 'lagu-karya-pegawai-bc', 'lagu-orisinal'];
+            return Object.values(SCHEDULES).sort((a, b) =>
+                a.time.localeCompare(b.time) ||
+                ((a.sortOrder || 99) - (b.sortOrder || 99)) ||
+                order.indexOf(a.category || a.id) - order.indexOf(b.category || b.id)
+            );
+        }
+
+        function selectSchedule(scheduleId) {
+            document.querySelectorAll('.schedule-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.schedule === scheduleId);
+            });
+            
+            const config = SCHEDULES[scheduleId];
+            if (config) {
+                const categoryId = config.category || config.id;
+                document.getElementById('playerBadge').innerHTML = `
+                    <i class="fas ${getIconForCategory(categoryId)}"></i>
+                    <span>${config.label} - ${config.time}</span>
+                `;
+                switchCategory(categoryId, false);
+            }
+        }
+
+        function openAddScheduleModal() {
+            document.getElementById('scheduleModalTitle').textContent = '➕ Tambah Jadwal';
+            document.getElementById('scheduleEditId').value = '';
+            document.getElementById('scheduleTimeInput').value = '08:00';
+            renderCategoryControls();
+            document.getElementById('scheduleCategoryInput').value = 'sapa-pagi';
+            document.getElementById('scheduleCustomLabel').value = 'Sapa Pagi';
+            document.getElementById('scheduleDurationInput').value = '30';
+            document.getElementById('scheduleDescInput').value = '';
+            document.getElementById('scheduleEnabled').checked = true;
+            document.getElementById('customLabelGroup').style.display = 'block';
+            document.getElementById('deleteScheduleBtn').style.display = 'none';
+            document.getElementById('scheduleModal').classList.add('active');
+        }
+
+        function openEditScheduleModal(scheduleId) {
+            const s = SCHEDULES[scheduleId];
+            if (!s) return;
+
+            document.getElementById('scheduleModalTitle').textContent = '✏️ Edit Jadwal';
+            document.getElementById('scheduleEditId').value = scheduleId;
+            document.getElementById('scheduleTimeInput').value = s.time;
+            renderCategoryControls();
+            document.getElementById('scheduleCategoryInput').value = CATEGORIES[s.category || s.id] ? (s.category || s.id) : 'custom';
+            document.getElementById('scheduleCustomLabel').value = s.label || '';
+            document.getElementById('scheduleDurationInput').value = s.duration;
+            document.getElementById('scheduleDescInput').value = s.desc || '';
+            document.getElementById('scheduleEnabled').checked = s.enabled;
+            document.getElementById('customLabelGroup').style.display = 'block';
+            
+            document.getElementById('deleteScheduleBtn').style.display = 'block';
+            document.getElementById('scheduleModal').classList.add('active');
+        }
+
+        function closeScheduleModal() {
+            document.getElementById('scheduleModal').classList.remove('active');
+        }
+
+        function saveSchedule() {
+            const id = document.getElementById('scheduleEditId').value;
+            const time = document.getElementById('scheduleTimeInput').value;
+            const category = document.getElementById('scheduleCategoryInput').value;
+            const duration = parseInt(document.getElementById('scheduleDurationInput').value);
+            const desc = document.getElementById('scheduleDescInput').value;
+            const enabled = document.getElementById('scheduleEnabled').checked;
+            
+            let label, type, scheduleId, categoryId;
+            const customLabel = document.getElementById('scheduleCustomLabel').value.trim();
+            
+            if (category === 'custom') {
+                label = customLabel || 'Kustom';
+                type = 'custom';
+                categoryId = id && SCHEDULES[id]?.category ? SCHEDULES[id].category : 'custom_' + Date.now();
+                scheduleId = id || `${categoryId}_schedule`;
+                CATEGORIES[categoryId] = {
+                    id: categoryId,
+                    label,
+                    type,
+                    icon: 'fa-music',
+                    desc: desc || 'Kategori kustom'
+                };
+                saveCategories();
+            } else {
+                const def = getCategory(category);
+                label = customLabel || def.label;
+                type = def.type;
+                categoryId = category;
+                scheduleId = id || `${category}_${Date.now()}`;
+                CATEGORIES[categoryId] = { ...def, label, desc: desc || def.desc };
+                saveCategories();
+            }
+
+            SCHEDULES[scheduleId] = {
+                id: scheduleId,
+                category: categoryId,
+                time,
+                label,
+                duration,
+                type,
+                desc: desc || getCategory(categoryId).desc || 'Jadwal kustom',
+                sortOrder: SCHEDULES[scheduleId]?.sortOrder || 99,
+                enabled
+            };
+
+            localStorage.setItem('schedules', JSON.stringify(SCHEDULES));
+            renderCategoryControls();
+            renderSchedules();
+            closeScheduleModal();
+            showToast(id ? 'Jadwal diperbarui!' : 'Jadwal ditambahkan!', 'success');
+        }
+
+        function deleteSchedule() {
+            const id = document.getElementById('scheduleEditId').value;
+            if (!id || Object.keys(DEFAULT_SCHEDULES).includes(id)) {
+                showToast('Jadwal default tidak bisa dihapus, hanya bisa diedit', 'error');
+                return;
+            }
+            
+            if (confirm('Yakin hapus jadwal ini?')) {
+                delete SCHEDULES[id];
+                localStorage.setItem('schedules', JSON.stringify(SCHEDULES));
+                renderSchedules();
+                closeScheduleModal();
+                showToast('Jadwal dihapus', 'success');
+            }
+        }
+
+        // Keep agenda title editable for every category.
+        document.getElementById('scheduleCategoryInput')?.addEventListener('change', function() {
+            const schedule = getCategory(this.value);
+            document.getElementById('customLabelGroup').style.display = 'block';
+            document.getElementById('scheduleCustomLabel').value = schedule?.label || '';
+            document.getElementById('scheduleDescInput').value = schedule?.desc || '';
+            document.getElementById('scheduleDurationInput').value = schedule?.type === 'lagu' ? 90 : 30;
+        });
+
+        // ==================== CATEGORY SWITCHING ====================
+        function switchCategory(category, updateSchedule = true) {
+            state.currentCategory = category;
+            
+            document.querySelectorAll('.content-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.category === category);
+            });
+
+            // Find the first schedule for this category
+            const schedule = Object.values(SCHEDULES).find(s => (s.category || s.id) === category);
+            if (schedule && updateSchedule) selectSchedule(schedule.id);
+            
+            loadTodayContent(category);
+        }
+
+        function getIconForCategory(cat) {
+            const icons = {
+                'sapa-pagi': 'fa-sun', 'doa': 'fa-pray', 'motivasi': 'fa-fire',
+                'apresiasi': 'fa-heart', 'indonesia-raya': 'fa-flag',
+                'sapa-sore': 'fa-cloud-sun', 'lagu-orisinal': 'fa-music'
+            };
+            return getCategory(cat).icon || icons[cat] || 'fa-music';
+        }
+
+        // ==================== CONTENT LOADING ====================
+        async function loadTodayContent(category) {
+            showLoading();
+            
+            const today = new Date().toISOString().split('T')[0];
+            const saved = localStorage.getItem(`content_${today}_${category}`);
+            
+            if (saved) {
+                displayContent(JSON.parse(saved));
+            } else {
+                if (category === 'indonesia-raya') {
+                    displayContent(getIndonesiaRayaContent());
+                } else if (isSongCategory(category)) {
+                    displayContent(getSongContent(category));
+                } else {
+                    await generateContent();
+                }
+            }
+        }
+
+        function isSongCategory(category) {
+            return getCategory(category).type === 'lagu';
+        }
+
+        function showLoading() {
+            document.getElementById('contentTitle').textContent = 'Memuat...';
+            document.getElementById('contentText').innerHTML = `
+                <div class="loading-shimmer" style="height: 20px; width: 90%; margin-bottom: 10px;"></div>
+                <div class="loading-shimmer" style="height: 20px; width: 70%; margin-bottom: 10px;"></div>
+                <div class="loading-shimmer" style="height: 20px; width: 80%;"></div>
+            `;
+        }
+
+        function displayContent(content) {
+            state.currentContent = content;
+            
+            document.getElementById('contentTitle').textContent = content.title || 'Tanpa Judul';
+            document.getElementById('contentSource').innerHTML = `
+                <i class="fas fa-book"></i>
+                <span>${content.source || 'Sumber tidak diketahui'}</span>
+            `;
+
+            if (content.arabic && state.currentCategory === 'doa') {
+                document.getElementById('contentArabic').style.display = 'block';
+                document.getElementById('contentArabic').textContent = content.arabic;
+            } else {
+                document.getElementById('contentArabic').style.display = 'none';
+            }
+
+            document.getElementById('contentText').textContent = content.text || '';
+
+            updateVoiceInfo();
+
+            // Update edit form
+            document.getElementById('editTitle').value = content.title || '';
+            document.getElementById('editText').value = content.text || '';
+            document.getElementById('editSource').value = content.source || '';
+            document.getElementById('editArabic').value = content.arabic || '';
+        }
+
+        function updateVoiceInfo() {
+            const voice = INDONESIAN_VOICES[CONFIG.VOICE] || { name: 'Default', desc: 'Suara Indonesia' };
+            if (CONFIG.VOICE_PROVIDER === 'elevenlabs') {
+                document.getElementById('voiceLabel').textContent = 'Voice AI - ElevenLabs';
+                document.getElementById('voiceDesc').textContent = `${CONFIG.ELEVENLABS_MODEL} - fallback ke browser jika API gagal`;
+                document.getElementById('ttsBadge').querySelector('span').textContent = 'ElevenLabs / Browser';
+            } else {
+                document.getElementById('voiceLabel').textContent = `Voice Indonesia - ${voice.name}`;
+                document.getElementById('voiceDesc').textContent = `${voice.desc} - Gratis`;
+                document.getElementById('ttsBadge').querySelector('span').textContent = 'Voice Indonesia Gratis';
+            }
+        }
+
+        function getIndonesiaRayaContent() {
+            return {
+                title: "Lagu Kebangsaan Indonesia Raya",
+                text: "Silakan berdiri tegap. Pemutar akan memainkan lagu Indonesia Raya. Jika file audio resmi sudah di-upload untuk kategori ini, sistem akan memakai file tersebut. Jika belum, sistem memutar melodi instrumental penghormat sebagai tanda pembuka.",
+                source: "Mode lagu - upload MP3/WAV untuk audio resmi",
+                category: 'indonesia-raya',
+                date: new Date().toISOString(),
+                id: Date.now()
+            };
+        }
+
+        function getLaguOrisinalContent() {
+            return getSongContent('lagu-orisinal');
+        }
+
+        function getSongContent(category) {
+            const meta = getCategory(category);
+            return {
+                title: meta.label,
+                text: `${meta.label} siap diputar. Upload satu atau beberapa file audio untuk kategori ini agar sistem memilih file upload terlebih dahulu dan merotasi pilihan setiap hari. Jika belum ada file, sistem memakai melodi bawaan sementara.`,
+                source: "Mode lagu - upload MP3/WAV untuk audio utama",
+                category,
+                date: new Date().toISOString(),
+                id: Date.now()
+            };
+        }
+
+        // ==================== CONTENT GENERATION ====================
+        async function generateContent() {
+            const btn = document.getElementById('generateBtn');
+            btn.classList.add('generating');
+            btn.disabled = true;
+
+            try {
+                let content;
+                
+                // Try OpenAI if key available
+                if (CONFIG.GAS_URL) {
+                    try {
+                        const response = await fetch(`${CONFIG.GAS_URL}?action=generate&category=${state.currentCategory}`);
+                        const data = await response.json();
+                        if (!data.error) content = data;
+                    } catch(e) {}
+                }
+                
+                if (!content) content = getFallbackContent();
+
+                const today = new Date().toISOString().split('T')[0];
+                localStorage.setItem(`content_${today}_${state.currentCategory}`, JSON.stringify(content));
+                
+                displayContent(content);
+                addToHistory(content);
+                showToast('Konten berhasil dibuat!', 'success');
+
+            } catch (error) {
+                console.error(error);
+                displayContent(getFallbackContent());
+            } finally {
+                btn.classList.remove('generating');
+                btn.disabled = false;
+            }
+        }
+
+        function getFallbackContent() {
+            const fallbacks = {
+                doa: {
+                    title: "Doa Memulai Pagi Hari",
+                    arabic: "اللَّهُمَّ بِكَ أَصْبَحْنَا وَبِكَ أَمْسَيْنَا وَبِكَ نَحْيَا وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ",
+                    latin: "Allahumma bika asbahna wa bika amsayna wa bika nahya wa bika namutu wa ilaikan-nusyur",
+                    text: "Ya Allah, dengan-Mu kami memasuki waktu pagi dan dengan-Mu kami memasuki waktu sore, dengan-Mu kami hidup dan dengan-Mu kami mati, dan kepada-Mu kami akan kembali (bangkit).",
+                    source: "HR. Tirmidzi No. 3391"
+                },
+                apresiasi: {
+                    title: "Apresiasi Kinerja Hari Ini",
+                    text: "Terima kasih atas dedikasi dan kerja keras Anda hari ini. Setiap tugas yang diselesaikan dengan penuh tanggung jawab adalah kontribusi berharga bagi organisasi dan masyarakat. Kinerja Anda tidak luput dari perhatian, dan setiap langkah kecil membawa kita menuju pelayanan yang lebih baik. Tetap semangat dan terus berkarya!",
+                    source: "SAPA DJBC"
+                },
+                motivasi: {
+                    title: "Semangat Pelayanan Publik",
+                    text: "Pelayanan yang tulus akan selalu diingat. Sebagai abdi negara, setiap senyum dan setiap bantuan yang kita berikan adalah investasi kepercayaan publik. Jangan pernah meremehkan dampak dari pekerjaan kita. Integritas, profesionalisme, dan dedikasi adalah tiga pilar yang menopang keberhasilan kita bersama.",
+                    source: "SAPA DJBC"
+                }
+            };
+
+            return {
+                ...fallbacks[state.currentCategory],
+                category: state.currentCategory,
+                date: new Date().toISOString(),
+                id: Date.now()
+            };
+        }
+
+        function getDailyIndex(category, length, offset = 0) {
+            const today = new Date();
+            const key = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}-${category}-${offset}`;
+            let hash = 0;
+            for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+            return hash % length;
+        }
+
+        function pickDaily(category, items, offset = 0) {
+            return items[getDailyIndex(category, items.length, offset)];
+        }
+
+        function getDailyPantun(type = 'pagi') {
+            const pantunPagi = [
+                "Ke Pangkalbalam membawa bekal, singgah sebentar membeli roti. Mari bekerja dengan akal, jujur melayani sepenuh hati.",
+                "Mentari pagi menyapa pelabuhan, angin laut membawa terang. Niatkan kerja jadi pengabdian, tugas selesai hati pun lapang.",
+                "Kain rapi warna cemerlang, dipakai pagi penuh percaya. Bea Cukai Pangkalpinang, siap melayani bangsa dan negara."
+            ];
+            const pantunSore = [
+                "Senja turun di tepi dermaga, lampu menyala satu per satu. Tugas tuntas kita jaga, esok kembali dengan semangat baru.",
+                "Pulau Bangka indah berseri, pasir putih terkenang selalu. Terima kasih untuk hari ini, pulanglah tenang membawa restu.",
+                "Perahu berlabuh menjelang petang, ombak kecil menepi perlahan. Usai tugas kita pulang, semoga lelah menjadi keberkahan."
+            ];
+            return pickDaily(type, type === 'pagi' ? pantunPagi : pantunSore, 4);
+        }
+
+        function getSapaPagiText() {
+            const openings = [
+                "Selamat pagi, rekan-rekan Bea Cukai Pangkalpinang. Semoga pagi ini membawa kejernihan hati, kesehatan, dan semangat pelayanan.",
+                "Assalamu'alaikum warahmatullahi wabarakatuh. Selamat pagi, keluarga besar Bea Cukai Pangkalpinang. Mari membuka hari dengan niat baik dan langkah yang tenang.",
+                "Selamat pagi semuanya. Semoga ruang kerja kita hari ini dipenuhi keramahan, ketelitian, dan rasa syukur."
+            ];
+            return `${pickDaily('sapa-pagi', openings, 1)}\n\n${getDailyPantun('pagi')}`;
+        }
+
+        function getSapaSoreText() {
+            const closings = [
+                "Selamat sore, rekan-rekan. Terima kasih sudah menjaga ritme kerja hari ini dengan sabar, tertib, dan penuh tanggung jawab.",
+                "Sore ini kita tutup pekerjaan dengan syukur. Semoga setiap ikhtiar kecil yang dilakukan hari ini memberi manfaat bagi masyarakat.",
+                "Terima kasih atas pengabdian hari ini. Mari pulang dengan hati lapang, tetap menjaga kesehatan, dan menyiapkan energi baik untuk esok."
+            ];
+            return `${pickDaily('sapa-sore', closings, 2)}\n\n${getDailyPantun('sore')}`;
+        }
+
+        function getFallbackContent() {
+            const doaItems = [
+                {
+                    title: "Doa Memulai Pagi Hari",
+                    arabic: "اللهم بك أصبحنا وبك أمسينا وبك نحيا وبك نموت وإليك النشور",
+                    latin: "Allahumma bika asbahna wa bika amsayna wa bika nahya wa bika namutu wa ilaikan-nusyur",
+                    text: "Ya Allah, dengan-Mu kami memasuki waktu pagi. Bimbinglah langkah kami agar bekerja dengan jujur, teliti, dan membawa manfaat. Lapangkan hati kami untuk melayani, kuatkan kami menjaga amanah, dan jadikan hari ini penuh keberkahan.",
+                    source: "Doa pagi dan nilai pelayanan"
+                },
+                {
+                    title: "Doa Kelancaran Tugas",
+                    arabic: "رب اشرح لي صدري ويسر لي أمري",
+                    latin: "Rabbi syrah li sadri wa yassir li amri",
+                    text: "Ya Allah, lapangkan dada kami dan mudahkan urusan kami. Jauhkan kami dari kelalaian, kuatkan kebersamaan, dan tuntun setiap keputusan agar selaras dengan integritas dan kebaikan.",
+                    source: "QS. Taha: 25-26"
+                },
+                {
+                    title: "Doa Menjaga Amanah",
+                    arabic: "حسبنا الله ونعم الوكيل",
+                    latin: "Hasbunallah wa ni'mal wakil",
+                    text: "Ya Allah, cukupkan kami dengan pertolongan-Mu. Jadikan amanah pekerjaan sebagai jalan ibadah, pelayanan sebagai ladang kebaikan, dan kebersamaan sebagai kekuatan untuk memberi yang terbaik.",
+                    source: "SAPA DJBC"
+                }
+            ];
+
+            const motivasiItems = [
+                { title: "Tenang, Teliti, Tuntas", text: "Hari ini mari bekerja dengan tenang, teliti, dan tuntas. Ketelitian menjaga kualitas, ketenangan menjaga keputusan, dan ketuntasan menjaga kepercayaan. Setiap proses yang rapi adalah bagian dari pelayanan yang bermartabat.", source: "SAPA DJBC" },
+                { title: "Pelayanan yang Menguatkan", text: "Pelayanan bukan hanya menyelesaikan permintaan, tetapi menghadirkan rasa aman dan percaya. Saat kita ramah, tegas, dan konsisten, organisasi menjadi lebih kuat dan masyarakat merasa lebih dilayani.", source: "SAPA DJBC" },
+                { title: "Integritas dalam Hal Kecil", text: "Integritas terlihat dari hal-hal kecil yang dilakukan ketika tidak ada yang melihat. Datang tepat, mencatat rapi, memeriksa ulang, dan menepati janji adalah bahasa sederhana dari profesionalisme.", source: "SAPA DJBC" },
+                { title: "Semangat Pangkalpinang", text: "Dari Pangkalpinang, kita menjaga pelayanan dengan hati yang hangat dan sikap yang teguh. Semoga setiap tugas hari ini menjadi bagian dari kontribusi nyata untuk negeri.", source: "SAPA DJBC" }
+            ];
+
+            const apresiasiItems = [
+                { title: "Apresiasi Kinerja Hari Ini", text: "Terima kasih atas dedikasi hari ini. Setiap dokumen yang diperiksa, setiap layanan yang diselesaikan, dan setiap koordinasi yang dijaga adalah kontribusi penting bagi organisasi dan masyarakat.", source: "SAPA DJBC" },
+                { title: "Terima Kasih untuk Ketekunan", text: "Apresiasi untuk rekan-rekan yang tetap tekun menjaga kualitas kerja. Ketekunan seperti ini sering sunyi, tetapi dampaknya besar: pekerjaan lebih tertib, layanan lebih lancar, dan kepercayaan terus tumbuh.", source: "SAPA DJBC" },
+                { title: "Penghargaan untuk Kebersamaan", text: "Hari ini kita kembali belajar bahwa pekerjaan yang baik lahir dari kebersamaan. Terima kasih untuk saling bantu, saling mengingatkan, dan saling menjaga agar tugas selesai dengan baik.", source: "SAPA DJBC" }
+            ];
+
+            const fallbackMap = {
+                'sapa-pagi': {
+                    title: "Sapa Pagi",
+                    text: getSapaPagiText(),
+                    source: "SAPA DJBC"
+                },
+                doa: pickDaily('doa', doaItems),
+                motivasi: pickDaily('motivasi', motivasiItems),
+                apresiasi: pickDaily('apresiasi', apresiasiItems),
+                'sapa-sore': {
+                    title: "Sapa Sore",
+                    text: getSapaSoreText(),
+                    source: "SAPA DJBC"
+                },
+                'pengantar-indonesia-raya': {
+                    title: "Pengantar Indonesia Raya",
+                    text: "Bapak dan Ibu, sebentar lagi akan diperdengarkan Lagu Kebangsaan Indonesia Raya. Dimohon untuk berdiri dengan sikap sempurna.",
+                    source: "SAPA DJBC"
+                },
+                'indonesia-raya': getIndonesiaRayaContent(),
+                'bell-pembuka': getSongContent('bell-pembuka'),
+                'mars-djbc': getSongContent('mars-djbc'),
+                'lagu-tak-pernah-ku-ragu': getSongContent('lagu-tak-pernah-ku-ragu'),
+                'mars-kemenkeu': getSongContent('mars-kemenkeu'),
+                'lagu-karya-pegawai-bc': getSongContent('lagu-karya-pegawai-bc'),
+                'lagu-orisinal': getLaguOrisinalContent()
+            };
+
+            return {
+                ...(fallbackMap[state.currentCategory] || {
+                    title: getCategory(state.currentCategory).label,
+                    text: `${getCategory(state.currentCategory).label} siap digunakan. Upload audio utama untuk kategori ini, atau edit teks ini agar dibacakan oleh voice pilihan.`,
+                    source: "Konten kustom"
+                }),
+                category: state.currentCategory,
+                date: new Date().toISOString(),
+                id: Date.now()
+            };
+        }
+
+        // ==================== TTS PLAYBACK (Indonesian Voice) ====================
+        async function togglePlay() {
+            if (state.isPlaying) {
+                stopPlayback();
+            } else {
+                await startPlayback();
+            }
+        }
+
+        async function startPlayback() {
+            if (!state.currentContent) return;
+            
+            const text = state.currentContent.text;
+            await playIndonesianTTS(text);
+        }
+
+        function playIndonesianTTS(text) {
+            if (!window.speechSynthesis) {
+                showToast('Browser tidak mendukung Text-to-Speech', 'error');
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'id-ID';
+            utterance.rate = CONFIG.SPEECH_RATE;
+            utterance.pitch = CONFIG.SPEECH_PITCH;
+
+            // Find best Indonesian voice
+            const voices = window.speechSynthesis.getVoices();
+            let selectedVoice = null;
+            
+            // Try to find matching voice
+            const voiceMap = {
+                'Google id-ID-Standard-A': 'Google Bahasa Indonesia (id-ID-Standard-A)',
+                'Google id-ID-Standard-B': 'Google Bahasa Indonesia (id-ID-Standard-B)',
+                'Google id-ID-Standard-C': 'Google Bahasa Indonesia (id-ID-Standard-C)',
+                'Google id-ID-Wavenet-A': 'Google Bahasa Indonesia (id-ID-Wavenet-A)',
+                'Google id-ID-Wavenet-B': 'Google Bahasa Indonesia (id-ID-Wavenet-B)',
+                'Microsoft Gadis': 'Microsoft Gadis - Indonesian (Indonesia)'
+            };
+
+            const targetName = voiceMap[CONFIG.VOICE];
+            
+            if (targetName) {
+                selectedVoice = voices.find(v => v.name.includes(targetName) || v.name === targetName);
+            }
+            
+            // Fallback: any Indonesian voice
+            if (!selectedVoice) {
+                selectedVoice = voices.find(v => v.lang === 'id-ID' || v.lang.startsWith('id'));
+            }
+            
+            // Fallback: any voice that supports Indonesian
+            if (!selectedVoice) {
+                selectedVoice = voices.find(v => v.lang.includes('id') || v.name.toLowerCase().includes('indonesia'));
+            }
+
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+                console.log('Using voice:', selectedVoice.name, selectedVoice.lang);
+            } else {
+                console.warn('No Indonesian voice found, using default');
+            }
+
+            utterance.onstart = () => {
+                state.isPlaying = true;
+                updatePlayUI(true);
+                startVisualizer();
+                showNowPlaying();
+                playBackgroundMusic();
+            };
+
+            utterance.onend = () => {
+                stopBackgroundMusic();
+                stopPlayback();
+            };
+
+            utterance.onerror = (e) => {
+                console.error('TTS error:', e);
+                stopPlayback();
+            };
+
+            state.speechUtterance = utterance;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function getSpeechSequence(content) {
+            const base = content?.text || '';
+            if (state.currentCategory === 'doa') {
+                return [
+                    { text: content.latin ? `Doa pagi hari. ${content.latin}.` : 'Mari kita berdoa.', pause: 500, rate: 0.7, pitch: 0.92 },
+                    { text: base, pause: 0, rate: 0.72, pitch: 0.94 }
+                ];
+            }
+            if (state.currentCategory === 'sapa-pagi' || state.currentCategory === 'sapa-sore') {
+                return [{ text: base, pause: 0, rate: 0.76, pitch: 0.94 }];
+            }
+            return [{ text: base, pause: 0, rate: CONFIG.SPEECH_RATE, pitch: CONFIG.SPEECH_PITCH }];
+        }
+
+        async function startPlayback() {
+            if (!state.currentContent) return;
+
+            if (isSongCategory(state.currentCategory)) {
+                playSongCategory(state.currentCategory);
+                return;
+            }
+
+            if (playPrimaryUploadedAudio(state.currentCategory)) return;
+
+            const sequence = getSpeechSequence(state.currentContent);
+            if (CONFIG.VOICE_PROVIDER === 'elevenlabs' && CONFIG.ELEVENLABS_API_KEY) {
+                const ok = await playElevenLabsTTS(sequence);
+                if (ok) return;
+                showToast('ElevenLabs gagal, memakai voice browser.', 'info');
+            }
+
+            await playIndonesianTTS(sequence);
+        }
+
+        function getUploadedAudio(category, role) {
+            const files = state.musicFiles.filter(m =>
+                m.category === category &&
+                (!role || (m.role || 'background') === role) &&
+                m.data
+            );
+            if (!files.length) return null;
+            return files[getDailyIndex(`${category}-${role || 'any'}`, files.length)];
+        }
+
+        function playPrimaryUploadedAudio(category) {
+            const uploaded = getUploadedAudio(category, 'primary');
+            if (!uploaded) return false;
+
+            stopPlayback();
+            const audio = new Audio(uploaded.data);
+            audio.loop = false;
+            audio.volume = Math.max(0.2, document.getElementById('voiceMix').value / 100);
+            state.activeMusic = audio;
+            audio.onplay = () => {
+                state.isPlaying = true;
+                updatePlayUI(true);
+                startVisualizer();
+                showNowPlaying();
+            };
+            audio.onended = stopPlayback;
+            audio.onerror = stopPlayback;
+            audio.play().catch(() => showToast('Audio upload gagal diputar.', 'error'));
+            return true;
+        }
+
+        async function playElevenLabsTTS(sequence) {
+            const text = (Array.isArray(sequence) ? sequence.map(item => item.text).join('\n\n') : String(sequence || '')).trim();
+            if (!text) return false;
+
+            try {
+                const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${CONFIG.ELEVENLABS_VOICE_ID}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'audio/mpeg',
+                        'Content-Type': 'application/json',
+                        'xi-api-key': CONFIG.ELEVENLABS_API_KEY
+                    },
+                    body: JSON.stringify({
+                        text,
+                        model_id: CONFIG.ELEVENLABS_MODEL,
+                        voice_settings: {
+                            stability: 0.58,
+                            similarity_boost: 0.78,
+                            style: 0.24,
+                            use_speaker_boost: true
+                        }
+                    })
+                });
+
+                if (!response.ok) throw new Error(`ElevenLabs HTTP ${response.status}`);
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const audio = new Audio(url);
+                audio.volume = document.getElementById('voiceMix').value / 100;
+                state.activeMusic = audio;
+                audio.onplay = () => {
+                    state.isPlaying = true;
+                    updatePlayUI(true);
+                    startVisualizer();
+                    showNowPlaying();
+                };
+                audio.onended = () => {
+                    URL.revokeObjectURL(url);
+                    stopPlayback();
+                };
+                audio.onerror = () => {
+                    URL.revokeObjectURL(url);
+                    stopPlayback();
+                };
+                await audio.play();
+                return true;
+            } catch (error) {
+                console.error('ElevenLabs TTS error:', error);
+                return false;
+            }
+        }
+
+        function getBestIndonesianVoice() {
+            const voices = window.speechSynthesis.getVoices();
+            const voiceMap = {
+                'Google id-ID-Standard-A': 'Google Bahasa Indonesia (id-ID-Standard-A)',
+                'Google id-ID-Standard-B': 'Google Bahasa Indonesia (id-ID-Standard-B)',
+                'Google id-ID-Standard-C': 'Google Bahasa Indonesia (id-ID-Standard-C)',
+                'Google id-ID-Wavenet-A': 'Google Bahasa Indonesia (id-ID-Wavenet-A)',
+                'Google id-ID-Wavenet-B': 'Google Bahasa Indonesia (id-ID-Wavenet-B)',
+                'Microsoft Gadis': 'Microsoft Gadis - Indonesian (Indonesia)'
+            };
+            const targetName = voiceMap[CONFIG.VOICE];
+            return (targetName && voices.find(v => v.name.includes(targetName) || v.name === targetName)) ||
+                voices.find(v => v.lang === 'id-ID' || v.lang.startsWith('id')) ||
+                voices.find(v => v.lang.includes('id') || v.name.toLowerCase().includes('indonesia')) ||
+                voices[0] ||
+                null;
+        }
+
+        function splitForNaturalSpeech(text) {
+            return text
+                .replace(/\s+/g, ' ')
+                .split(/(?<=[.!?])\s+/)
+                .map(part => part.trim())
+                .filter(Boolean);
+        }
+
+        function playIndonesianTTS(sequence) {
+            if (!window.speechSynthesis) {
+                showToast('Browser tidak mendukung Text-to-Speech', 'error');
+                return Promise.resolve();
+            }
+
+            window.speechSynthesis.cancel();
+            const selectedVoice = getBestIndonesianVoice();
+            const voiceVol = document.getElementById('voiceMix').value / 100;
+            const items = (Array.isArray(sequence) ? sequence : [{ text: sequence }])
+                .flatMap(item => splitForNaturalSpeech(item.text).map((sentence, index, arr) => ({
+                    text: sentence,
+                    rate: item.rate || CONFIG.SPEECH_RATE,
+                    pitch: item.pitch || CONFIG.SPEECH_PITCH,
+                    pause: index === arr.length - 1 ? (item.pause || 360) : 260
+                })));
+
+            if (!items.length) return Promise.resolve();
+
+            return new Promise(resolve => {
+                let index = 0;
+
+                const speakNext = () => {
+                    if (index >= items.length || !state.isPlaying && index > 0) {
+                        stopPlayback();
+                        resolve();
+                        return;
+                    }
+
+                    const item = items[index++];
+                    const utterance = new SpeechSynthesisUtterance(item.text);
+                    utterance.lang = 'id-ID';
+                    utterance.rate = Math.max(0.62, Math.min(0.9, item.rate));
+                    utterance.pitch = Math.max(0.82, Math.min(1.08, item.pitch));
+                    utterance.volume = Math.max(0.1, Math.min(1, voiceVol));
+                    if (selectedVoice) utterance.voice = selectedVoice;
+
+                    utterance.onstart = () => {
+                        if (!state.isPlaying) {
+                            state.isPlaying = true;
+                            updatePlayUI(true);
+                            startVisualizer();
+                            showNowPlaying();
+                            playBackgroundMusic();
+                        }
+                    };
+                    utterance.onend = () => setTimeout(speakNext, item.pause);
+                    utterance.onerror = e => {
+                        console.error('TTS error:', e);
+                        stopPlayback();
+                        resolve();
+                    };
+
+                    state.speechUtterance = utterance;
+                    window.speechSynthesis.speak(utterance);
+                };
+
+                speakNext();
+            });
+        }
+
+        function playSongCategory(category) {
+            stopPlayback();
+            state.isPlaying = true;
+            updatePlayUI(true);
+            startVisualizer();
+            showNowPlaying();
+
+            const uploaded = getUploadedAudio(category, 'primary') || getUploadedAudio(category);
+            if (uploaded) {
+                const audio = new Audio(uploaded.data);
+                audio.loop = false;
+                audio.volume = Math.max(0.2, document.getElementById('musicMix').value / 100);
+                state.activeMusic = audio;
+                audio.onended = stopPlayback;
+                audio.onerror = () => {
+                    showToast('File lagu gagal diputar, memakai melodi bawaan.', 'info');
+                    playGeneratedMelody(category);
+                };
+                audio.play().catch(() => playGeneratedMelody(category));
+                return;
+            }
+
+            playGeneratedMelody(category);
+            showToast('Belum ada file lagu di-upload. Memutar melodi bawaan sementara.', 'info');
+        }
+
+        function playGeneratedMelody(category) {
+            initAudioContext();
+            const ctx = state.audioContext;
+            if (ctx.state === 'suspended') ctx.resume();
+            const master = ctx.createGain();
+            master.gain.value = Math.max(0.08, (document.getElementById('musicMix').value / 100) * 0.35);
+            master.connect(ctx.destination);
+
+            const notes = category === 'lagu-orisinal'
+                ? [392, 440, 494, 523, 494, 440, 392, 330, 392, 440, 523, 587, 523, 494, 440, 392]
+                : [392, 392, 440, 494, 523, 494, 440, 392, 330, 392, 440, 494, 440, 392];
+            const step = category === 'lagu-orisinal' ? 0.48 : 0.62;
+            const started = ctx.currentTime + 0.05;
+
+            state.generatedToneNodes = [];
+            notes.forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = category === 'lagu-orisinal' ? 'triangle' : 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.0001, started + (i * step));
+                gain.gain.exponentialRampToValueAtTime(0.32, started + (i * step) + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.0001, started + ((i + 1) * step) - 0.05);
+                osc.connect(gain).connect(master);
+                osc.start(started + (i * step));
+                osc.stop(started + ((i + 1) * step));
+                state.generatedToneNodes.push(osc, gain);
+            });
+
+            setTimeout(stopPlayback, Math.ceil((notes.length * step + 0.4) * 1000));
+        }
+
+        // ==================== BACKGROUND MUSIC ====================
+        function playBackgroundMusic() {
+            const musicFile = getUploadedAudio(state.currentCategory, 'background');
+            if (!musicFile || !musicFile.data) return;
+
+            try {
+                const audio = new Audio(musicFile.data);
+                audio.loop = true;
+                const musicVol = document.getElementById('musicMix').value / 100;
+                audio.volume = musicVol * 0.5;
+                
+                state.activeMusic = audio;
+                audio.play().catch(e => console.error('Music play error:', e));
+            } catch (e) {
+                console.error('Music error:', e);
+            }
+        }
+
+        function stopBackgroundMusic() {
+            if (state.activeMusic) {
+                state.activeMusic.pause();
+                state.activeMusic.currentTime = 0;
+                state.activeMusic = null;
+            }
+            if (state.generatedToneNodes?.length) {
+                state.generatedToneNodes.forEach(node => {
+                    try {
+                        if (node.stop) node.stop();
+                        if (node.disconnect) node.disconnect();
+                    } catch (e) {}
+                });
+                state.generatedToneNodes = [];
+            }
+        }
+
+        function stopPlayback() {
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+            stopBackgroundMusic();
+            
+            state.isPlaying = false;
+            updatePlayUI(false);
+            stopVisualizer();
+            hideNowPlaying();
+            document.getElementById('progressFill').style.width = '0%';
+        }
+
+        function updatePlayUI(playing) {
+            const icon = document.getElementById('playIcon');
+            const npIcon = document.getElementById('npPlayIcon');
+            
+            if (playing) {
+                icon.className = 'fas fa-pause';
+                npIcon.className = 'fas fa-pause';
+                document.getElementById('playBtn').classList.add('playing');
+            } else {
+                icon.className = 'fas fa-play';
+                npIcon.className = 'fas fa-play';
+                document.getElementById('playBtn').classList.remove('playing');
+            }
+        }
+
+        function updateMix() {
+            const voiceVol = document.getElementById('voiceMix').value;
+            const musicVol = document.getElementById('musicMix').value;
+            
+            document.getElementById('voiceVolDisplay').textContent = voiceVol + '%';
+            document.getElementById('musicVolDisplay').textContent = musicVol + '%';
+
+            if (state.activeMusic) {
+                state.activeMusic.volume = (musicVol / 100) * 0.5;
+            }
+        }
+
+        function setVolume(value) {
+            // Master volume
+        }
+
+        function seek(e) {
+            // Seek functionality
+        }
+
+        // ==================== VISUALIZER ====================
+        function setupVisualizer() {
+            const canvas = document.getElementById('visualizer');
+            resizeCanvas();
+        }
+
+        function resizeCanvas() {
+            const canvas = document.getElementById('visualizer');
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth - 48;
+            canvas.height = 80;
+        }
+
+        function startVisualizer() {
+            const canvas = document.getElementById('visualizer');
+            const ctx = canvas.getContext('2d');
+            
+            function draw() {
+                if (!state.isPlaying) return;
+                
+                ctx.fillStyle = 'rgba(26, 95, 74, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                const bars = 50;
+                const barWidth = canvas.width / bars;
+                
+                for (let i = 0; i < bars; i++) {
+                    const height = Math.random() * canvas.height * 0.8;
+                    const x = i * barWidth;
+                    const y = (canvas.height - height) / 2;
+                    
+                    const gradient = ctx.createLinearGradient(0, y, 0, y + height);
+                    gradient.addColorStop(0, 'rgba(26, 95, 74, 0.1)');
+                    gradient.addColorStop(0.5, 'rgba(45, 138, 110, 0.4)');
+                    gradient.addColorStop(1, 'rgba(26, 95, 74, 0.1)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(x + 1, y, barWidth - 2, height);
+                }
+                
+                state.animationId = requestAnimationFrame(draw);
+            }
+            
+            draw();
+        }
+
+        function stopVisualizer() {
+            if (state.animationId) {
+                cancelAnimationFrame(state.animationId);
+            }
+            const canvas = document.getElementById('visualizer');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // ==================== MUSIC UPLOAD ====================
+        function openUploadModal() {
+            renderCategoryControls();
+            document.getElementById('uploadModal').classList.add('active');
+        }
+
+        function openUploadForCurrentCategory() {
+            renderCategoryControls();
+            document.getElementById('musicCategory').value = state.currentCategory;
+            document.getElementById('audioRole').value = 'primary';
+            openUploadModal();
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+            document.getElementById('uploadPreview').style.display = 'none';
+        }
+
+        function setupDropZones() {
+            const dropZone = document.getElementById('dropZone');
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--primary)';
+                dropZone.style.background = 'rgba(26, 95, 74, 0.05)';
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.style.borderColor = 'var(--border)';
+                dropZone.style.background = 'transparent';
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--border)';
+                dropZone.style.background = 'transparent';
+                if (e.dataTransfer.files.length > 0) {
+                    Array.from(e.dataTransfer.files).forEach(file => handleFileUpload(file));
+                }
+            });
+        }
+
+        function handleModalUpload(event) {
+            Array.from(event.target.files || []).forEach(file => handleFileUpload(file));
+        }
+
+        function handleMusicUpload(event) {
+            const files = Array.from(event.target.files);
+            files.forEach(file => handleFileUpload(file));
+        }
+
+        function handleFileUpload(file) {
+            if (!file.type.startsWith('audio/')) {
+                showToast('File harus audio (MP3/WAV)', 'error');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('File maksimal 5MB', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const category = document.getElementById('musicCategory').value;
+                const role = document.getElementById('audioRole').value;
+                
+                state.musicFiles.push({
+                    id: `${Date.now()}_${Math.random().toString(36).slice(2)}`,
+                    name: file.name,
+                    category: category,
+                    role,
+                    data: e.target.result,
+                    size: file.size,
+                    date: new Date().toISOString()
+                });
+                
+                localStorage.setItem('musicFiles', JSON.stringify(state.musicFiles));
+                renderMusicList();
+                
+                document.getElementById('previewAudio').src = e.target.result;
+                document.getElementById('uploadPreview').style.display = 'block';
+                
+                showToast(`Audio untuk ${getCategory(category).label || category} ditambahkan!`, 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderMusicList() {
+            const list = document.getElementById('musicList');
+            
+            if (state.musicFiles.length === 0) {
+                list.innerHTML = `<div style="text-align: center; color: var(--text-light); font-size: 0.85rem; padding: 1rem;">Belum ada musik diupload</div>`;
+                return;
+            }
+
+            list.innerHTML = state.musicFiles.map(m => `
+                <div class="music-item">
+                    <i class="fas fa-music"></i>
+                    <div style="flex: 1; overflow: hidden;">
+                        <div style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${m.name}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">${getCategory(m.category).label || m.category} - ${(m.role || 'background') === 'primary' ? 'Utama' : 'Background'}</div>
+                    </div>
+                    <span class="remove-btn" onclick="removeMusic('${m.id}')">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        function removeMusic(id) {
+            state.musicFiles = state.musicFiles.filter(m => m.id != id);
+            localStorage.setItem('musicFiles', JSON.stringify(state.musicFiles));
+            renderMusicList();
+            showToast('Musik dihapus', 'success');
+        }
+
+        function confirmUpload() {
+            closeUploadModal();
+        }
+
+        // ==================== SCHEDULED PLAYBACK ====================
+        function checkSchedule() {
+            if (!CONFIG.AUTO_ENABLED) return;
+            if (state.playbackQueueActive) return;
+            
+            const now = new Date();
+            const day = now.getDay();
+            if (day === 0 || day === 6) return;
+            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+            const due = [];
+            getSortedSchedules().forEach(schedule => {
+                if (!schedule.enabled) return;
+                if (schedule.time === currentTime) {
+                    const lastPlayed = localStorage.getItem(`lastPlayed_${today}_${schedule.id}`);
+                    if (!lastPlayed) {
+                        localStorage.setItem(`lastPlayed_${today}_${schedule.id}`, 'true');
+                        due.push(schedule);
+                    }
+                }
+            });
+
+            if (due.length) playScheduleQueue(due);
+        }
+
+        async function playScheduleQueue(queue) {
+            state.playbackQueueActive = true;
+            for (const schedule of queue) {
+                await autoPlaySchedule(schedule.id);
+                await new Promise(resolve => setTimeout(resolve, (schedule.duration + 2) * 1000));
+            }
+            state.playbackQueueActive = false;
+        }
+
+        async function autoPlaySchedule(scheduleId) {
+            const schedule = SCHEDULES[scheduleId];
+            if (!schedule) return;
+            
+            selectSchedule(scheduleId);
+            switchCategory(schedule.category || schedule.id);
+            showToast(`Memutar ${schedule.label} otomatis!`, 'success');
+            
+            setTimeout(() => startPlayback(), 1200);
+        }
+
+        function schedulePlayback() {
+            const schedule = Object.values(SCHEDULES).find(s => (s.category || s.id) === state.currentCategory);
+            if (schedule) {
+                showToast(`${schedule.label} dijadwalkan ${schedule.time}`, 'success');
+            }
+        }
+
+        function toggleAuto() {
+            CONFIG.AUTO_ENABLED = document.getElementById('autoToggle').checked;
+            localStorage.setItem('autoEnabled', CONFIG.AUTO_ENABLED);
+            showToast(CONFIG.AUTO_ENABLED ? 'Auto-play aktif' : 'Auto-play nonaktif', 'success');
+        }
+
+        // ==================== EDIT CONTENT ====================
+        function editContent() {
+            if (!state.currentContent) return;
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        function saveEdit() {
+            const content = {
+                ...state.currentContent,
+                title: document.getElementById('editTitle').value,
+                text: document.getElementById('editText').value,
+                source: document.getElementById('editSource').value,
+                arabic: document.getElementById('editArabic').value
+            };
+
+            const today = new Date().toISOString().split('T')[0];
+            localStorage.setItem(`content_${today}_${state.currentCategory}`, JSON.stringify(content));
+            
+            displayContent(content);
+            closeEditModal();
+            showToast('Konten diperbarui!', 'success');
+        }
+
+        // ==================== EXPORT & SHARE ====================
+        function exportAudio() {
+            showToast('Export audio membutuhkan server processing. Gunakan screen recording untuk saat ini.', 'info');
+        }
+
+        function downloadAudio() {
+            if (!state.currentContent) return;
+            const blob = new Blob([state.currentContent.text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `daily-spirit-${state.currentCategory}-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+        }
+
+        function shareContent() {
+            if (!state.currentContent) return;
+            
+            const shareData = {
+                title: state.currentContent.title,
+                text: state.currentContent.text
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData);
+            } else {
+                navigator.clipboard.writeText(`${shareData.title}\n\n${shareData.text}`);
+                showToast('Teks disalin ke clipboard!', 'success');
+            }
+        }
+
+        function previewWithMusic() {
+            startPlayback();
+        }
+
+        // ==================== NOW PLAYING ====================
+        function showNowPlaying() {
+            const bar = document.getElementById('nowPlaying');
+            bar.classList.add('active');
+            document.getElementById('npTitle').textContent = state.currentContent?.title || 'Memutar...';
+            
+            const schedule = Object.values(SCHEDULES).find(s => (s.category || s.id) === state.currentCategory);
+            document.getElementById('npCategory').textContent = schedule?.label || getCategory(state.currentCategory).label || state.currentCategory;
+        }
+
+        function hideNowPlaying() {
+            document.getElementById('nowPlaying').classList.remove('active');
+        }
+
+        // ==================== HISTORY ====================
+        function addToHistory(content) {
+            state.history.unshift(content);
+            if (state.history.length > 20) state.history.pop();
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const grid = document.getElementById('historyGrid');
+            
+            if (state.history.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                        <p>Belum ada konten hari ini</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = state.history.map(item => {
+                const schedule = Object.values(SCHEDULES).find(s => (s.category || s.id) === item.category);
+                return `
+                <div class="history-item ${item.category}" onclick="loadHistoryItem('${item.id}')">
+                    <div class="history-icon">
+                        <i class="fas ${getIconForCategory(item.category)}"></i>
+                    </div>
+                    <div class="history-info">
+                        <div class="history-title">${item.title || 'Tanpa Judul'}</div>
+                        <div class="history-meta">${schedule?.label || item.category} • ${new Date(item.date).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}</div>
+                    </div>
+                    <button class="history-play" onclick="event.stopPropagation(); playHistoryItem('${item.id}')">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+            `}).join('');
+        }
+
+        function loadHistoryItem(id) {
+            const item = state.history.find(h => h.id == id);
+            if (item) {
+                switchCategory(item.category);
+                displayContent(item);
+            }
+        }
+
+        function playHistoryItem(id) {
+            loadHistoryItem(id);
+            setTimeout(() => startPlayback(), 500);
+        }
+
+        function loadHistory() {
+            const today = new Date().toISOString().split('T')[0];
+            const keys = Object.keys(localStorage).filter(k => k.startsWith(`content_${today}`));
+            state.history = keys.map(k => JSON.parse(localStorage.getItem(k))).sort((a, b) => b.id - a.id);
+            renderHistory();
+        }
+
+        // ==================== SETTINGS ====================
+        function openSettings() {
+            document.getElementById('gasUrlInput').value = CONFIG.GAS_URL;
+            document.getElementById('voiceProviderSelect').value = CONFIG.VOICE_PROVIDER;
+            document.getElementById('elevenLabsApiKeyInput').value = CONFIG.ELEVENLABS_API_KEY;
+            document.getElementById('elevenLabsVoiceIdInput').value = CONFIG.ELEVENLABS_VOICE_ID;
+            document.getElementById('elevenLabsModelSelect').value = CONFIG.ELEVENLABS_MODEL;
+            document.getElementById('rateSelect').value = CONFIG.SPEECH_RATE.toString();
+            document.getElementById('pitchSelect').value = CONFIG.SPEECH_PITCH.toString();
+            
+            document.querySelectorAll('.voice-option').forEach(v => {
+                v.classList.toggle('selected', v.dataset.voice === CONFIG.VOICE);
+            });
+            
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function selectVoice(voiceId) {
+            CONFIG.VOICE = voiceId;
+            document.querySelectorAll('.voice-option').forEach(v => {
+                v.classList.toggle('selected', v.dataset.voice === voiceId);
+            });
+        }
+
+        function saveSettings() {
+            CONFIG.GAS_URL = document.getElementById('gasUrlInput').value.trim();
+            CONFIG.VOICE_PROVIDER = document.getElementById('voiceProviderSelect').value;
+            CONFIG.ELEVENLABS_API_KEY = document.getElementById('elevenLabsApiKeyInput').value.trim();
+            CONFIG.ELEVENLABS_VOICE_ID = document.getElementById('elevenLabsVoiceIdInput').value.trim() || 'EXAVITQu4vr4xnSDxMaL';
+            CONFIG.ELEVENLABS_MODEL = document.getElementById('elevenLabsModelSelect').value;
+            CONFIG.SPEECH_RATE = parseFloat(document.getElementById('rateSelect').value);
+            CONFIG.SPEECH_PITCH = parseFloat(document.getElementById('pitchSelect').value);
+
+            localStorage.setItem('ttsVoice', CONFIG.VOICE);
+            localStorage.setItem('voiceProvider', CONFIG.VOICE_PROVIDER);
+            localStorage.setItem('elevenLabsApiKey', CONFIG.ELEVENLABS_API_KEY);
+            localStorage.setItem('elevenLabsVoiceId', CONFIG.ELEVENLABS_VOICE_ID);
+            localStorage.setItem('elevenLabsModel', CONFIG.ELEVENLABS_MODEL);
+            localStorage.setItem('speechRate', CONFIG.SPEECH_RATE);
+            localStorage.setItem('speechPitch', CONFIG.SPEECH_PITCH);
+            localStorage.setItem('gasUrl', CONFIG.GAS_URL);
+
+            closeSettings();
+            showToast('Pengaturan tersimpan!', 'success');
+            
+            // Refresh voice info
+            updateVoiceInfo();
+        }
+
+        // ==================== UTILITIES ====================
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Modal close on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) overlay.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
