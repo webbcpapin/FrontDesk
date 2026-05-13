@@ -77,6 +77,8 @@
         .service-cek { --service-color:#10b981; --service-color-dark:#059669; --service-glow:rgba(16,185,129,0.4); }
         .service-imei { --service-color:#6366f1; --service-color-dark:#4f46e5; --service-glow:rgba(99,102,241,0.4); }
         .service-ngingetken { --service-color:#14b8a6; --service-color-dark:#0f766e; --service-glow:rgba(20,184,166,0.4); }
+        .service-seperadik { --service-color:#0ea5e9; --service-color-dark:#0369a1; --service-glow:rgba(14,165,233,0.4); }
+        .service-repack { --service-color:#22c55e; --service-color-dark:#15803d; --service-glow:rgba(34,197,94,0.4); }
         .skm-section { padding:2rem; max-width:1400px; margin:0 auto; }
         .skm-card { background:linear-gradient(135deg, rgba(236,72,153,0.2) 0%, rgba(139,92,246,0.2) 100%); backdrop-filter:blur(20px); border:1px solid rgba(236,72,153,0.3); border-radius:24px; padding:2rem; text-align:center; cursor:pointer; transition:all 0.4s; position:relative; overflow:hidden; }
         .skm-card:hover { transform:translateY(-5px); box-shadow:0 20px 40px rgba(236,72,153,0.3); }
@@ -294,6 +296,8 @@
                 <div class="service-card service-ppid" onclick="openModal('ppid')"><div class="service-icon"><i class="fas fa-folder-open"></i></div><h3>PPID</h3><p>Permohonan informasi publik sesuai Undang-Undang Keterbukaan Informasi</p></div>
                 <div class="service-card service-imei" onclick="window.open('https://webbcpapin.github.io/IMEI/', '_blank')"><span class="service-badge">Online</span><div class="service-icon"><i class="fas fa-mobile-alt"></i></div><h3>Registrasi IMEI</h3><p>Layanan registrasi IMEI untuk perangkat elektronik Anda</p></div>
                 <div class="service-card service-ngingetken" onclick="window.open('https://webbcpapin.github.io/ngingetken/', '_blank')"><span class="service-badge">Online</span><div class="service-icon"><i class="fas fa-bell"></i></div><h3>Aplikasi Ngingetken</h3><p>Layanan pengingat dan informasi digital Bea Cukai Pangkalpinang</p></div>
+                <div class="service-card service-seperadik" onclick="window.open('https://seperadik-pangkalpinang.beacukai.go.id/auth', '_blank')"><span class="service-badge">Online</span><div class="service-icon"><i class="fas fa-truck-loading"></i></div><h3>Layanan Bongkar Timbun Muat di Luar Kawasan Pabean</h3><p>Pengajuan layanan bongkar, timbun, dan muat di luar kawasan pabean</p></div>
+                <div class="service-card service-repack" onclick="window.open('https://repack-pangkalpinang.beacukai.go.id/', '_blank')"><span class="service-badge">Online</span><div class="service-icon"><i class="fas fa-box-open"></i></div><h3>Layanan Returnable Packages</h3><p>Pengajuan dan monitoring layanan returnable packages secara online</p></div>
                 <div class="service-card service-cek" onclick="openCekTiket()"><span class="service-badge">Tracking</span><div class="service-icon"><i class="fas fa-search"></i></div><h3>Cek Status Tiket</h3><p>Cek status layanan Anda dengan nomor tiket atau nomor HP</p></div>
                 <div class="service-card service-skm" onclick="toggleSKM()"><span class="service-badge">Survey</span><div class="service-icon"><i class="fas fa-star"></i></div><h3>Survey Kepuasan</h3><p>Scan QR Code untuk mengisi Survei Kepuasan Masyarakat (SKM)</p><div class="qr-display" id="qrDisplay"><div id="qrCodeContainer"></div></div><div class="skm-preview" id="skmPreview"><i class="fas fa-qrcode"></i></div></div>
             </div>
