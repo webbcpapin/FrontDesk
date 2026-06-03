@@ -57,6 +57,14 @@ function getCanonicalKey(header) {
     waktupulang: 'waktu_pulang',
     kategori: 'kategori',
     detail: 'detail',
+    rincianinformasi: 'detail',
+    rincianinformasiyangdibutuhkan: 'detail',
+    informasiyangdibutuhkan: 'detail',
+    pertanyaan: 'pertanyaan',
+    jawaban: 'jawaban',
+    nomorformulir: 'nomor_formulir',
+    nomorform: 'nomor_formulir',
+    formulir: 'nomor_formulir',
     caraperoleh: 'cara_peroleh',
     carakirim: 'cara_kirim',
     lampiran: 'lampiran',
@@ -140,6 +148,45 @@ function ensureTicketHeader(sheet, headers) {
   sheet.getRange(1, 1).setValue('id_tiket');
   headers[0] = 'id_tiket';
   return headers;
+}
+
+function looksLikeHeaderRow(headers) {
+  if (!headers || headers.length === 0) return false;
+  const canonicalHeaders = headers.map(function(header) {
+    return getCanonicalKey(header);
+  });
+  const knownHeaders = canonicalHeaders.filter(function(header) {
+    return ['timestamp', 'id_tiket', 'hp', 'nama', 'email', 'instansi', 'alamat', 'kategori', 'detail', 'status'].indexOf(header) >= 0;
+  });
+  return knownHeaders.length >= 2 || canonicalHeaders.indexOf('timestamp') >= 0 || canonicalHeaders.indexOf('id_tiket') >= 0;
+}
+
+function getHeaderInfo(sheet, layanan) {
+  const fallbackHeaders = getHeaders(layanan || '');
+  if (!sheet || sheet.getLastRow() < 1) {
+    return {row: 1, startRow: 2, headers: fallbackHeaders};
+  }
+
+  const maxRows = Math.min(sheet.getLastRow(), 10);
+  const maxCols = Math.max(sheet.getLastColumn(), fallbackHeaders.length);
+  const headerCandidates = sheet.getRange(1, 1, maxRows, maxCols).getValues();
+
+  for (let i = 0; i < headerCandidates.length; i++) {
+    const rowHeaders = headerCandidates[i];
+    if (looksLikeHeaderRow(rowHeaders)) {
+      return {
+        row: i + 1,
+        startRow: i + 2,
+        headers: ensureTicketHeader(sheet, rowHeaders)
+      };
+    }
+  }
+
+  return {
+    row: 1,
+    startRow: 2,
+    headers: ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, maxCols).getValues()[0])
+  };
 }
 
 function normalizePhone(value) {
@@ -233,7 +280,8 @@ function submitData(params) {
     }
 
     // Prepare data row
-    const headers = ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]);
+    const headerInfo = getHeaderInfo(sheet, layanan);
+    const headers = headerInfo.headers;
     const rowData = headers.map(function(header) {
       const canonical = getCanonicalKey(header);
       return params[canonical] || params[header] || '';
@@ -266,8 +314,13 @@ function getSheetData(sheetName) {
       return {success: true, data: [], message: 'No data'};
     }
 
-    const headers = ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]);
-    const dataRange = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn());
+    const headerInfo = getHeaderInfo(sheet, getLayananBySheetName(sheetName));
+    if (sheet.getLastRow() < headerInfo.startRow) {
+      return {success: true, data: [], message: 'No data'};
+    }
+
+    const headers = headerInfo.headers;
+    const dataRange = sheet.getRange(headerInfo.startRow, 1, sheet.getLastRow() - headerInfo.startRow + 1, sheet.getLastColumn());
     const values = dataRange.getValues();
 
     const data = values.map(function(row) {
@@ -297,8 +350,11 @@ function getDashboardData() {
     let tamuPulang = 0;
 
     if (bukuSheet && bukuSheet.getLastRow() > 1) {
-      const headers = ensureTicketHeader(bukuSheet, bukuSheet.getRange(1, 1, 1, bukuSheet.getLastColumn()).getValues()[0]);
-      const values = bukuSheet.getRange(2, 1, bukuSheet.getLastRow() - 1, bukuSheet.getLastColumn()).getValues();
+      const headerInfo = getHeaderInfo(bukuSheet, 'buku');
+      const headers = headerInfo.headers;
+      const values = bukuSheet.getLastRow() >= headerInfo.startRow
+        ? bukuSheet.getRange(headerInfo.startRow, 1, bukuSheet.getLastRow() - headerInfo.startRow + 1, bukuSheet.getLastColumn()).getValues()
+        : [];
 
       values.forEach(function(row) {
         const obj = buildRowObject(headers, row);
@@ -384,8 +440,11 @@ function getAgendaData() {
       return {success: true, data: [], message: 'No data'};
     }
 
-    const headers = ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]);
-    const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+    const headerInfo = getHeaderInfo(sheet, 'agenda');
+    const headers = headerInfo.headers;
+    const values = sheet.getLastRow() >= headerInfo.startRow
+      ? sheet.getRange(headerInfo.startRow, 1, sheet.getLastRow() - headerInfo.startRow + 1, sheet.getLastColumn()).getValues()
+      : [];
     
     const data = values.map(function(row) {
       return buildRowObject(headers, row);
@@ -410,8 +469,11 @@ function cekTiket(searchTerm) {
       const sheet = ss.getSheetByName(sheetName);
       if (!sheet || sheet.getLastRow() < 2) continue;
 
-      const headers = ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]);
-      const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+      const headerInfo = getHeaderInfo(sheet, getLayananBySheetName(sheetName));
+      const headers = headerInfo.headers;
+      const values = sheet.getLastRow() >= headerInfo.startRow
+        ? sheet.getRange(headerInfo.startRow, 1, sheet.getLastRow() - headerInfo.startRow + 1, sheet.getLastColumn()).getValues()
+        : [];
 
       for (const row of values) {
         const obj = buildRowObject(headers, row);
@@ -453,18 +515,21 @@ function getHistory(hp) {
       const sheet = ss.getSheetByName(sheetName);
       if (!sheet || sheet.getLastRow() < 2) return;
 
-      const headers = ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]);
+      const headerInfo = getHeaderInfo(sheet, getLayananBySheetName(sheetName));
+      const headers = headerInfo.headers;
       const hpCol = findColumnIndex(headers, 'hp');
       if (hpCol < 0) return;
 
-      const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+      const values = sheet.getLastRow() >= headerInfo.startRow
+        ? sheet.getRange(headerInfo.startRow, 1, sheet.getLastRow() - headerInfo.startRow + 1, sheet.getLastColumn()).getValues()
+        : [];
       for (let i = values.length - 1; i >= 0; i--) {
         if (normalizePhone(values[i][hpCol]) !== targetHp) continue;
         const obj = buildRowObject(headers, values[i]);
         matches.push({
           layanan: layananNames[sheetName],
           sheet: sheetName,
-          row: i + 2,
+          row: i + headerInfo.startRow,
           timestamp: obj.timestamp || obj.tanggal || '',
           data: obj
         });
@@ -507,17 +572,20 @@ function updateStatus(sheetName, rowIndex, newStatus, tiketId) {
       return {success: false, message: 'Sheet not found'};
     }
 
-    const headers = ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]);
+    const headerInfo = getHeaderInfo(sheet, getLayananBySheetName(sheetName));
+    const headers = headerInfo.headers;
     let targetRow = parseInt(rowIndex);
 
     // If row not provided but tiketId provided, find the row
     if ((!targetRow || isNaN(targetRow)) && tiketId) {
-      const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+      const values = sheet.getLastRow() >= headerInfo.startRow
+        ? sheet.getRange(headerInfo.startRow, 1, sheet.getLastRow() - headerInfo.startRow + 1, sheet.getLastColumn()).getValues()
+        : [];
       const idCol = findColumnIndex(headers, 'id_tiket');
       if (idCol >= 0) {
         for (let i = 0; i < values.length; i++) {
           if (String(values[i][idCol]) === String(tiketId)) {
-            targetRow = i + 2;
+            targetRow = i + headerInfo.startRow;
             break;
           }
         }
@@ -554,17 +622,20 @@ function editRow(sheetName, rowIndex, params) {
       return {success: false, message: 'Sheet not found'};
     }
 
-    const headers = ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]);
+    const headerInfo = getHeaderInfo(sheet, getLayananBySheetName(sheetName));
+    const headers = headerInfo.headers;
     let targetRow = parseInt(rowIndex);
     const tiketId = params.tiket || params.id_tiket;
 
     if ((!targetRow || isNaN(targetRow)) && tiketId) {
-      const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+      const values = sheet.getLastRow() >= headerInfo.startRow
+        ? sheet.getRange(headerInfo.startRow, 1, sheet.getLastRow() - headerInfo.startRow + 1, sheet.getLastColumn()).getValues()
+        : [];
       const idCol = findColumnIndex(headers, 'id_tiket');
       if (idCol >= 0) {
         for (let i = 0; i < values.length; i++) {
           if (String(values[i][idCol]) === String(tiketId)) {
-            targetRow = i + 2;
+            targetRow = i + headerInfo.startRow;
             break;
           }
         }
@@ -605,13 +676,16 @@ function deleteRow(sheetName, rowIndex, tiketId) {
     let targetRow = parseInt(rowIndex);
 
     if ((!targetRow || isNaN(targetRow)) && tiketId) {
-      const headers = ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]);
-      const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+      const headerInfo = getHeaderInfo(sheet, getLayananBySheetName(sheetName));
+      const headers = headerInfo.headers;
+      const values = sheet.getLastRow() >= headerInfo.startRow
+        ? sheet.getRange(headerInfo.startRow, 1, sheet.getLastRow() - headerInfo.startRow + 1, sheet.getLastColumn()).getValues()
+        : [];
       const idCol = findColumnIndex(headers, 'id_tiket');
       if (idCol >= 0) {
         for (let i = 0; i < values.length; i++) {
           if (String(values[i][idCol]) === String(tiketId)) {
-            targetRow = i + 2;
+            targetRow = i + headerInfo.startRow;
             break;
           }
         }
@@ -645,6 +719,21 @@ function getSheetName(layanan) {
     'mediasosial': 'MediaSosial'
   };
   return map[layanan] || 'DataLainnya';
+}
+
+function getLayananBySheetName(sheetName) {
+  const map = {
+    'BukuTamu': 'buku',
+    'LayananInformasi': 'informasi',
+    'Pengaduan': 'pengaduan',
+    'KlinikEkspor': 'klinik',
+    'JanjiTemu': 'janji',
+    'PPID': 'ppid',
+    'Agenda': 'agenda',
+    'SKM': 'skm',
+    'MediaSosial': 'mediasosial'
+  };
+  return map[sheetName] || '';
 }
 
 function getHeaders(layanan) {
