@@ -4,6 +4,7 @@
 // ============================================
 
 const SPREADSHEET_ID = '1_TINczIJ6GNcHk5aeBYdG3bj2praCEZMowuiVf4xAnY'; // ID Spreadsheet Frontdesk Bea Cukai Pangkalpinang
+const APP_VERSION = '2026-06-04-header-row-fix';
 
 // ============================================
 // CORS HELPERS
@@ -217,7 +218,7 @@ function doGet(e) {
       case 'deleteRow':
         return createCORSResponse(deleteRow(e.parameter.sheet, e.parameter.row, e.parameter.tiket), callback);
       case 'test':
-        return createCORSResponse({success: true, message: 'API is running', timestamp: new Date().toISOString()}, callback);
+        return createCORSResponse({success: true, message: 'API is running', version: APP_VERSION, timestamp: new Date().toISOString()}, callback);
       default:
         return createCORSResponse({success: false, message: 'Invalid action'}, callback);
     }
