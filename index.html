@@ -53,6 +53,13 @@
         .hero-stat:hover { transform:translateY(-3px); border-color:var(--gold); box-shadow:0 10px 25px rgba(0,0,0,0.25); }
         .hero-stat .number { font-size:1.8rem; font-weight:800; color:var(--gold); }
         .hero-stat .label { font-size:0.75rem; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:1px; }
+        .agenda-ticker { max-width:1400px; margin:0 auto 1rem; padding:0 2rem; }
+        .agenda-ticker-inner { display:flex; align-items:center; gap:1rem; background:linear-gradient(135deg, rgba(245,158,11,0.18) 0%, rgba(59,130,246,0.14) 100%); border:1px solid rgba(212,175,55,0.35); border-radius:14px; overflow:hidden; min-height:46px; box-shadow:0 10px 30px rgba(0,0,0,0.18); }
+        .agenda-ticker-label { flex:0 0 auto; display:flex; align-items:center; gap:0.5rem; padding:0.75rem 1rem; background:rgba(212,175,55,0.18); color:var(--gold); font-size:0.82rem; font-weight:800; text-transform:uppercase; white-space:nowrap; }
+        .agenda-ticker-track { flex:1; overflow:hidden; white-space:nowrap; color:rgba(255,255,255,0.92); font-size:0.9rem; font-weight:600; }
+        .agenda-ticker-text { display:inline-block; padding-left:100%; animation:agendaTicker 35s linear infinite; }
+        .agenda-ticker:hover .agenda-ticker-text { animation-play-state:paused; }
+        @keyframes agendaTicker { from{transform:translateX(0);} to{transform:translateX(-100%);} }
         .services-section { padding:2rem; max-width:1400px; margin:0 auto; }
         .section-title { text-align:center; margin-bottom:2rem; }
         .section-title h3 { font-size:1.5rem; font-weight:700; color:var(--white); margin-bottom:0.5rem; }
@@ -283,6 +290,12 @@
                 <div class="hero-stat" onclick="openDashboardSection('skm')" title="Lihat detail SKM"><div class="number" id="statSKM">90.5</div><div class="label">IKM SKM T1 2026</div></div>
                 <div class="hero-stat" onclick="openDashboardSection('media')" title="Lihat detail media sosial"><div class="number" id="statMedia">77</div><div class="label">Konten Media Sosial</div></div>
                 <div class="hero-stat" onclick="openDashboardSection('buku-tamu')" title="Lihat daftar tamu hari ini"><div class="number" id="statTamu">0</div><div class="label">Tamu Hari Ini</div></div>
+            </div>
+        </section>
+        <section class="agenda-ticker" id="homeAgendaTicker" style="display:none;">
+            <div class="agenda-ticker-inner">
+                <div class="agenda-ticker-label"><i class="fas fa-calendar-day"></i> Agenda Hari Ini</div>
+                <div class="agenda-ticker-track"><span class="agenda-ticker-text" id="homeAgendaTickerText">Memuat agenda hari ini...</span></div>
             </div>
         </section>
         <section class="services-section">
@@ -1453,6 +1466,77 @@
         return (rows || []).map(normalizeRow);
     }
 
+    function normalizeAgendaRows(rows) {
+        return (rows || []).map(function(row) {
+            return hydrateAgendaRow(normalizeRow(row), row);
+        });
+    }
+
+    function isDateLikeAgendaValue(value) {
+        if (!value) return false;
+        const text = String(value).trim();
+        if (/^\d{4}-\d{2}-\d{2}(T|\s|$)/.test(text)) return true;
+        if (/\b(gmt|wib|wit|wita|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|sen|sel|rab|kam|jum|sab|min|mon|tue|wed|thu|fri|sat|sun)\b/i.test(text)) {
+            return !isNaN(new Date(text).getTime());
+        }
+        return false;
+    }
+
+    function hydrateAgendaRow(normalized, rawRow) {
+        const row = normalized || {};
+        const rawEntries = Object.entries(rawRow || {});
+        const canonicalKeys = {
+            timestamp: true,
+            id_tiket: true,
+            ticketNumber: true,
+            tanggal: true,
+            waktu: true,
+            agenda: true,
+            tempat: true,
+            penyelenggara_tamu_undangan: true,
+            pic: true,
+            status: true
+        };
+
+        const legacyValues = [];
+        rawEntries.forEach(function(entry) {
+            const key = entry[0];
+            const value = entry[1];
+            const normalizedKey = normalizeKey(key);
+            const text = String(value || '').trim();
+            if (!text || key.charAt(0) === '_' || canonicalKeys[key] || canonicalKeys[normalizedKey]) return;
+            if (legacyValues.length === 0 || legacyValues[legacyValues.length - 1].value !== text) {
+                legacyValues.push({ value: text, used: false });
+            }
+        });
+
+        function takeBy(match) {
+            for (let i = 0; i < legacyValues.length; i++) {
+                if (!legacyValues[i].used && match(legacyValues[i].value)) {
+                    legacyValues[i].used = true;
+                    return legacyValues[i].value;
+                }
+            }
+            return '';
+        }
+
+        if (!row.tanggal) row.tanggal = takeBy(isDateLikeAgendaValue);
+        if (!row.waktu) row.waktu = takeBy(function(value) {
+            return /\d{1,2}[.:]\d{2}/.test(value) && !isDateLikeAgendaValue(value);
+        });
+        if (!row.status) row.status = takeBy(function(value) {
+            return /^(aktif|selesai|diterima|completed|pending)$/i.test(value);
+        });
+
+        const remaining = legacyValues.filter(function(item) { return !item.used; }).map(function(item) { return item.value; });
+        if (!row.agenda && remaining.length > 0) row.agenda = remaining.shift();
+        if (!row.tempat && remaining.length > 0) row.tempat = remaining.shift();
+        if (!row.pic && remaining.length > 0) row.pic = remaining.pop() || '';
+        if (!row.penyelenggara_tamu_undangan && remaining.length > 0) row.penyelenggara_tamu_undangan = remaining.join(' ');
+
+        return row;
+    }
+
     function normalizePhone(value) {
         return String(value || '').replace(/\D/g, '').replace(/^62/, '0');
     }
@@ -1493,6 +1577,26 @@
         return key || (value || '-');
     }
 
+    function isValidAgendaRow(row) {
+        return !!(row && (getDateKey(row.tanggal || row.timestamp) || row.agenda || row.tempat || row.pic || row.penyelenggara_tamu_undangan));
+    }
+
+    function agendaParticipantText(item) {
+        return item.penyelenggara_tamu_undangan || item.penyelenggara || item.tamu || item.undangan || '';
+    }
+
+    function agendaSummaryText(item, includeDate) {
+        const parts = [];
+        if (includeDate) parts.push(formatDateForDisplay(item.tanggal || item.timestamp));
+        if (item.waktu) parts.push(item.waktu);
+        if (item.agenda) parts.push(item.agenda);
+        if (item.tempat) parts.push(item.tempat);
+        const participant = agendaParticipantText(item);
+        if (participant) parts.push('Penyelenggara/Tamu/Undangan: ' + participant);
+        if (item.pic) parts.push('PIC: ' + item.pic);
+        return parts.join(' | ');
+    }
+
     function getDateKey(value) {
         if (!value) return '';
         if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
@@ -1529,7 +1633,9 @@
         setTimeout(initCharts, 500);
         renderDetailInformasiTable();
         loadDashboardData();
+        loadHomeAgendaTicker();
         setInterval(loadDashboardData, 30000);
+        setInterval(loadHomeAgendaTicker, 30000);
         // Sinkronisasi data lokal ke server setiap 60 detik
         syncLocalData();
         setInterval(syncLocalData, 60000);
@@ -1629,7 +1735,10 @@
             const response = await apiFetch(GAS_URL + '?action=getData&sheet=' + sheetName);
             const data = await response.json();
             if (data.success) {
-                const serverData = normalizeRows(data.data || []);
+                let serverData = sheetName === 'Agenda' ? normalizeAgendaRows(data.data || []) : normalizeRows(data.data || []);
+                if (sheetName === 'Agenda') {
+                    serverData = serverData.filter(isValidAgendaRow);
+                }
                 // Gabungkan dengan data lokal
                 const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
                 const layananMap = {
@@ -1643,9 +1752,15 @@
                     'SKM': 'skm',
                     'MediaSosial': 'mediasosial'
                 };
-                const localData = normalizeRows(pending.filter(function(item) {
+                let localData = normalizeRows(pending.filter(function(item) {
                     return item.layanan === layananMap[sheetName];
                 }));
+                if (sheetName === 'Agenda') {
+                    localData = normalizeAgendaRows(localData);
+                }
+                if (sheetName === 'Agenda') {
+                    localData = localData.filter(isValidAgendaRow);
+                }
 
                 // Merge: prioritaskan data lokal jika tiket sama
                 const mergedMap = {};
@@ -1906,7 +2021,7 @@
         if (stats.mendatang) {
             const el = document.getElementById(stats.mendatang);
             if (el) el.textContent = data.filter(function(r) {
-                return getDateKey(r.tanggal) > today;
+                return getDateKey(r.tanggal || r.timestamp) > today;
             }).length;
         }
         if (stats.rata) {
@@ -2227,6 +2342,9 @@
 
     function filterAdminData(sheetName) {
         let data = adminDataCache[sheetName] || [];
+        if (sheetName === 'Agenda') {
+            data = data.filter(isValidAgendaRow);
+        }
 
         // Filter by date
         const dateFilterId = 'adminFilterTanggal' + sheetName.replace('Layanan', '').replace('Ekspor', '');
@@ -3120,6 +3238,33 @@
     // ============================================
     // AGENDA
     // ============================================
+    async function loadHomeAgendaTicker() {
+        const ticker = document.getElementById('homeAgendaTicker');
+        const tickerText = document.getElementById('homeAgendaTickerText');
+        if (!ticker || !tickerText) return;
+
+        try {
+            const response = await apiFetch(GAS_URL + '?action=getAgenda');
+            const data = await response.json();
+            const today = todayKey();
+            const todayAgenda = normalizeAgendaRows(data.data || []).filter(function(item) {
+                return isValidAgendaRow(item) && getDateKey(item.tanggal || item.timestamp) === today;
+            });
+
+            ticker.style.display = 'block';
+            if (data.success && todayAgenda.length > 0) {
+                tickerText.textContent = todayAgenda.map(function(item) {
+                    return agendaSummaryText(item, false);
+                }).join('     •     ');
+            } else {
+                tickerText.textContent = 'Tidak ada agenda hari ini';
+            }
+        } catch (error) {
+            ticker.style.display = 'block';
+            tickerText.textContent = 'Agenda hari ini belum dapat dimuat';
+        }
+    }
+
     async function loadAgendaData() {
         const container = document.getElementById('agendaList');
         if (!container) return;
@@ -3129,7 +3274,7 @@
             const response = await apiFetch(GAS_URL + '?action=getAgenda');
             const data = await response.json();
             if (data.success) {
-                renderAgendaList(normalizeRows(data.data || []));
+                renderAgendaList(normalizeAgendaRows(data.data || []).filter(isValidAgendaRow));
             } else {
                 renderAgendaList([]);
             }
@@ -3147,7 +3292,7 @@
         const nextAgenda = [];
 
         agendaData.forEach(function(item) {
-            const itemDate = getDateKey(item.tanggal);
+            const itemDate = getDateKey(item.tanggal || item.timestamp);
             if (itemDate === today) {
                 todayAgenda.push(item);
             } else if (itemDate > today) {
@@ -3168,6 +3313,7 @@
                 html += '<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem;">';
                 html += '<div style="font-weight:700;color:var(--white);font-size:1rem;">' + (item.agenda || '-') + '</div>';
                 html += '<div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-top:0.25rem;"><i class="fas fa-clock" style="color:var(--accent);"></i> ' + (item.waktu || '-') + ' &bull; <i class="fas fa-map-marker-alt" style="color:var(--danger);"></i> ' + (item.tempat || '-') + '</div>';
+                html += '<div style="color:rgba(255,255,255,0.65);font-size:0.8rem;margin-top:0.25rem;"><i class="fas fa-users" style="color:var(--gold);"></i> Penyelenggara/Tamu/Undangan: ' + (agendaParticipantText(item) || '-') + '</div>';
                 html += '<div style="color:rgba(255,255,255,0.6);font-size:0.8rem;margin-top:0.25rem;">PIC: ' + (item.pic || '-') + '</div>';
                 html += '</div>';
             });
@@ -3182,7 +3328,8 @@
             nextAgenda.slice(0, 10).forEach(function(item) {
                 html += '<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem;">';
                 html += '<div style="font-weight:700;color:var(--white);font-size:1rem;">' + (item.agenda || '-') + '</div>';
-                html += '<div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-top:0.25rem;"><i class="fas fa-calendar" style="color:var(--success);"></i> ' + formatDate(item.tanggal) + ' &bull; <i class="fas fa-clock" style="color:var(--accent);"></i> ' + (item.waktu || '-') + ' &bull; <i class="fas fa-map-marker-alt" style="color:var(--danger);"></i> ' + (item.tempat || '-') + '</div>';
+                html += '<div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-top:0.25rem;"><i class="fas fa-calendar" style="color:var(--success);"></i> ' + formatDateForDisplay(item.tanggal || item.timestamp) + ' &bull; <i class="fas fa-clock" style="color:var(--accent);"></i> ' + (item.waktu || '-') + ' &bull; <i class="fas fa-map-marker-alt" style="color:var(--danger);"></i> ' + (item.tempat || '-') + '</div>';
+                html += '<div style="color:rgba(255,255,255,0.65);font-size:0.8rem;margin-top:0.25rem;"><i class="fas fa-users" style="color:var(--gold);"></i> Penyelenggara/Tamu/Undangan: ' + (agendaParticipantText(item) || '-') + '</div>';
                 html += '<div style="color:rgba(255,255,255,0.6);font-size:0.8rem;margin-top:0.25rem;">PIC: ' + (item.pic || '-') + '</div>';
                 html += '</div>';
             });
