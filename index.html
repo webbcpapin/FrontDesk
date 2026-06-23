@@ -1572,6 +1572,32 @@
         return url;
     }
 
+    function escapeHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function getAdminEditableFields(sheetName, row) {
+        const fieldMap = {
+            Agenda: ['tanggal', 'waktu', 'agenda', 'tempat', 'pic', 'status', 'penyelenggara_tamu_undangan']
+        };
+        if (fieldMap[sheetName]) return fieldMap[sheetName];
+        return Object.keys(row || {}).filter(function(key) {
+            return !(key === 'timestamp' || key === 'id_tiket' || key === 'savedAt' || key === 'ticketNumber' || key.startsWith('_'));
+        });
+    }
+
+    function getAdminFieldLabel(key) {
+        const labels = {
+            penyelenggara_tamu_undangan: 'Penyelenggara/Tamu/Undangan'
+        };
+        return labels[key] || key.replace(/_/g, ' ').toUpperCase();
+    }
+
     function formatDateForDisplay(value) {
         const key = getDateKey(value);
         return key || (value || '-');
@@ -2100,13 +2126,12 @@
         editingSheet = sheetName;
 
         let formHtml = '<div class="form-row">';
-        Object.keys(row).forEach(function(key) {
-            if (key === 'timestamp' || key === 'id_tiket' || key === 'savedAt' || key === 'ticketNumber' || key.startsWith('_')) return;
+        getAdminEditableFields(sheetName, row).forEach(function(key) {
             const value = row[key] || '';
             const inputType = key === 'tanggal' ? 'date' : 'text';
             const inputValue = key === 'tanggal' ? getDateKey(value) : value;
-            formHtml += '<div class="form-group"><label class="form-label">' + key.replace(/_/g, ' ').toUpperCase() + '</label>' +
-                '<input type="' + inputType + '" class="form-input edit-field" data-key="' + key + '" value="' + inputValue + '"></div>';
+            formHtml += '<div class="form-group"><label class="form-label">' + getAdminFieldLabel(key) + '</label>' +
+                '<input type="' + inputType + '" class="form-input edit-field" data-key="' + key + '" value="' + escapeHtml(inputValue) + '"></div>';
         });
         formHtml += '</div>';
 
