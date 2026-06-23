@@ -4,7 +4,7 @@
 // ============================================
 
 const SPREADSHEET_ID = '1_TINczIJ6GNcHk5aeBYdG3bj2praCEZMowuiVf4xAnY'; // ID Spreadsheet Frontdesk Bea Cukai Pangkalpinang
-const APP_VERSION = '2026-06-04-header-row-fix';
+const APP_VERSION = '2026-06-23-agenda-admin-fix';
 
 // ============================================
 // CORS HELPERS
@@ -86,6 +86,12 @@ function getCanonicalKey(header) {
     waktu: 'waktu',
     agenda: 'agenda',
     tempat: 'tempat',
+    penyelenggara: 'penyelenggara_tamu_undangan',
+    tamu: 'penyelenggara_tamu_undangan',
+    undangan: 'penyelenggara_tamu_undangan',
+    penyelenggaratamuundangan: 'penyelenggara_tamu_undangan',
+    penyelenggaratamu: 'penyelenggara_tamu_undangan',
+    penyelenggaraundangan: 'penyelenggara_tamu_undangan',
     pic: 'pic',
     unsur: 'unsur',
     nilai: 'nilai',
@@ -162,6 +168,34 @@ function looksLikeHeaderRow(headers) {
   return knownHeaders.length >= 2 || canonicalHeaders.indexOf('timestamp') >= 0 || canonicalHeaders.indexOf('id_tiket') >= 0;
 }
 
+function ensureRequiredHeaders(sheet, headers, headerRow, layanan) {
+  const requiredHeaders = getHeaders(layanan || '');
+  if (!sheet || !layanan || requiredHeaders.length === 0) return headers;
+
+  let lastHeaderIndex = headers.length - 1;
+  while (lastHeaderIndex >= 0 && !String(headers[lastHeaderIndex] || '').trim()) {
+    lastHeaderIndex--;
+  }
+  const effectiveHeaders = headers.slice(0, lastHeaderIndex + 1);
+  const canonicalHeaders = effectiveHeaders.map(function(header) {
+    return getCanonicalKey(header);
+  });
+  const missingHeaders = requiredHeaders.filter(function(header) {
+    return canonicalHeaders.indexOf(getCanonicalKey(header)) < 0;
+  });
+
+  if (missingHeaders.length === 0) return effectiveHeaders;
+
+  const startCol = effectiveHeaders.length + 1;
+  sheet.getRange(headerRow, startCol, 1, missingHeaders.length).setValues([missingHeaders]);
+  sheet.getRange(headerRow, startCol, 1, missingHeaders.length)
+    .setFontWeight('bold')
+    .setBackground('#1e3a8a')
+    .setFontColor('white');
+
+  return effectiveHeaders.concat(missingHeaders);
+}
+
 function getHeaderInfo(sheet, layanan) {
   const fallbackHeaders = getHeaders(layanan || '');
   if (!sheet || sheet.getLastRow() < 1) {
@@ -178,7 +212,7 @@ function getHeaderInfo(sheet, layanan) {
       return {
         row: i + 1,
         startRow: i + 2,
-        headers: ensureTicketHeader(sheet, rowHeaders)
+        headers: ensureRequiredHeaders(sheet, ensureTicketHeader(sheet, rowHeaders), i + 1, layanan)
       };
     }
   }
@@ -186,7 +220,7 @@ function getHeaderInfo(sheet, layanan) {
   return {
     row: 1,
     startRow: 2,
-    headers: ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, maxCols).getValues()[0])
+    headers: ensureRequiredHeaders(sheet, ensureTicketHeader(sheet, sheet.getRange(1, 1, 1, maxCols).getValues()[0]), 1, layanan)
   };
 }
 
@@ -324,8 +358,10 @@ function getSheetData(sheetName) {
     const dataRange = sheet.getRange(headerInfo.startRow, 1, sheet.getLastRow() - headerInfo.startRow + 1, sheet.getLastColumn());
     const values = dataRange.getValues();
 
-    const data = values.map(function(row) {
-      return buildRowObject(headers, row);
+    const data = values.map(function(row, index) {
+      const obj = buildRowObject(headers, row);
+      obj._sheet_row = headerInfo.startRow + index;
+      return obj;
     });
 
     return {success: true, data: data, count: data.length};
@@ -447,8 +483,10 @@ function getAgendaData() {
       ? sheet.getRange(headerInfo.startRow, 1, sheet.getLastRow() - headerInfo.startRow + 1, sheet.getLastColumn()).getValues()
       : [];
     
-    const data = values.map(function(row) {
-      return buildRowObject(headers, row);
+    const data = values.map(function(row, index) {
+      const obj = buildRowObject(headers, row);
+      obj._sheet_row = headerInfo.startRow + index;
+      return obj;
     });
 
     return {success: true, data: data};
@@ -745,7 +783,7 @@ function getHeaders(layanan) {
     'klinik': ['timestamp', 'id_tiket', 'nama', 'hp', 'nama_usaha', 'email', 'domisili', 'alamat', 'tahap_umkm', 'jenis_produk', 'keperluan', 'deskripsi', 'status'],
     'janji': ['timestamp', 'id_tiket', 'nama', 'hp', 'instansi', 'email', 'bertemu_dengan', 'keperluan', 'tanggal', 'waktu', 'status'],
     'ppid': ['timestamp', 'id_tiket', 'nama', 'hp', 'nik', 'npwp', 'email', 'pekerjaan', 'alamat', 'detail', 'tujuan', 'lampiran', 'status'],
-    'agenda': ['timestamp', 'id_tiket', 'tanggal', 'waktu', 'agenda', 'tempat', 'pic', 'status'],
+    'agenda': ['timestamp', 'id_tiket', 'tanggal', 'waktu', 'agenda', 'tempat', 'penyelenggara_tamu_undangan', 'pic', 'status'],
     'skm': ['timestamp', 'id_tiket', 'unsur', 'nilai', 'kategori'],
     'mediasosial': ['timestamp', 'id_tiket', 'bulan', 'total', 'feed', 'reels', 'jenis', 'keterangan']
   };

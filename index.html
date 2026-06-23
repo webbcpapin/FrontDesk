@@ -1070,6 +1070,7 @@
                 </div>
                 <div class="admin-toolbar">
                     <input type="text" class="admin-search" id="searchAgenda" placeholder="Cari agenda..." onkeyup="searchAdminData('Agenda')">
+                    <input type="date" class="admin-filter" id="adminFilterTanggalAgenda" onchange="filterAdminData('Agenda')" title="Filter tanggal agenda">
                     <select class="admin-filter" id="adminFilterStatusAgenda" onchange="filterAdminData('Agenda')">
                         <option value="">Semua Status</option>
                         <option value="Aktif">Aktif</option>
@@ -1082,7 +1083,7 @@
                 </div>
                 <div style="overflow-x:auto;">
                     <table class="data-table" id="tableAgenda">
-                        <thead><tr><th>No</th><th>Tanggal</th><th>Waktu</th><th>Agenda</th><th>Tempat</th><th>PIC</th><th>Status</th><th>Aksi</th></tr></thead>
+                        <thead><tr><th>No</th><th>Tanggal</th><th>Waktu</th><th>Agenda</th><th>Tempat</th><th>Penyelenggara/Tamu/Undangan</th><th>PIC</th><th>Status</th><th>Aksi</th></tr></thead>
                         <tbody id="tbodyAgenda"></tbody>
                     </table>
                 </div>
@@ -1194,6 +1195,7 @@
                 <div class="form-group"><label class="form-label">Tempat</label><input type="text" class="form-input" id="addAgendaTempat" placeholder="Lokasi kegiatan"></div>
                 <div class="form-group"><label class="form-label">PIC</label><input type="text" class="form-input" id="addAgendaPIC" placeholder="Penanggung jawab"></div>
             </div>
+            <div class="form-group"><label class="form-label">Penyelenggara/Tamu/Undangan</label><input type="text" class="form-input" id="addAgendaPenyelenggara" placeholder="Nama penyelenggara, tamu, atau undangan"></div>
             <div class="form-group">
                 <label class="form-label">Status</label>
                 <select class="form-input" id="addAgendaStatus">
@@ -1417,6 +1419,12 @@
             waktu: 'waktu',
             agenda: 'agenda',
             tempat: 'tempat',
+            penyelenggara: 'penyelenggara_tamu_undangan',
+            tamu: 'penyelenggara_tamu_undangan',
+            undangan: 'penyelenggara_tamu_undangan',
+            penyelenggaratamuundangan: 'penyelenggara_tamu_undangan',
+            penyelenggaratamu: 'penyelenggara_tamu_undangan',
+            penyelenggaraundangan: 'penyelenggara_tamu_undangan',
             pic: 'pic',
             unsur: 'unsur',
             nilai: 'nilai',
@@ -1450,7 +1458,39 @@
     }
 
     function rowKey(row, prefix, index) {
-        return row.id_tiket || row.ticketNumber || row.hp || (prefix + '_' + index);
+        return row.id_tiket || row.ticketNumber || row._sheet_row || row.hp || (prefix + '_' + index);
+    }
+
+    function adminActionKey(row, index) {
+        return encodeURIComponent(row.id_tiket || row.ticketNumber || ('row:' + (row._sheet_row || row._rowIndex || index)));
+    }
+
+    function findAdminRowByKey(data, key) {
+        const decodedKey = decodeURIComponent(String(key || ''));
+        return (data || []).find(function(row) {
+            const rowSheetKey = 'row:' + (row._sheet_row || row._rowIndex || '');
+            return String(row.id_tiket || '') === decodedKey ||
+                String(row.ticketNumber || '') === decodedKey ||
+                rowSheetKey === decodedKey;
+        });
+    }
+
+    function buildAdminRequestUrl(action, sheetName, row, key) {
+        const decodedKey = decodeURIComponent(String(key || ''));
+        let url = GAS_URL + '?action=' + action + '&sheet=' + encodeURIComponent(sheetName);
+        if (row && row._sheet_row) {
+            url += '&row=' + encodeURIComponent(row._sheet_row);
+        } else if (decodedKey.indexOf('row:') === 0) {
+            url += '&row=' + encodeURIComponent(decodedKey.replace('row:', ''));
+        } else {
+            url += '&tiket=' + encodeURIComponent(decodedKey);
+        }
+        return url;
+    }
+
+    function formatDateForDisplay(value) {
+        const key = getDateKey(value);
+        return key || (value || '-');
     }
 
     function getDateKey(value) {
@@ -1755,16 +1795,18 @@
                     '<button class="btn-action btn-delete" onclick="deleteRowAdmin(\'' + (row.id_tiket || '') + '\', \'PPID\')" title="Hapus"><i class="fas fa-trash"></i></button>' +
                     '</div></td></tr>';
             } else if (sheetName === 'Agenda') {
+                const agendaKey = adminActionKey(row, actualIndex);
                 html += '<tr><td style="padding:0.75rem;">' + (actualIndex + 1) + '</td>' +
-                    '<td style="padding:0.75rem;">' + (row.tanggal || '-') + '</td>' +
+                    '<td style="padding:0.75rem;">' + formatDateForDisplay(row.tanggal) + '</td>' +
                     '<td style="padding:0.75rem;">' + (row.waktu || '-') + '</td>' +
                     '<td style="padding:0.75rem;">' + (row.agenda || '-').substring(0, 40) + '</td>' +
                     '<td style="padding:0.75rem;">' + (row.tempat || '-') + '</td>' +
+                    '<td style="padding:0.75rem;">' + (row.penyelenggara_tamu_undangan || '-') + '</td>' +
                     '<td style="padding:0.75rem;">' + (row.pic || '-') + '</td>' +
                     '<td style="padding:0.75rem;"><span class="status-badge ' + statusClass + '">' + status + '</span></td>' +
                     '<td style="padding:0.75rem;"><div class="actions">' +
-                    '<button class="btn-action btn-edit" onclick="editRowAdmin(\'' + (row.id_tiket || '') + '\', \'Agenda\')" title="Edit"><i class="fas fa-edit"></i></button>' +
-                    '<button class="btn-action btn-delete" onclick="deleteRowAdmin(\'' + (row.id_tiket || '') + '\', \'Agenda\')" title="Hapus"><i class="fas fa-trash"></i></button>' +
+                    '<button class="btn-action btn-edit" onclick="editRowAdmin(\'' + agendaKey + '\', \'Agenda\')" title="Edit"><i class="fas fa-edit"></i></button>' +
+                    '<button class="btn-action btn-delete" onclick="deleteRowAdmin(\'' + agendaKey + '\', \'Agenda\')" title="Hapus"><i class="fas fa-trash"></i></button>' +
                     '</div></td></tr>';
             } else if (sheetName === 'SKM') {
                 html += '<tr><td style="padding:0.75rem;">' + (actualIndex + 1) + '</td>' +
@@ -1937,17 +1979,19 @@
     function editRowAdmin(id_tiket, sheetName) {
         const data = adminDataCache[sheetName];
         if (!data) return;
-        const row = data.find(function(r) { return r.id_tiket === id_tiket; });
+        const row = findAdminRowByKey(data, id_tiket);
         if (!row) return;
         editingRow = id_tiket;
         editingSheet = sheetName;
 
         let formHtml = '<div class="form-row">';
         Object.keys(row).forEach(function(key) {
-            if (key === 'timestamp' || key === 'id_tiket' || key === 'savedAt' || key === 'ticketNumber') return;
+            if (key === 'timestamp' || key === 'id_tiket' || key === 'savedAt' || key === 'ticketNumber' || key.startsWith('_')) return;
             const value = row[key] || '';
+            const inputType = key === 'tanggal' ? 'date' : 'text';
+            const inputValue = key === 'tanggal' ? getDateKey(value) : value;
             formHtml += '<div class="form-group"><label class="form-label">' + key.replace(/_/g, ' ').toUpperCase() + '</label>' +
-                '<input type="text" class="form-input edit-field" data-key="' + key + '" value="' + value + '"></div>';
+                '<input type="' + inputType + '" class="form-input edit-field" data-key="' + key + '" value="' + inputValue + '"></div>';
         });
         formHtml += '</div>';
 
@@ -1964,11 +2008,11 @@
         });
 
         const data = adminDataCache[editingSheet];
-        const row = data.find(function(r) { return r.id_tiket === editingRow; });
+        const row = findAdminRowByKey(data, editingRow);
         if (!row) { closeEditModal(); return; }
 
         try {
-            const response = await apiFetch(GAS_URL + '?action=editRow&sheet=' + editingSheet + '&tiket=' + encodeURIComponent(editingRow), {
+            const response = await apiFetch(buildAdminRequestUrl('editRow', editingSheet, row, editingRow), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updates)
@@ -2007,6 +2051,7 @@
         document.getElementById('addAgendaNama').value = '';
         document.getElementById('addAgendaTempat').value = '';
         document.getElementById('addAgendaPIC').value = '';
+        document.getElementById('addAgendaPenyelenggara').value = '';
         document.getElementById('addAgendaStatus').value = 'Aktif';
     }
     function closeAddAgendaModal() {
@@ -2021,6 +2066,7 @@
             waktu: document.getElementById('addAgendaWaktu').value,
             agenda: document.getElementById('addAgendaNama').value,
             tempat: document.getElementById('addAgendaTempat').value,
+            penyelenggara_tamu_undangan: document.getElementById('addAgendaPenyelenggara').value,
             pic: document.getElementById('addAgendaPIC').value,
             status: document.getElementById('addAgendaStatus').value
         };
@@ -2137,12 +2183,13 @@
 
     async function deleteRowAdmin(id_tiket, sheetName) {
         if (!confirm('Yakin ingin menghapus data ini?')) return;
+        const data = adminDataCache[sheetName] || [];
+        const row = findAdminRowByKey(data, id_tiket);
+        const idx = data.indexOf(row);
 
         try {
-            const response = await apiFetch(GAS_URL + '?action=deleteRow&sheet=' + sheetName + '&tiket=' + encodeURIComponent(id_tiket));
+            const response = await apiFetch(buildAdminRequestUrl('deleteRow', sheetName, row, id_tiket));
             const result = await response.json();
-            const data = adminDataCache[sheetName];
-            const idx = data.findIndex(function(r) { return r.id_tiket === id_tiket; });
             if (result.success) {
                 if (idx >= 0) data.splice(idx, 1);
                 renderAdminTable(sheetName, data);
@@ -2154,8 +2201,6 @@
                 showToast('Data dihapus (lokal)', 'warning');
             }
         } catch (error) {
-            const data = adminDataCache[sheetName];
-            const idx = data.findIndex(function(r) { return r.id_tiket === id_tiket; });
             if (idx >= 0) data.splice(idx, 1);
             renderAdminTable(sheetName, data);
             showToast('Data dihapus (lokal)', 'warning');
