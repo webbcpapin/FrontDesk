@@ -705,6 +705,7 @@
                 <button class="nav-tab" onclick="switchTab('buku-tamu')">Buku Tamu</button>
                 <button class="nav-tab" onclick="switchTab('informasi')">Layanan Informasi</button>
                 <button class="nav-tab" onclick="switchTab('klinik')">Klinik Ekspor</button>
+                <button class="nav-tab" onclick="switchTab('janji-temu')">Janji Temu</button>
                 <button class="nav-tab" onclick="switchTab('saluran')">Saluran Komunikasi</button>
                 <button class="nav-tab" onclick="switchTab('skm')">SKM</button>
                 <button class="nav-tab" onclick="switchTab('media')">Media Sosial</button>
@@ -796,6 +797,31 @@
                     <div class="dashboard-card"><h4><i class="fas fa-map-marker-alt"></i> Domisili UMKM</h4><div class="chart-container"><canvas id="domisiliKlinikChart"></canvas></div></div>
                     <div class="dashboard-card"><h4><i class="fas fa-box"></i> Jenis Produk</h4><div class="chart-container"><canvas id="produkKlinikChart"></canvas></div></div>
                     <div class="dashboard-card"><h4><i class="fas fa-chart-line"></i> Tahap UMKM</h4><div class="chart-container"><canvas id="tahapUMKMChart"></canvas></div></div>
+                </div>
+            </div>
+            <div id="tab-janji-temu" class="tab-content" style="display:none;">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h4><i class="fas fa-calendar-check"></i> Statistik Janji Temu</h4>
+                        <div class="stat-grid">
+                            <div class="stat-item"><div class="value" id="dashTotalJanji">0</div><div class="label">Total Janji</div></div>
+                            <div class="stat-item"><div class="value" id="dashJanjiHariIni">0</div><div class="label">Hari Ini</div></div>
+                            <div class="stat-item"><div class="value" id="dashJanjiMendatang">0</div><div class="label">Mendatang</div></div>
+                            <div class="stat-item"><div class="value" id="dashJanjiSelesai">0</div><div class="label">Selesai</div></div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card" style="grid-column:1 / -1;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+                            <h4><i class="fas fa-calendar-check"></i> Daftar Janji Temu</h4>
+                            <div class="date-filter-row">
+                                <label>Filter Tanggal:</label>
+                                <input type="date" id="filterTanggalJanji" onchange="filterJanjiTemuByDate()">
+                                <button class="btn-refresh" style="padding:0.5rem 1rem;font-size:0.8rem;" onclick="resetFilterJanjiTemu()"><i class="fas fa-undo"></i> Reset</button>
+                                <button class="btn-refresh" style="padding:0.5rem 1rem;font-size:0.8rem;" onclick="loadJanjiTemuData()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            </div>
+                        </div>
+                        <div class="tamu-list" id="janjiTemuList"></div>
+                    </div>
                 </div>
             </div>
             <div id="tab-saluran" class="tab-content" style="display:none;">
@@ -1280,6 +1306,7 @@
     let editingRow = null;
     let editingSheet = null;
     let dashboardBukuTamuCache = [];
+    let dashboardJanjiTemuCache = [];
     let dashboardSKMCache = [];
     let dashboardMediaCache = [];
     let historyCache = {};
@@ -1399,6 +1426,7 @@
             jumlahrombo: 'jumlah_rombongan',
             tanggalkunjungan: 'tanggal',
             tanggalkunjun: 'tanggal',
+            tanggaljanji: 'tanggal_janji',
             tanggal: 'tanggal',
             status: 'status',
             waktupulang: 'waktu_pulang',
@@ -1654,6 +1682,7 @@
             }
         });
         document.getElementById('filterTanggalBuku').value = today;
+        document.getElementById('filterTanggalJanji').value = today;
         document.getElementById('adminFilterTanggalBuku').value = today;
         initQRCode();
         setTimeout(initCharts, 500);
@@ -2986,6 +3015,7 @@
         if (activeNav) activeNav.classList.add('active');
         setTimeout(initCharts, 100);
         if (tabName === 'agenda') loadAgendaData();
+        if (tabName === 'janji-temu') renderJanjiTemuDashboard();
         if (tabName === 'skm') renderDashboardSKM();
         if (tabName === 'media') renderDashboardMedia();
     }
@@ -3045,6 +3075,8 @@
             const mediaData = await mediaRes.json();
             if (mediaData.success) dashboardMediaCache = normalizeRows(mediaData.data || []);
         } catch(e) { dashboardMediaCache = []; }
+
+        await loadJanjiTemuData(false);
     }
 
     function updateDashboardStats(data) {
@@ -3078,6 +3110,7 @@
         const today = todayKey();
 
         const bukuTamu = normalizeRows(pending.filter(function(item) { return item.layanan === 'buku'; }));
+        dashboardJanjiTemuCache = normalizeRows(pending.filter(function(item) { return item.layanan === 'janji'; }));
         const todayTamu = bukuTamu.filter(function(item) {
             const itemDate = getDateKey(item.tanggal || item.timestamp || item.savedAt);
             return itemDate === today;
@@ -3099,6 +3132,128 @@
         if (dashTotalBulan) dashTotalBulan.textContent = bukuTamu.length;
 
         renderTamuListFromLocal(bukuTamu);
+    }
+
+    function getJanjiDateKey(janji) {
+        return getDateKey(janji.tanggal_janji || janji.tanggal || janji.timestamp || janji.savedAt);
+    }
+
+    async function loadJanjiTemuData(showLoading) {
+        const container = document.getElementById('janjiTemuList');
+        if (showLoading !== false && container) {
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Memuat janji temu...</p></div>';
+        }
+
+        try {
+            const response = await apiFetch(GAS_URL + '?action=getData&sheet=JanjiTemu');
+            const data = await response.json();
+            if (data.success) {
+                const serverJanji = normalizeRows(data.data || []);
+                const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+                const localJanji = normalizeRows(pending.filter(function(item) { return item.layanan === 'janji'; }));
+                const mergedMap = {};
+                serverJanji.forEach(function(row, index) {
+                    mergedMap[rowKey(row, 'server_janji', index)] = row;
+                });
+                localJanji.forEach(function(row, index) {
+                    mergedMap[rowKey(row, 'local_janji', index)] = row;
+                });
+                dashboardJanjiTemuCache = Object.values(mergedMap);
+            }
+        } catch (error) {
+            const pending = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+            dashboardJanjiTemuCache = normalizeRows(pending.filter(function(item) { return item.layanan === 'janji'; }));
+        }
+
+        renderJanjiTemuDashboard();
+    }
+
+    function renderJanjiTemuDashboard(rows) {
+        updateJanjiTemuStats(dashboardJanjiTemuCache);
+        let data = rows;
+        if (!data) {
+            const dateInput = document.getElementById('filterTanggalJanji');
+            const selectedDate = dateInput ? dateInput.value : '';
+            data = selectedDate ? dashboardJanjiTemuCache.filter(function(row) {
+                return getJanjiDateKey(row) === selectedDate;
+            }) : dashboardJanjiTemuCache;
+        }
+        renderJanjiTemuList(data);
+    }
+
+    function updateJanjiTemuStats(data) {
+        const today = todayKey();
+        const safeData = data || [];
+        const todayRows = safeData.filter(function(row) { return getJanjiDateKey(row) === today; });
+        const futureRows = safeData.filter(function(row) { return getJanjiDateKey(row) > today; });
+        const doneRows = safeData.filter(function(row) {
+            return /^(selesai|completed)$/i.test(String(row.status || ''));
+        });
+
+        const totalEl = document.getElementById('dashTotalJanji');
+        const todayEl = document.getElementById('dashJanjiHariIni');
+        const futureEl = document.getElementById('dashJanjiMendatang');
+        const doneEl = document.getElementById('dashJanjiSelesai');
+        if (totalEl) totalEl.textContent = safeData.length;
+        if (todayEl) todayEl.textContent = todayRows.length;
+        if (futureEl) futureEl.textContent = futureRows.length;
+        if (doneEl) doneEl.textContent = doneRows.length;
+    }
+
+    function filterJanjiTemuByDate() {
+        const dateInput = document.getElementById('filterTanggalJanji');
+        const selectedDate = dateInput ? dateInput.value : '';
+        if (!selectedDate) {
+            renderJanjiTemuDashboard();
+            return;
+        }
+        const filtered = dashboardJanjiTemuCache.filter(function(row) {
+            return getJanjiDateKey(row) === selectedDate;
+        });
+        renderJanjiTemuDashboard(filtered);
+    }
+
+    function resetFilterJanjiTemu() {
+        const dateInput = document.getElementById('filterTanggalJanji');
+        if (dateInput) dateInput.value = todayKey();
+        filterJanjiTemuByDate();
+    }
+
+    function renderJanjiTemuList(data) {
+        const container = document.getElementById('janjiTemuList');
+        if (!container) return;
+        const rows = data || [];
+
+        if (rows.length === 0) {
+            const dateInput = document.getElementById('filterTanggalJanji');
+            const selectedDate = dateInput ? dateInput.value : '';
+            const message = selectedDate ? 'Belum ada janji temu pada tanggal ' + formatDate(selectedDate) : 'Belum ada data janji temu';
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-check"></i><p>' + message + '</p></div>';
+            return;
+        }
+
+        rows.sort(function(a, b) {
+            return (getJanjiDateKey(a) + ' ' + (a.waktu || '')).localeCompare(getJanjiDateKey(b) + ' ' + (b.waktu || ''));
+        });
+
+        container.innerHTML = rows.map(function(janji) {
+            const status = janji.status || 'Dijadwalkan';
+            const statusClass = /selesai|completed/i.test(status) ? 'pulang' : 'hadir';
+            const initial = (janji.nama || 'J').charAt(0).toUpperCase();
+            const dateText = formatDateForDisplay(janji.tanggal_janji || janji.tanggal || janji.timestamp);
+            const timeText = janji.waktu || '-';
+            const topic = janji.keperluan || janji.topik || janji.detail || '-';
+
+            return '<div class="tamu-item">' +
+                '<div class="tamu-avatar">' + initial + '</div>' +
+                '<div class="tamu-info">' +
+                    '<div class="name">' + (janji.nama || 'Anonim') + '</div>' +
+                    '<div class="detail">' + dateText + ' &bull; ' + timeText + ' &bull; ' + (janji.bertemu_dengan || '-') + '</div>' +
+                    '<div class="detail">' + (janji.instansi || 'Perorangan') + ' &bull; ' + topic.substring(0, 80) + '</div>' +
+                '</div>' +
+                '<span class="tamu-status ' + statusClass + '">' + status + '</span>' +
+            '</div>';
+        }).join('');
     }
 
     // ============================================
