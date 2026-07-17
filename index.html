@@ -287,8 +287,8 @@
             <p>Silakan pilih layanan yang Anda butuhkan. Layanan kami gratis, tanpa dipungut biaya.</p>
             <div class="hero-stats">
                 <div class="hero-stat" onclick="openDashboardSection('overview')" title="Lihat ringkasan dashboard"><div class="number" id="statTotalLayanan">0</div><div class="label">Total Layanan</div></div>
-                <div class="hero-stat" onclick="openDashboardSection('skm')" title="Lihat detail SKM"><div class="number" id="statSKM">90.5</div><div class="label">IKM SKM T1 2026</div></div>
-                <div class="hero-stat" onclick="openDashboardSection('media')" title="Lihat detail media sosial"><div class="number" id="statMedia">77</div><div class="label">Konten Media Sosial</div></div>
+                <div class="hero-stat" onclick="openDashboardSection('skm')" title="Lihat detail SKM"><div class="number" id="statSKM">96.4</div><div class="label">IKM SKM T2 2026</div></div>
+                <div class="hero-stat" onclick="openDashboardSection('media')" title="Lihat detail media sosial"><div class="number" id="statMedia">145</div><div class="label">Konten Media Sosial</div></div>
                 <div class="hero-stat" onclick="openDashboardSection('buku-tamu')" title="Lihat daftar tamu hari ini"><div class="number" id="statTamu">0</div><div class="label">Tamu Hari Ini</div></div>
             </div>
         </section>
@@ -728,16 +728,19 @@
                     <div class="dashboard-card">
                         <h4><i class="fas fa-info-circle"></i> Layanan Informasi</h4>
                         <div class="stat-grid">
-                            <div class="stat-item"><div class="value" id="dashTotalInfo">0</div><div class="label">Total T1 2026</div></div>
+                            <div class="stat-item"><div class="value" id="dashTotalInfo">111</div><div class="label">Total Jan-Jun 2026</div></div>
                             <div class="stat-item"><div class="value">33</div><div class="label">Januari</div></div>
-                            <div class="stat-item"><div class="value">10</div><div class="label">Februari</div></div>
+                            <div class="stat-item"><div class="value">11</div><div class="label">Februari</div></div>
                             <div class="stat-item"><div class="value">4</div><div class="label">Maret</div></div>
+                            <div class="stat-item"><div class="value">15</div><div class="label">April</div></div>
+                            <div class="stat-item"><div class="value">30</div><div class="label">Mei</div></div>
+                            <div class="stat-item"><div class="value">18</div><div class="label">Juni</div></div>
                         </div>
                     </div>
                     <div class="dashboard-card">
                         <h4><i class="fas fa-star"></i> Indeks Kepuasan Masyarakat</h4>
                         <div class="chart-container"><canvas id="skmOverviewChart"></canvas></div>
-                        <div style="text-align:center;margin-top:0.5rem;"><span style="font-size:2rem;font-weight:800;color:var(--gold);">90.5</span><span style="color:rgba(255,255,255,0.7);font-size:0.9rem;"> / 100</span></div>
+                        <div style="text-align:center;margin-top:0.5rem;"><span style="font-size:2rem;font-weight:800;color:var(--gold);">96.4</span><span style="color:rgba(255,255,255,0.7);font-size:0.9rem;"> / 100</span></div>
                     </div>
                     <div class="dashboard-card">
                         <h4><i class="fas fa-share-alt"></i> Media Sosial</h4>
@@ -770,7 +773,7 @@
             </div>
             <div id="tab-informasi" class="tab-content" style="display:none;">
                 <div class="dashboard-grid">
-                    <div class="dashboard-card"><h4><i class="fas fa-chart-pie"></i> Kategori Layanan Informasi T1 2026</h4><div class="chart-container"><canvas id="kategoriInformasiChart"></canvas></div></div>
+                    <div class="dashboard-card"><h4><i class="fas fa-chart-pie"></i> Kategori Layanan Informasi Jan-Jun 2026</h4><div class="chart-container"><canvas id="kategoriInformasiChart"></canvas></div></div>
                     <div class="dashboard-card"><h4><i class="fas fa-chart-line"></i> Tren Layanan Informasi</h4><div class="chart-container"><canvas id="trenInformasiChart"></canvas></div></div>
                     <div class="dashboard-card" style="grid-column:1 / -1;">
                         <h4><i class="fas fa-table"></i> Detail Layanan Informasi</h4>
@@ -826,22 +829,22 @@
             </div>
             <div id="tab-saluran" class="tab-content" style="display:none;">
                 <div class="dashboard-grid">
-                    <div class="dashboard-card"><h4><i class="fas fa-comments"></i> Saluran Komunikasi T1 2026</h4><div class="chart-container"><canvas id="saluranKomunikasiChart"></canvas></div></div>
+                    <div class="dashboard-card"><h4><i class="fas fa-comments"></i> Saluran Komunikasi Jan-Jun 2026</h4><div class="chart-container"><canvas id="saluranKomunikasiChart"></canvas></div></div>
                     <div class="dashboard-card"><h4><i class="fas fa-chart-bar"></i> Perbandingan per Bulan</h4><div class="chart-container"><canvas id="saluranBulanChart"></canvas></div></div>
                     <div class="dashboard-card" style="grid-column:1 / -1;">
                         <h4><i class="fas fa-list"></i> Rekapitulasi Topik</h4>
                         <div style="overflow-x:auto;">
                             <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
-                                <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.2);"><th style="padding:0.75rem;text-align:left;color:var(--gold);">No</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Topik</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Januari</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Februari</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Maret</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Total</th></tr></thead>
+                                <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.2);"><th style="padding:0.75rem;text-align:left;color:var(--gold);">No</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Topik</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Januari</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Februari</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Maret</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">April</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Mei</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Juni</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Total</th></tr></thead>
                                 <tbody>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">Ekspor-Impor</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">4</td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">Cukai</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">2</td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">IMEI</td><td style="padding:0.75rem;">8</td><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">13</td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">4</td><td style="padding:0.75rem;">Kerjasama</td><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">3</td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">5</td><td style="padding:0.75rem;">Penipuan</td><td style="padding:0.75rem;">4</td><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">7</td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">6</td><td style="padding:0.75rem;">Rokok Ilegal</td><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">6</td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">7</td><td style="padding:0.75rem;">Kebutuhan Lainnya</td><td style="padding:0.75rem;">11</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">11</td></tr>
-                                    <tr style="background:rgba(212,175,55,0.1);"><td style="padding:0.75rem;font-weight:700;"></td><td style="padding:0.75rem;font-weight:700;">TOTAL</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">32</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">10</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">4</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">46</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">Ekspor-Impor</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">12</td><td style="padding:0.75rem;">7</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">23</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">Cukai</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">4</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">IMEI</td><td style="padding:0.75rem;">8</td><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">9</td><td style="padding:0.75rem;">8</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">32</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">4</td><td style="padding:0.75rem;">Kerjasama</td><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">4</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">7</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">5</td><td style="padding:0.75rem;">Penipuan</td><td style="padding:0.75rem;">4</td><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">4</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">16</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">6</td><td style="padding:0.75rem;">Pengawasan/Lartas</td><td style="padding:0.75rem;">3</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">1</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">10</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">7</td><td style="padding:0.75rem;">Kebutuhan Lainnya</td><td style="padding:0.75rem;">11</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">0</td><td style="padding:0.75rem;">2</td><td style="padding:0.75rem;">4</td><td style="padding:0.75rem;">9</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">26</td></tr>
+                                    <tr style="background:rgba(212,175,55,0.1);"><td style="padding:0.75rem;font-weight:700;"></td><td style="padding:0.75rem;font-weight:700;">TOTAL</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">32</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">10</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">4</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">7</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">30</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">35</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">118</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -853,22 +856,22 @@
                     <div class="dashboard-card"><h4><i class="fas fa-star"></i> Nilai SKM per Unsur</h4><div class="chart-container" style="height:300px;"><canvas id="skmDetailChart"></canvas></div></div>
                     <div class="dashboard-card"><h4><i class="fas fa-chart-pie"></i> Distribusi Nilai</h4><div class="chart-container"><canvas id="skmPieChart"></canvas></div></div>
                     <div class="dashboard-card" style="grid-column:1 / -1;">
-                        <h4><i class="fas fa-table"></i> Detail Nilai SKM T1 2026</h4>
+                        <h4><i class="fas fa-table"></i> Detail Nilai SKM T2 2026</h4>
                         <div style="overflow-x:auto;">
                             <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
                                 <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.2);"><th style="padding:0.75rem;text-align:left;color:var(--gold);">No</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Unsur Pelayanan</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Nilai (Skala 4)</th><th style="padding:0.75rem;text-align:left;color:var(--gold);">Kategori</th></tr></thead>
                                 <tbody id="detailSKMTable">
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U1</td><td style="padding:0.75rem;">Persyaratan</td><td style="padding:0.75rem;">3.70</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U2</td><td style="padding:0.75rem;">Prosedur</td><td style="padding:0.75rem;">3.60</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U3</td><td style="padding:0.75rem;">Waktu Pelayanan</td><td style="padding:0.75rem;">3.60</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U4</td><td style="padding:0.75rem;">Biaya/Tarif</td><td style="padding:0.75rem;">3.70</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U5</td><td style="padding:0.75rem;">Produk Layanan</td><td style="padding:0.75rem;">3.70</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U6</td><td style="padding:0.75rem;">Kompetensi Pelaksana</td><td style="padding:0.75rem;">3.84</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U7</td><td style="padding:0.75rem;">Perilaku Pelaksana</td><td style="padding:0.75rem;">3.84</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U8</td><td style="padding:0.75rem;">Penanganan Pengaduan</td><td style="padding:0.75rem;">3.68</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U9</td><td style="padding:0.75rem;">Sarana dan Prasarana</td><td style="padding:0.75rem;">3.40</td><td style="padding:0.75rem;"><span style="color:var(--warning);">Baik</span></td></tr>
-                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U10</td><td style="padding:0.75rem;">E-Services</td><td style="padding:0.75rem;">3.65</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
-                                    <tr style="background:rgba(212,175,55,0.1);"><td style="padding:0.75rem;"></td><td style="padding:0.75rem;font-weight:700;">RATA-RATA</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">3.62</td><td style="padding:0.75rem;font-weight:700;color:var(--success);">Sangat Baik (A)</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U1</td><td style="padding:0.75rem;">Persyaratan</td><td style="padding:0.75rem;">3.84</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U2</td><td style="padding:0.75rem;">Prosedur</td><td style="padding:0.75rem;">3.84</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U3</td><td style="padding:0.75rem;">Waktu Pelayanan</td><td style="padding:0.75rem;">3.68</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U4</td><td style="padding:0.75rem;">Biaya/Tarif</td><td style="padding:0.75rem;">3.68</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U5</td><td style="padding:0.75rem;">Produk Layanan</td><td style="padding:0.75rem;">3.84</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U6</td><td style="padding:0.75rem;">Kompetensi Pelaksana</td><td style="padding:0.75rem;">3.80</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U7</td><td style="padding:0.75rem;">Perilaku Pelaksana</td><td style="padding:0.75rem;">4.00</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U8</td><td style="padding:0.75rem;">Penanganan Pengaduan</td><td style="padding:0.75rem;">3.80</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U9</td><td style="padding:0.75rem;">Sarana dan Prasarana</td><td style="padding:0.75rem;">3.84</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">U10</td><td style="padding:0.75rem;">E-Services</td><td style="padding:0.75rem;">3.93</td><td style="padding:0.75rem;"><span style="color:var(--success);">Sangat Baik</span></td></tr>
+                                    <tr style="background:rgba(212,175,55,0.1);"><td style="padding:0.75rem;"></td><td style="padding:0.75rem;font-weight:700;">RATA-RATA</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">3.86</td><td style="padding:0.75rem;font-weight:700;color:var(--success);">Sangat Baik (A)</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -888,7 +891,7 @@
             </div>
             <div id="tab-media" class="tab-content" style="display:none;">
                 <div class="dashboard-grid">
-                    <div class="dashboard-card"><h4><i class="fas fa-share-alt"></i> Konten Media Sosial T1 2026</h4><div class="chart-container"><canvas id="mediaSosialChart"></canvas></div></div>
+                    <div class="dashboard-card"><h4><i class="fas fa-share-alt"></i> Konten Media Sosial Jan-Jun 2026</h4><div class="chart-container"><canvas id="mediaSosialChart"></canvas></div></div>
                     <div class="dashboard-card"><h4><i class="fas fa-chart-line"></i> Tren Media Sosial</h4><div class="chart-container"><canvas id="trenMediaChart"></canvas></div></div>
                     <div class="dashboard-card" style="grid-column:1 / -1;">
                         <h4><i class="fas fa-list"></i> Rekapitulasi Konten Media Sosial</h4>
@@ -899,7 +902,10 @@
                                     <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">Januari 2026</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">31</td><td style="padding:0.75rem;">Feed, Reels, Stories</td><td style="padding:0.75rem;">Highlight kegiatan, capaian kinerja, edukasi</td></tr>
                                     <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">Februari 2026</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">27</td><td style="padding:0.75rem;">Feed, Reels</td><td style="padding:0.75rem;">Operasi cukai, penipuan, kolaborasi</td></tr>
                                     <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">Maret 2026</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">19</td><td style="padding:0.75rem;">Feed, Reels</td><td style="padding:0.75rem;">Klinik ekspor, Ramadhan, kuliah umum</td></tr>
-                                    <tr style="background:rgba(212,175,55,0.1);"><td style="padding:0.75rem;font-weight:700;">TOTAL</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">77</td><td style="padding:0.75rem;"></td><td style="padding:0.75rem;"></td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">April 2026</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">15</td><td style="padding:0.75rem;">Feed, Reels</td><td style="padding:0.75rem;">Penipuan, SKM, IMEI, BRS, capaian kinerja</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">Mei 2026</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">28</td><td style="padding:0.75rem;">Feed, Reels</td><td style="padding:0.75rem;">Hari besar, layanan, pengawasan, ekspor, Babel Youthpreneur</td></tr>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">Juni 2026</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">25</td><td style="padding:0.75rem;">Feed, Reels</td><td style="padding:0.75rem;">Ekspor, CEISA, BRS, UMKM, edukasi penipuan</td></tr>
+                                    <tr style="background:rgba(212,175,55,0.1);"><td style="padding:0.75rem;font-weight:700;">TOTAL</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">145</td><td style="padding:0.75rem;"></td><td style="padding:0.75rem;"></td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -3531,16 +3537,34 @@
             {no:3,bulan:'Januari',kategori:'IMEI',jumlah:8,ket:'Ketentuan, syarat, tagihan'},
             {no:4,bulan:'Januari',kategori:'Kerjasama',jumlah:3,ket:'Perbankan dan hotel'},
             {no:5,bulan:'Januari',kategori:'Penipuan',jumlah:4,ket:'Konfirmasi dan edukasi'},
-            {no:6,bulan:'Januari',kategori:'Rokok Ilegal',jumlah:3,ket:'Diteruskan ke unit P2'},
+            {no:6,bulan:'Januari',kategori:'Rokok Ilegal',jumlah:4,ket:'Diteruskan ke unit P2'},
             {no:7,bulan:'Januari',kategori:'Kebutuhan Lainnya',jumlah:11,ket:'Kunjungan wartawan PT IMM'},
-            {no:8,bulan:'Februari',kategori:'Ekspor-Impor',jumlah:1,ket:'Pelatihan ekspor-impor'},
-            {no:9,bulan:'Februari',kategori:'Cukai',jumlah:1,ket:'Kendala CEISA'},
+            {no:8,bulan:'Februari',kategori:'Ekspor-Impor',jumlah:2,ket:'Pelatihan ekspor-impor'},
+            {no:9,bulan:'Februari',kategori:'Kebutuhan Lainnya',jumlah:3,ket:'Permohonan dan informasi umum'},
             {no:10,bulan:'Februari',kategori:'IMEI',jumlah:3,ket:'Ketentuan dan syarat'},
-            {no:11,bulan:'Februari',kategori:'Penipuan',jumlah:3,ket:'Konfirmasi dan edukasi'},
-            {no:12,bulan:'Februari',kategori:'Rokok Ilegal',jumlah:2,ket:'Diteruskan ke unit P2'},
+            {no:11,bulan:'Februari',kategori:'Penipuan',jumlah:2,ket:'Konfirmasi dan edukasi'},
+            {no:12,bulan:'Februari',kategori:'Rokok Ilegal',jumlah:1,ket:'Diteruskan ke unit P2'},
             {no:13,bulan:'Maret',kategori:'Ekspor-Impor',jumlah:1,ket:'Daun ketapang'},
             {no:14,bulan:'Maret',kategori:'Rokok Ilegal',jumlah:1,ket:'Laporan wartawan'},
-            {no:15,bulan:'Maret',kategori:'IMEI',jumlah:2,ket:'Ketentuan dan tagihan'}
+            {no:15,bulan:'Maret',kategori:'IMEI',jumlah:2,ket:'Ketentuan dan tagihan'},
+            {no:16,bulan:'April',kategori:'Penipuan',jumlah:2,ket:'Konfirmasi penipuan mengatasnamakan Bea Cukai'},
+            {no:17,bulan:'April',kategori:'Kebutuhan Lainnya',jumlah:4,ket:'Permohonan dan informasi umum'},
+            {no:18,bulan:'April',kategori:'Ekspor-Impor',jumlah:2,ket:'Informasi ekspor-impor'},
+            {no:19,bulan:'April',kategori:'IMEI',jumlah:5,ket:'Registrasi dan ketentuan IMEI'},
+            {no:20,bulan:'April',kategori:'Rokok Ilegal',jumlah:2,ket:'Informasi dan aduan pengawasan'},
+            {no:21,bulan:'Mei',kategori:'Ekspor-Impor',jumlah:12,ket:'Manifest, ekspor sementara, impor, dan klinik ekspor'},
+            {no:22,bulan:'Mei',kategori:'Kebutuhan Lainnya',jumlah:2,ket:'Informasi umum'},
+            {no:23,bulan:'Mei',kategori:'Cukai',jumlah:2,ket:'Perizinan dan ketentuan cukai'},
+            {no:24,bulan:'Mei',kategori:'Pengawasan dan Lartas',jumlah:1,ket:'Konsultasi hasil lab dan pengawasan'},
+            {no:25,bulan:'Mei',kategori:'IMEI',jumlah:9,ket:'Prosedur, syarat, dan tarif registrasi IMEI'},
+            {no:26,bulan:'Mei',kategori:'Penipuan',jumlah:4,ket:'Konfirmasi dan edukasi penipuan'},
+            {no:27,bulan:'Juni',kategori:'Cukai',jumlah:1,ket:'Perizinan NPPBKC'},
+            {no:28,bulan:'Juni',kategori:'Ekspor-Impor',jumlah:7,ket:'Konfirmasi ekspor-impor dan komoditas ekspor'},
+            {no:29,bulan:'Juni',kategori:'Rokok Ilegal',jumlah:2,ket:'Aduan pengawasan/lartas'},
+            {no:30,bulan:'Juni',kategori:'IMEI',jumlah:2,ket:'Prosedur dan syarat registrasi IMEI'},
+            {no:31,bulan:'Juni',kategori:'Kebutuhan Lainnya',jumlah:4,ket:'Informasi umum dan magang'},
+            {no:32,bulan:'Juni',kategori:'Penipuan',jumlah:1,ket:'Konfirmasi penipuan'},
+            {no:33,bulan:'Juni',kategori:'Kerjasama',jumlah:1,ket:'Penawaran kerja sama'}
         ];
         tbody.innerHTML = detailData.map(function(row) {
             return '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:0.75rem;">' + row.no + '</td><td style="padding:0.75rem;">' + row.bulan + '</td><td style="padding:0.75rem;">' + row.kategori + '</td><td style="padding:0.75rem;font-weight:700;color:var(--gold);">' + row.jumlah + '</td><td style="padding:0.75rem;color:rgba(255,255,255,0.7);font-size:0.85rem;">' + row.ket + '</td></tr>';
@@ -3608,7 +3632,7 @@
         var skmOverviewCtx = document.getElementById('skmOverviewChart');
         if (skmOverviewCtx) {
             if (skmOverviewChartInst) skmOverviewChartInst.destroy();
-            let nilai = 90.5;
+            let nilai = 96.4;
             if (dashboardSKMCache.length > 0) {
                 const list = dashboardSKMCache.map(function(r){ return parseFloat(r.nilai) || 0; }).filter(function(n){ return n > 0; });
                 if (list.length > 0) nilai = (list.reduce(function(a,b){return a+b;}, 0) / list.length);
@@ -3622,7 +3646,7 @@
         var mediaOverviewCtx = document.getElementById('mediaOverviewChart');
         if (mediaOverviewCtx) {
             if (mediaOverviewChartInst) mediaOverviewChartInst.destroy();
-            let labels = ['Jan','Feb','Mar'], data = [31,27,19], colors = ['#3b82f6','#f59e0b','#10b981'];
+            let labels = ['Jan','Feb','Mar','Apr','Mei','Jun'], data = [31,27,19,15,28,25], colors = ['#3b82f6','#f59e0b','#10b981','#8b5cf6','#06b6d4','#ec4899'];
             if (dashboardMediaCache.length > 0) {
                 labels = dashboardMediaCache.map(function(r){ return r.bulan || '-'; });
                 data = dashboardMediaCache.map(function(r){ return parseInt(r.total) || 0; });
@@ -3654,7 +3678,7 @@
         if (kategoriCtx) {
             new Chart(kategoriCtx, {
                 type: 'pie',
-                data: { labels: ['IMEI','Kebutuhan Lainnya','Penipuan','Ekspor-Impor','Rokok Ilegal','Kerjasama','Cukai'], datasets: [{ data: [13,11,7,4,6,3,2], backgroundColor: ['#3b82f6','#8b5cf6','#ef4444','#10b981','#f59e0b','#06b6d4','#ec4899'], borderWidth: 0 }] },
+                data: { labels: ['IMEI','Kebutuhan Lainnya','Penipuan','Ekspor-Impor','Rokok Ilegal','Kerjasama','Cukai','Pengawasan/Lartas'], datasets: [{ data: [29,24,13,26,10,4,4,1], backgroundColor: ['#3b82f6','#8b5cf6','#ef4444','#10b981','#f59e0b','#06b6d4','#ec4899','#64748b'], borderWidth: 0 }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: 'rgba(255,255,255,0.7)', font: { size: 10 } } } } }
             });
         }
@@ -3662,7 +3686,7 @@
         if (trenCtx) {
             new Chart(trenCtx, {
                 type: 'bar',
-                data: { labels: ['Januari','Februari','Maret'], datasets: [{ label: 'Jumlah Layanan', data: [33,10,4], backgroundColor: ['#3b82f6','#f59e0b','#10b981'], borderRadius: 8 }] },
+                data: { labels: ['Januari','Februari','Maret','April','Mei','Juni'], datasets: [{ label: 'Jumlah Layanan', data: [33,11,4,15,30,18], backgroundColor: ['#3b82f6','#f59e0b','#10b981','#8b5cf6','#06b6d4','#ec4899'], borderRadius: 8 }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'rgba(255,255,255,0.7)' } }, x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.7)' } } } }
             });
         }
@@ -3694,10 +3718,13 @@
         if (saluranCtx) {
             new Chart(saluranCtx, {
                 type: 'bar',
-                data: { labels: ['Ekspor-Impor','Cukai','IMEI','Kerjasama','Penipuan','Rokok Ilegal','Lainnya'], datasets: [
+                data: { labels: ['Ekspor-Impor','Cukai','IMEI','Kerjasama','Penipuan','Pengawasan/Lartas','Lainnya'], datasets: [
                     { label: 'Januari', data: [2,1,8,3,4,3,11], backgroundColor: '#3b82f6', borderRadius: 4 },
                     { label: 'Februari', data: [1,1,3,0,3,2,0], backgroundColor: '#f59e0b', borderRadius: 4 },
-                    { label: 'Maret', data: [1,0,2,0,0,1,0], backgroundColor: '#10b981', borderRadius: 4 }
+                    { label: 'Maret', data: [1,0,2,0,0,1,0], backgroundColor: '#10b981', borderRadius: 4 },
+                    { label: 'April', data: [0,0,2,0,2,1,2], backgroundColor: '#8b5cf6', borderRadius: 4 },
+                    { label: 'Mei', data: [12,1,9,0,3,1,4], backgroundColor: '#06b6d4', borderRadius: 4 },
+                    { label: 'Juni', data: [7,1,8,4,4,2,9], backgroundColor: '#ec4899', borderRadius: 4 }
                 ] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: 'rgba(255,255,255,0.7)', font: { size: 11 } } } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'rgba(255,255,255,0.7)' } }, x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.7)', font: { size: 9 } } } } }
             });
@@ -3706,7 +3733,7 @@
         if (saluranBulanCtx) {
             new Chart(saluranBulanCtx, {
                 type: 'line',
-                data: { labels: ['Januari','Februari','Maret'], datasets: [{ label: 'Total Layanan', data: [32,10,4], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension: 0.4, borderWidth: 3 }] },
+                data: { labels: ['Januari','Februari','Maret','April','Mei','Juni'], datasets: [{ label: 'Total Layanan', data: [32,10,4,7,30,35], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension: 0.4, borderWidth: 3 }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'rgba(255,255,255,0.7)' } }, x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.7)' } } } }
             });
         }
@@ -3714,8 +3741,8 @@
         if (skmDetailCtx) {
             if (skmDetailChartInst) skmDetailChartInst.destroy();
             let labels = ['Persyaratan','Prosedur','Waktu','Biaya','Produk','Kompetensi','Perilaku','Pengaduan','Sarpras','E-Services'];
-            let data = [3.70,3.60,3.60,3.70,3.70,3.84,3.84,3.68,3.40,3.65];
-            let bg = ['#3b82f6','#3b82f6','#3b82f6','#3b82f6','#3b82f6','#10b981','#10b981','#f59e0b','#ef4444','#3b82f6'];
+            let data = [3.84,3.84,3.68,3.68,3.84,3.80,4.00,3.80,3.84,3.93];
+            let bg = ['#10b981','#10b981','#3b82f6','#3b82f6','#10b981','#10b981','#10b981','#10b981','#10b981','#10b981'];
             if (dashboardSKMCache.length > 0) {
                 labels = dashboardSKMCache.map(function(r){ return r.unsur || '-'; });
                 data = dashboardSKMCache.map(function(r){ return parseFloat(r.nilai) || 0; });
@@ -3749,21 +3776,21 @@
         var mediaSosialCtx = document.getElementById('mediaSosialChart');
         if (mediaSosialCtx) {
             if (mediaSosialChartInst) mediaSosialChartInst.destroy();
-            let labels = ['Januari','Februari','Maret'], data = [31,27,19];
+            let labels = ['Januari','Februari','Maret','April','Mei','Juni'], data = [31,27,19,15,28,25];
             if (dashboardMediaCache.length > 0) {
                 labels = dashboardMediaCache.map(function(r){ return r.bulan || '-'; });
                 data = dashboardMediaCache.map(function(r){ return parseInt(r.total) || 0; });
             }
             mediaSosialChartInst = new Chart(mediaSosialCtx, {
                 type: 'bar',
-                data: { labels: labels, datasets: [{ label: 'Jumlah Konten', data: data, backgroundColor: ['#3b82f6','#f59e0b','#10b981'], borderRadius: 8 }] },
+                data: { labels: labels, datasets: [{ label: 'Jumlah Konten', data: data, backgroundColor: ['#3b82f6','#f59e0b','#10b981','#8b5cf6','#06b6d4','#ec4899'], borderRadius: 8 }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'rgba(255,255,255,0.7)' } }, x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.7)' } } } }
             });
         }
         var trenMediaCtx = document.getElementById('trenMediaChart');
         if (trenMediaCtx) {
             if (trenMediaChartInst) trenMediaChartInst.destroy();
-            let labels = ['Jan','Feb','Mar'], feedData = [20,18,12], reelsData = [11,9,7];
+            let labels = ['Jan','Feb','Mar','Apr','Mei','Jun'], feedData = [20,18,12,10,18,16], reelsData = [11,9,7,5,10,9];
             if (dashboardMediaCache.length > 0) {
                 labels = dashboardMediaCache.map(function(r){ return r.bulan || '-'; });
                 feedData = dashboardMediaCache.map(function(r){ return parseInt(r.feed) || 0; });
