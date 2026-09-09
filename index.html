@@ -42,6 +42,7 @@
         /* Internal monitoring is available from the authenticated Admin menu only. */
         .public-dashboard-trigger { display:none !important; }
         .klinik-qr-section { display:none !important; }
+        .dashboard-overlay.public-skm .nav-tab:not([onclick="switchTab('skm')"]) { display:none !important; }
         .btn-dashboard:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(59,130,246,0.4); }
         .btn-admin { background:linear-gradient(135deg, var(--secondary) 0%, #d97706 100%); color:white; border:1px solid rgba(245,158,11,0.3); }
         .btn-admin:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(245,158,11,0.4); }
@@ -3134,6 +3135,7 @@
     }
     function closeDashboard() {
         document.getElementById('dashboardOverlay').classList.remove('active');
+        document.getElementById('dashboardOverlay').classList.remove('public-skm');
         document.body.style.overflow = 'auto';
     }
     function activateDashboardTab(tabName) {
@@ -3157,6 +3159,7 @@
     }
     function openDashboardSection(tabName) {
         if (tabName !== 'skm' && !isAdminLoggedIn) { openAdminLogin(); return; }
+        document.getElementById('dashboardOverlay').classList.toggle('public-skm', tabName === 'skm' && !isAdminLoggedIn);
         document.getElementById('dashboardOverlay').classList.add('active');
         document.body.style.overflow = 'hidden';
         loadDashboardData().then(function() {
