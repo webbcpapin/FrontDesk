@@ -39,6 +39,9 @@
         .header-actions { display:flex; gap:0.75rem; }
         .btn-header { padding:0.6rem 1.2rem; border:none; border-radius:10px; cursor:pointer; font-weight:600; font-size:0.85rem; transition:all 0.3s; display:flex; align-items:center; gap:0.5rem; backdrop-filter:blur(10px); }
         .btn-dashboard { background:linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%); color:white; border:1px solid rgba(59,130,246,0.3); }
+        /* Internal monitoring is available from the authenticated Admin menu only. */
+        .public-dashboard-trigger { display:none !important; }
+        .klinik-qr-section { display:none !important; }
         .btn-dashboard:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(59,130,246,0.4); }
         .btn-admin { background:linear-gradient(135deg, var(--secondary) 0%, #d97706 100%); color:white; border:1px solid rgba(245,158,11,0.3); }
         .btn-admin:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(245,158,11,0.4); }
@@ -297,7 +300,7 @@
         </div>
         <div class="header-actions">
             <button class="btn-header btn-cek-tiket" onclick="openCekTiket()"><i class="fas fa-ticket-alt"></i> Cek Tiket</button>
-            <button class="btn-header btn-dashboard" onclick="openDashboard()"><i class="fas fa-chart-line"></i> Dashboard</button>
+            <button class="btn-header btn-dashboard public-dashboard-trigger" onclick="openDashboard()"><i class="fas fa-chart-line"></i> Dashboard</button>
             <button class="btn-header btn-admin" onclick="openAdminLogin()"><i class="fas fa-user-shield"></i> Admin</button>
         </div>
     </header>
@@ -959,6 +962,7 @@
         <div class="admin-header">
             <h2><i class="fas fa-user-shield"></i> Panel Admin</h2>
             <div class="admin-nav">
+                <button class="admin-tab" onclick="openDashboard()"><i class="fas fa-chart-line"></i> Dashboard Monitoring</button>
                 <button class="admin-tab active" onclick="switchAdminTab('buku-tamu')" data-sheet="BukuTamu">Buku Tamu</button>
                 <button class="admin-tab" onclick="switchAdminTab('layanan-informasi')" data-sheet="LayananInformasi">Layanan Informasi</button>
                 <button class="admin-tab" onclick="switchAdminTab('pengaduan')" data-sheet="Pengaduan">Pengaduan</button>
@@ -3122,6 +3126,7 @@
     // DASHBOARD
     // ============================================
     function openDashboard() {
+        if (!isAdminLoggedIn) { openAdminLogin(); return; }
         document.getElementById('dashboardOverlay').classList.add('active');
         document.body.style.overflow = 'hidden';
         loadDashboardData();
@@ -3151,6 +3156,7 @@
         activateDashboardTab(tabName);
     }
     function openDashboardSection(tabName) {
+        if (tabName !== 'skm' && !isAdminLoggedIn) { openAdminLogin(); return; }
         document.getElementById('dashboardOverlay').classList.add('active');
         document.body.style.overflow = 'hidden';
         loadDashboardData().then(function() {
