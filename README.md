@@ -204,6 +204,15 @@ https://forms.office.com/Pages/ResponsePage.aspx?id=ZrNv7SKD80aRXsTQN6RUqUHW-Z1O
 - Klik card "Survey Kepuasan" akan membuka link di tab baru
 - Data SKM tidak masuk database lokal (sesuai arahan)
 
+### F. Link Langsung Klinik Ekspor
+Gunakan link berikut untuk membuka formulir Klinik Ekspor secara langsung:
+```
+https://webbcpapin.github.io/FrontDesk/?layanan=klinik-ekspor
+```
+- Halaman utama menampilkan QR Code khusus Klinik Ekspor
+- QR Code dapat diunduh sebagai PNG melalui tombol **Unduh QR Code**
+- Link dapat disalin melalui tombol **Salin Link**
+
 ---
 
 ## 👥 Panduan Penggunaan

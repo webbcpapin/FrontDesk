@@ -86,6 +86,21 @@
         .service-ngingetken { --service-color:#14b8a6; --service-color-dark:#0f766e; --service-glow:rgba(20,184,166,0.4); }
         .service-seperadik { --service-color:#0ea5e9; --service-color-dark:#0369a1; --service-glow:rgba(14,165,233,0.4); }
         .service-repack { --service-color:#22c55e; --service-color-dark:#15803d; --service-glow:rgba(34,197,94,0.4); }
+        .klinik-qr-section { padding:0 2rem 2rem; max-width:1400px; margin:0 auto; }
+        .klinik-qr-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2rem; align-items:center; background:linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(217,119,6,0.1) 55%, rgba(255,255,255,0.06) 100%); backdrop-filter:blur(20px); border:1px solid rgba(245,158,11,0.4); border-radius:24px; padding:2rem; box-shadow:0 16px 40px rgba(0,0,0,0.2); }
+        .klinik-qr-copy h3 { display:flex; align-items:center; gap:0.65rem; color:var(--white); font-size:1.4rem; margin-bottom:0.65rem; }
+        .klinik-qr-copy h3 i { color:var(--gold); }
+        .klinik-qr-copy p { color:rgba(255,255,255,0.75); line-height:1.65; max-width:720px; }
+        .klinik-direct-link { display:flex; align-items:center; gap:0.6rem; margin-top:1rem; padding:0.8rem 1rem; border:1px solid rgba(245,158,11,0.35); border-radius:12px; background:rgba(15,23,42,0.45); color:#fde68a; font-size:0.82rem; overflow-wrap:anywhere; }
+        .klinik-qr-actions { display:flex; gap:0.75rem; margin-top:1rem; flex-wrap:wrap; }
+        .btn-klinik-link { display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; min-height:44px; padding:0.75rem 1rem; border-radius:10px; border:1px solid rgba(245,158,11,0.4); color:white; font:inherit; font-size:0.85rem; font-weight:700; cursor:pointer; text-decoration:none; transition:all 0.25s; }
+        .btn-klinik-link.primary { background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .btn-klinik-link.secondary { background:rgba(255,255,255,0.08); }
+        .btn-klinik-link:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(245,158,11,0.25); border-color:#fbbf24; }
+        .klinik-qr-box { width:220px; flex:0 0 220px; text-align:center; }
+        .klinik-qr-code { width:220px; height:220px; display:grid; place-items:center; padding:12px; background:white; border-radius:18px; box-shadow:0 12px 30px rgba(0,0,0,0.28); }
+        .klinik-qr-code img, .klinik-qr-code canvas { max-width:196px; max-height:196px; }
+        .klinik-qr-label { color:#fde68a; margin-top:0.75rem; font-size:0.78rem; font-weight:700; }
         .skm-section { padding:2rem; max-width:1400px; margin:0 auto; }
         .skm-card { background:linear-gradient(135deg, rgba(236,72,153,0.2) 0%, rgba(139,92,246,0.2) 100%); backdrop-filter:blur(20px); border:1px solid rgba(236,72,153,0.3); border-radius:24px; padding:2rem; text-align:center; cursor:pointer; transition:all 0.4s; position:relative; overflow:hidden; }
         .skm-card:hover { transform:translateY(-5px); box-shadow:0 20px 40px rgba(236,72,153,0.3); }
@@ -183,6 +198,11 @@
             .hero h2 { font-size:1.75rem; } .services-grid { grid-template-columns:1fr; } .form-row { grid-template-columns:1fr; }
             .header { padding:0.75rem 1rem; } .brand-text h1 { font-size:1rem; } .dashboard-grid { grid-template-columns:1fr; }
             .hero-stats { gap:1rem; } .dashboard-nav { justify-content:center; } .dashboard-header { flex-direction:column; align-items:stretch; }
+            .klinik-qr-section { padding:0 1rem 1rem; }
+            .klinik-qr-card { grid-template-columns:1fr; padding:1.5rem; text-align:center; }
+            .klinik-qr-copy h3 { justify-content:center; }
+            .klinik-qr-actions { justify-content:center; }
+            .klinik-qr-box { width:100%; display:flex; flex-direction:column; align-items:center; }
         }
         ::-webkit-scrollbar { width:8px; }
         ::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); }
@@ -304,7 +324,7 @@
                 <div class="service-card service-buku" onclick="openModal('buku')"><span class="service-badge">Registrasi</span><div class="service-icon"><i class="fas fa-book"></i></div><h3>Buku Tamu</h3><p>Registrasi kunjungan dan pertemuan umum di Kantor Bea Cukai Pangkalpinang</p></div>
                 <div class="service-card service-informasi" onclick="openModal('informasi')"><span class="service-badge">Populer</span><div class="service-icon"><i class="fas fa-info-circle"></i></div><h3>Layanan Informasi</h3><p>Konsultasi umum Bea Cukai, tanya jawab proses kepabeanan, dan informasi tarif</p></div>
                 <div class="service-card service-pengaduan" onclick="openModal('pengaduan')"><span class="service-badge">Prioritas</span><div class="service-icon"><i class="fas fa-exclamation-triangle"></i></div><h3>Pengaduan Masyarakat</h3><p>Sampaikan keluhan, aspirasi, atau laporan penyimpangan (Bersifat Rahasia)</p></div>
-                <div class="service-card service-klinik" onclick="openModal('klinik')"><span class="service-badge">UMKM</span><div class="service-icon"><i class="fas fa-hand-holding-usd"></i></div><h3>Klinik Ekspor</h3><p>Bimbingan ekspor untuk UMKM dan pemula yang ingin mengekspor</p></div>
+                <div class="service-card service-klinik" onclick="openKlinikEkspor()"><span class="service-badge">UMKM</span><div class="service-icon"><i class="fas fa-hand-holding-usd"></i></div><h3>Klinik Ekspor</h3><p>Bimbingan ekspor untuk UMKM dan pemula yang ingin mengekspor</p></div>
                 <div class="service-card service-janji" onclick="openModal('janji')"><div class="service-icon"><i class="fas fa-calendar-check"></i></div><h3>Janji Temu</h3><p>Jadwalkan pertemuan dengan petugas Bea Cukai sesuai kebutuhan</p></div>
                 <div class="service-card service-ppid" onclick="openModal('ppid')"><div class="service-icon"><i class="fas fa-folder-open"></i></div><h3>PPID</h3><p>Permohonan informasi publik sesuai Undang-Undang Keterbukaan Informasi</p></div>
                 <div class="service-card service-imei" onclick="window.open('https://webbcpapin.github.io/IMEI/', '_blank')"><span class="service-badge">Online</span><div class="service-icon"><i class="fas fa-mobile-alt"></i></div><h3>Registrasi IMEI</h3><p>Layanan registrasi IMEI untuk perangkat elektronik Anda</p></div>
@@ -313,6 +333,24 @@
                 <div class="service-card service-repack" onclick="window.open('https://repack-pangkalpinang.beacukai.go.id/', '_blank')"><span class="service-badge">Online</span><div class="service-icon"><i class="fas fa-box-open"></i></div><h3>Layanan Returnable Packages</h3><p>Pengajuan dan monitoring layanan returnable packages secara online</p></div>
                 <div class="service-card service-cek" onclick="openCekTiket()"><span class="service-badge">Tracking</span><div class="service-icon"><i class="fas fa-search"></i></div><h3>Cek Status Tiket</h3><p>Cek status layanan Anda dengan nomor tiket atau nomor HP</p></div>
                 <div class="service-card service-skm" onclick="toggleSKM()"><span class="service-badge">Survey</span><div class="service-icon"><i class="fas fa-star"></i></div><h3>Survey Kepuasan</h3><p>Scan QR Code untuk mengisi Survei Kepuasan Masyarakat (SKM)</p><div class="qr-display" id="qrDisplay"><div id="qrCodeContainer"></div></div><div class="skm-preview" id="skmPreview"><i class="fas fa-qrcode"></i></div></div>
+            </div>
+        </section>
+        <section class="klinik-qr-section" aria-labelledby="klinikQRTitle">
+            <div class="klinik-qr-card">
+                <div class="klinik-qr-copy">
+                    <h3 id="klinikQRTitle"><i class="fas fa-qrcode"></i> Link &amp; QR Code Klinik Ekspor</h3>
+                    <p>Buka formulir pendaftaran Klinik Ekspor secara langsung atau pindai QR Code khusus ini melalui kamera ponsel.</p>
+                    <div class="klinik-direct-link"><i class="fas fa-link" aria-hidden="true"></i><span>https://webbcpapin.github.io/FrontDesk/?layanan=klinik-ekspor</span></div>
+                    <div class="klinik-qr-actions">
+                        <a class="btn-klinik-link primary" href="?layanan=klinik-ekspor"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Buka Klinik Ekspor</a>
+                        <button class="btn-klinik-link secondary" type="button" onclick="copyKlinikEksporLink()"><i class="fas fa-copy" aria-hidden="true"></i> Salin Link</button>
+                        <button class="btn-klinik-link secondary" type="button" onclick="downloadKlinikEksporQR()"><i class="fas fa-download" aria-hidden="true"></i> Unduh QR Code</button>
+                    </div>
+                </div>
+                <div class="klinik-qr-box">
+                    <div class="klinik-qr-code" id="klinikQRContainer" aria-label="QR Code menuju formulir Klinik Ekspor"></div>
+                    <div class="klinik-qr-label">Pindai untuk mendaftar</div>
+                </div>
             </div>
         </section>
         <section class="skm-section">
@@ -1302,6 +1340,7 @@
     // ============================================
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbx4jwleT70GEw0VWCRCW2QkPw-bRH4qkkwwjcbjWpsfqLBs8Shbw1tm62rip3M25fOK/exec';
     const SKM_URL = 'https://forms.office.com/Pages/ResponsePage.aspx?id=ZrNv7SKD80aRXsTQN6RUqUHW-Z1OdaZHlGb3jAd0e1VUOVo1S1E3R0VVSTZJU0ZYSEk5TUdJMUJHMSQlQCNjPTEkJUAjdD1n';
+    const KLINIK_EKSPOR_URL = 'https://webbcpapin.github.io/FrontDesk/?layanan=klinik-ekspor';
     const ADMIN_PIN = 'bcadmin2026';
     let isAdminLoggedIn = false;
     let currentTicketNumber = '';
@@ -1691,6 +1730,7 @@
         document.getElementById('filterTanggalJanji').value = today;
         document.getElementById('adminFilterTanggalBuku').value = today;
         initQRCode();
+        openRequestedService();
         setTimeout(initCharts, 500);
         renderDetailInformasiTable();
         loadDashboardData();
@@ -2711,7 +2751,70 @@
                     correctLevel: QRCode.CorrectLevel.M
                 });
             }
+            const klinikContainer = document.getElementById('klinikQRContainer');
+            if (klinikContainer && typeof QRCode !== 'undefined') {
+                klinikContainer.innerHTML = '';
+                new QRCode(klinikContainer, {
+                    text: KLINIK_EKSPOR_URL,
+                    width: 196,
+                    height: 196,
+                    colorDark: '#0f172a',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            }
         } catch(e) { console.error('QR init error:', e); }
+    }
+
+    function openRequestedService() {
+        const requestedService = new URLSearchParams(window.location.search).get('layanan');
+        if (requestedService === 'klinik-ekspor') {
+            openModal('klinik');
+        }
+    }
+
+    function openKlinikEkspor() {
+        const directUrl = new URL(window.location.href);
+        directUrl.searchParams.set('layanan', 'klinik-ekspor');
+        window.history.pushState({ layanan: 'klinik-ekspor' }, '', directUrl);
+        openModal('klinik');
+    }
+
+    async function copyKlinikEksporLink() {
+        try {
+            await navigator.clipboard.writeText(KLINIK_EKSPOR_URL);
+            showToast('Link Klinik Ekspor berhasil disalin', 'success');
+        } catch (error) {
+            const temporaryInput = document.createElement('textarea');
+            temporaryInput.value = KLINIK_EKSPOR_URL;
+            temporaryInput.style.position = 'fixed';
+            temporaryInput.style.opacity = '0';
+            document.body.appendChild(temporaryInput);
+            temporaryInput.select();
+            document.execCommand('copy');
+            temporaryInput.remove();
+            showToast('Link Klinik Ekspor berhasil disalin', 'success');
+        }
+    }
+
+    function downloadKlinikEksporQR() {
+        const container = document.getElementById('klinikQRContainer');
+        const canvas = container ? container.querySelector('canvas') : null;
+        const image = container ? container.querySelector('img') : null;
+        const downloadUrl = canvas ? canvas.toDataURL('image/png') : (image ? image.src : '');
+
+        if (!downloadUrl) {
+            showToast('QR Code belum siap. Silakan coba lagi.', 'warning');
+            return;
+        }
+
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = 'QR-Klinik-Ekspor-Bea-Cukai-Pangkalpinang.png';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        showToast('QR Code Klinik Ekspor berhasil diunduh', 'success');
     }
 
     function toggleSKM() {
@@ -2746,7 +2849,25 @@
     function closeModal(type) {
         document.getElementById('modal-' + type).classList.remove('active');
         document.body.style.overflow = 'auto';
+        if (type === 'klinik') {
+            const currentUrl = new URL(window.location.href);
+            if (currentUrl.searchParams.get('layanan') === 'klinik-ekspor') {
+                currentUrl.searchParams.delete('layanan');
+                window.history.replaceState({}, '', currentUrl);
+            }
+        }
     }
+
+    window.addEventListener('popstate', function() {
+        const requestedService = new URLSearchParams(window.location.search).get('layanan');
+        const klinikModal = document.getElementById('modal-klinik');
+        if (requestedService === 'klinik-ekspor') {
+            openModal('klinik');
+        } else if (klinikModal) {
+            klinikModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
 
     // ============================================
     // FORM SUBMISSION
