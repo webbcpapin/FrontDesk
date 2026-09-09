@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulir FKP 2026 — Bea Cukai Pangkalpinang</title>
+<meta name="description" content="Sampaikan pengalaman, kebutuhan, kendala, dan saran pelayanan melalui Forum Konsultasi Publik Bea Cukai Pangkalpinang Tahun 2026.">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="stylesheet" href="style.css"><script src="form.js" defer></script>
+</head>
+<body>
+<header><a href="../">← FrontDesk</a><span>BEA CUKAI PANGKALPINANG</span></header>
+<main>
+<section class="intro"><p class="eyebrow">FORUM KONSULTASI PUBLIK · 2026</p>
+<h1>Formulir Konsultasi Publik (FKP) KPPBC TMP C Pangkalpinang Tahun 2026</h1>
+<p>Formulir ini merupakan bagian dari Forum Konsultasi Publik (FKP) KPPBC TMP C Pangkalpinang Tahun 2026. Kami mengundang Bapak/Ibu menyampaikan pengalaman, kebutuhan, kendala, dan saran untuk meningkatkan kualitas pelayanan Bea Cukai Pangkalpinang.</p>
+<p>Informasi layanan dapat diakses melalui <a href="https://bit.ly/beacukaipapin" target="_blank" rel="noopener noreferrer">https://bit.ly/beacukaipapin</a>.</p>
+<p>Masukan Bapak/Ibu akan menjadi bahan pembahasan, penyusunan laporan, serta perumusan rekomendasi perbaikan pelayanan. Waktu pengisian sekitar 3–5 menit.</p>
+</section>
+<div id="status" class="notice" role="status" aria-live="polite">Memeriksa ketersediaan formulir…</div>
+<button id="retry" type="button" hidden>Periksa kembali</button>
+<form id="fkp-form">
+<fieldset id="fields" disabled><legend class="sr-only">Formulir masukan FKP</legend>
+<p class="required-note">Kolom bertanda * wajib diisi.</p>
+<section class="card"><h2>1. Identitas responden</h2>
+<label for="nama">Nama responden *</label><input id="nama" name="nama" autocomplete="name" maxlength="150" required>
+<label for="instansi">Instansi, perusahaan, organisasi, atau tulis “Perorangan” *</label><input id="instansi" name="instansi" autocomplete="organization" maxlength="200" required>
+<label for="kapasitas">Jabatan atau kapasitas responden *</label><p class="hint" id="kapasitas-hint">Contoh: pengguna layanan, eksportir, dosen, jurnalis, anggota OMS/LSM.</p><input id="kapasitas" name="kapasitas" aria-describedby="kapasitas-hint" maxlength="200" required>
+<label for="unsur">Unsur masyarakat yang diwakili *</label><select id="unsur" name="unsur_masyarakat" required><option value="">Pilih unsur masyarakat</option><option>Stakeholder pelayanan publik</option><option>Organisasi masyarakat sipil/LSM</option><option>Pengguna layanan</option><option>Ahli/praktisi atau organisasi terkait</option><option>Media massa</option></select>
+</section>
+<section class="card"><h2>2. Pengalaman dan masukan</h2>
+<fieldset class="question"><legend>Apakah pernah menggunakan atau berinteraksi dengan layanan Bea Cukai Pangkalpinang? *</legend>
+<label class="choice"><input type="radio" name="pengalaman_layanan" value="Ya" required>Ya</label>
+<label class="choice"><input type="radio" name="pengalaman_layanan" value="Belum, tetapi memiliki kebutuhan atau pengamatan terhadap layanan" required>Belum, tetapi memiliki kebutuhan atau pengamatan terhadap layanan</label></fieldset>
+<fieldset class="question" id="layanan-group"><legend>Layanan yang dinilai atau ingin dikonsultasikan *</legend><p class="hint">Pilih satu atau lebih.</p><label class="choice"><input type="checkbox" name="jenis_layanan" value="Informasi kepabeanan">Informasi kepabeanan</label><label class="choice"><input type="checkbox" name="jenis_layanan" value="Ekspor">Ekspor</label><label class="choice"><input type="checkbox" name="jenis_layanan" value="Impor">Impor</label><label class="choice"><input type="checkbox" name="jenis_layanan" value="Cukai">Cukai</label><label class="choice"><input type="checkbox" name="jenis_layanan" value="Barang kiriman">Barang kiriman</label><label class="choice"><input type="checkbox" name="jenis_layanan" value="Barang bawaan penumpang">Barang bawaan penumpang</label><label class="choice"><input type="checkbox" name="jenis_layanan" value="Registrasi IMEI">Registrasi IMEI</label><label class="choice"><input type="checkbox" name="jenis_layanan" value="Fasilitas kepabeanan">Fasilitas kepabeanan</label><label class="choice"><input type="checkbox" name="jenis_layanan" value="UMKM berorientasi ekspor">UMKM berorientasi ekspor</label><label class="choice"><input type="checkbox" name="jenis_layanan" value="Lainnya">Lainnya</label></fieldset>
+<label for="hal_positif">Apa hal yang sudah baik atau membantu dari layanan Bea Cukai Pangkalpinang? <span class="optional">(tidak wajib)</span></label><textarea id="hal_positif" name="hal_positif" maxlength="3000" rows="4"></textarea>
+<label for="kendala">Apa kendala, kebutuhan, atau hal yang perlu diperbaiki? *</label><textarea id="kendala" name="kendala" maxlength="3000" rows="4" required></textarea>
+<label for="rekomendasi">Apa saran atau rekomendasi perbaikan yang Anda usulkan? *</label><textarea id="rekomendasi" name="rekomendasi" maxlength="3000" rows="4" required></textarea>
+</section>
+<section class="card"><h2>3. Tindak lanjut dan persetujuan</h2>
+<fieldset class="question"><legend>Apakah bersedia dihubungi untuk klarifikasi atau konfirmasi rumusan rekomendasi? *</legend>
+<label class="choice"><input type="radio" name="kesediaan_dihubungi" value="Bersedia" required>Bersedia</label><label class="choice"><input type="radio" name="kesediaan_dihubungi" value="Tidak bersedia" required>Tidak bersedia</label></fieldset>
+<label for="kontak">Nomor WhatsApp atau email <span class="optional">(tidak wajib)</span></label><input id="kontak" name="kontak" maxlength="200" aria-describedby="kontak-hint"><p id="kontak-hint" class="hint">Isi jika Bapak/Ibu ingin dihubungi untuk tindak lanjut.</p>
+<p class="privacy">Data digunakan untuk verifikasi, penyusunan laporan FKP, Berita Acara, dan tindak lanjut rekomendasi. Data tidak ditampilkan kepada publik tanpa persetujuan.</p>
+<label class="choice consent"><input type="checkbox" name="persetujuan" value="Setuju" required><span>Saya menyetujui masukan ini digunakan sebagai bahan FKP, laporan, Berita Acara, dan rekomendasi perbaikan pelayanan Bea Cukai Pangkalpinang. *</span></label>
+<div class="trap" aria-hidden="true"><label for="website">Biarkan kosong</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+<button type="submit" id="submit">Kirim masukan</button><p id="submit-status" role="status" aria-live="polite"></p>
+</section></fieldset></form>
+<section id="success" class="card success" hidden tabindex="-1"><p class="eyebrow">MASUKAN TERSIMPAN</p><h2>Terima kasih.</h2><p>Masukan Anda telah diterima dan akan menjadi bahan Forum Konsultasi Publik Bea Cukai Pangkalpinang.</p><p id="receipt"></p><a href="../">Kembali ke FrontDesk</a></section>
+<noscript><p class="notice">Aktifkan JavaScript pada browser untuk mengisi formulir ini.</p></noscript>
+<footer>Forum Konsultasi Publik · Bea Cukai Pangkalpinang · 2026</footer>
+</main></body></html>

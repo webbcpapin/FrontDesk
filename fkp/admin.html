@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Administrasi FKP 2026</title><link rel="stylesheet" href="style.css"></head>
+<body><header><a href="../">← FrontDesk</a><span>BEA CUKAI PANGKALPINANG</span></header><main>
+<p class="eyebrow">ADMINISTRASI FKP 2026</p><h1>Rekap masukan masyarakat</h1>
+<section class="card"><h2>Dashboard administrator</h2><p>Masuk menggunakan akun Google yang mendapat akses ke berkas respons FKP.</p><p id="admin-status" class="notice" role="status">Memeriksa ketersediaan dashboard…</p><a id="open-admin" hidden rel="noopener noreferrer" target="_blank">Buka dashboard FKP di Google Sheets →</a></section>
+<section class="card"><h2>Melihat dan mengekspor masukan</h2><ol><li>Buka tab <strong>Ringkasan</strong> untuk melihat jumlah respons per unsur masyarakat dan layanan.</li><li>Buka tab <strong>Respons FKP</strong>. Gunakan filter pada kolom <strong>unsur_masyarakat</strong> dan <strong>jenis_layanan</strong>. Kendala dan rekomendasi tersedia dalam kolom tersendiri.</li><li>Gunakan <strong>File → Download → Microsoft Excel (.xlsx)</strong> atau <strong>Comma-separated values (.csv)</strong>. CSV mengikuti tab yang sedang dibuka; unduhan dapat memuat baris yang tersembunyi oleh filter.</li></ol><p>Untuk publikasi, buat salinan rekap tanpa nama, instansi, kontak, atau rincian yang dapat mengidentifikasi responden. Jangan membagikan berkas respons mentah kepada publik.</p></section>
+<section class="card"><h2>Tautan partisipasi</h2><p><a href="./">Buka formulir FKP</a> · <a href="qr.svg" download="QR-FKP-Pangkalpinang-2026.svg">Unduh QR Code</a> · <a href="pesan-whatsapp.txt">Teks pengantar WhatsApp</a></p><img src="qr.svg" alt="QR Code formulir FKP Bea Cukai Pangkalpinang 2026" width="240" height="240" style="max-width:100%;height:auto"></section>
+</main><script>
+const statusNode = document.getElementById('admin-status');
+const script = document.createElement('script');
+const timeout = setTimeout(() => { statusNode.textContent = 'Dashboard belum dapat dihubungi. Muat ulang halaman untuk mencoba kembali.'; script.remove(); }, 20000);
+window.fkpAdminStatus = result => {
+  clearTimeout(timeout); script.remove();
+  if (!result.success || result.module !== 'fkp-2026' || !/^https:\/\/docs\.google\.com\/spreadsheets\/d\/[A-Za-z0-9_-]+\/edit$/.test(result.admin_url || '')) { statusNode.textContent = 'Dashboard FKP belum diaktifkan oleh pengelola.'; return; }
+  const link = document.getElementById('open-admin'); link.href = result.admin_url; link.hidden = false;
+  statusNode.textContent = 'Akses data diperiksa oleh Google. Hanya akun yang diizinkan dapat membuka respons.';
+};
+script.onerror = () => { clearTimeout(timeout); script.remove(); statusNode.textContent = 'Koneksi belum berhasil. Muat ulang halaman untuk mencoba kembali.'; };
+script.src = 'https://script.google.com/macros/s/AKfycbx4jwleT70GEw0VWCRCW2QkPw-bRH4qkkwwjcbjWpsfqLBs8Shbw1tm62rip3M25fOK/exec?action=fkpStatus&callback=fkpAdminStatus';
+document.head.appendChild(script);
+</script></body></html>

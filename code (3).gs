@@ -233,6 +233,7 @@ function normalizePhone(value) {
 // ============================================
 function doGet(e) {
   const action = e.parameter.action;
+  if (action === 'fkpStatus') return createCORSResponse(fkpStatus(), e.parameter.callback);
   const callback = e.parameter.callback;
 
   try {
@@ -276,6 +277,7 @@ function doPost(e) {
     }
     
     const action = params.action || 'submit';
+    if (action === 'fkpSubmit') return createCORSResponse(fkpSubmit(params));
 
     switch(action) {
       case 'submit':
