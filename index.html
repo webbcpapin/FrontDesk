@@ -313,7 +313,7 @@
                 <div class="hero-stat" onclick="openDashboardSection('overview')" title="Lihat ringkasan dashboard"><div class="number" id="statTotalLayanan">0</div><div class="label">Total Layanan</div></div>
                 <div class="hero-stat" onclick="openDashboardSection('skm')" title="Lihat detail SKM"><div class="number" id="statSKM">96.4</div><div class="label">IKM SKM T2 2026</div></div>
                 <div class="hero-stat" onclick="openDashboardSection('media')" title="Lihat detail media sosial"><div class="number" id="statMedia">145</div><div class="label">Konten Media Sosial</div></div>
-                <div class="hero-stat" onclick="openDashboardSection('buku-tamu')" title="Lihat daftar tamu hari ini"><div class="number" id="statTamu">0</div><div class="label">Tamu Hari Ini</div></div>
+                <div class="hero-stat" onclick="openDashboardSection('buku-tamu')" title="Lihat seluruh daftar tamu"><div class="number" id="statTamu">0</div><div class="label">Total Tamu</div></div>
             </div>
         </section>
         <section class="agenda-ticker" id="homeAgendaTicker" style="display:none;">
@@ -3225,10 +3225,11 @@
             return tDate === today;
         });
         const totalTamuHariIni = todayTamu.length;
+        const totalTamu = dashboardBukuTamuCache.length;
         const hadir = todayTamu.filter(function(t) { return (t.status || 'Hadir') === 'Hadir'; }).length;
         const pulang = todayTamu.filter(function(t) { return t.status === 'Pulang'; }).length;
 
-        document.getElementById('statTamu').textContent = totalTamuHariIni;
+        document.getElementById('statTamu').textContent = totalTamu;
         document.getElementById('statTotalLayanan').textContent = data.totalLayanan || 0;
 
         const dashTotalTamu = document.getElementById('dashTotalTamu');
@@ -3256,7 +3257,7 @@
         const hadir = todayTamu.filter(function(t) { return (t.status || 'Hadir') === 'Hadir'; }).length;
         const pulang = todayTamu.filter(function(t) { return t.status === 'Pulang'; }).length;
 
-        document.getElementById('statTamu').textContent = todayTamu.length;
+        document.getElementById('statTamu').textContent = bukuTamu.length;
         document.getElementById('statTotalLayanan').textContent = pending.length;
 
         const dashTotalTamu = document.getElementById('dashTotalTamu');
