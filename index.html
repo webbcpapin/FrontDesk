@@ -80,6 +80,7 @@
         .service-badge { position:absolute; top:1rem;right:1rem; background:linear-gradient(135deg, var(--service-color) 0%, var(--service-color-dark) 100%); color:white; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; z-index:2; box-shadow:0 4px 15px var(--service-glow); }
         .service-ekspor { --service-color:#14b8a6; --service-color-dark:#0f766e; --service-glow:rgba(20,184,166,0.4); }
         .service-impor { --service-color:#6366f1; --service-color-dark:#4338ca; --service-glow:rgba(99,102,241,0.4); }
+        .service-cukai { --service-color:#f97316; --service-color-dark:#c2410c; --service-glow:rgba(249,115,22,0.4); }
         .service-buku { --service-color:#06b6d4; --service-color-dark:#0891b2; --service-glow:rgba(6,182,212,0.4); }
         .service-informasi { --service-color:#3b82f6; --service-color-dark:#1d4ed8; --service-glow:rgba(59,130,246,0.4); }
         .service-pengaduan { --service-color:#ef4444; --service-color-dark:#dc2626; --service-glow:rgba(239,68,68,0.4); }
@@ -170,6 +171,15 @@
         .screening-result-actions { display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem; }
         .screening-action { display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; min-height:44px; padding:0.75rem 1rem; border:1px solid rgba(255,255,255,0.2); border-radius:10px; color:white; background:rgba(255,255,255,0.08); text-decoration:none; font-size:0.84rem; font-weight:700; cursor:pointer; }
         .screening-action.primary { background:linear-gradient(135deg,#14b8a6 0%,#0f766e 100%); border-color:#14b8a6; }
+        .modal.modal-wide { max-width:900px; }
+        .nppbkc-section { margin-bottom:1.25rem; padding:1.15rem; border:1px solid rgba(255,255,255,0.1); border-radius:16px; background:rgba(255,255,255,0.035); }
+        .nppbkc-section-title { display:flex; align-items:center; gap:0.6rem; margin-bottom:1rem; color:#fdba74; font-size:1rem; font-weight:800; }
+        .nppbkc-section-title i { width:18px; text-align:center; }
+        .nppbkc-guide { margin-top:0.65rem; padding:0.8rem; border-left:3px solid #f97316; border-radius:8px; background:rgba(249,115,22,0.08); color:rgba(255,255,255,0.68); font-size:0.78rem; line-height:1.55; }
+        .nppbkc-checklist { display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; }
+        .nppbkc-check { display:flex; align-items:flex-start; gap:0.65rem; padding:0.75rem; border:1px solid rgba(255,255,255,0.09); border-radius:10px; color:rgba(255,255,255,0.8); font-size:0.82rem; line-height:1.45; cursor:pointer; }
+        .nppbkc-check input { margin-top:0.2rem; accent-color:#f97316; }
+        .nppbkc-result-preview { margin-top:0.85rem; padding:0.9rem; border-radius:10px; background:rgba(15,23,42,0.6); color:rgba(255,255,255,0.76); font:0.78rem/1.55 'Courier New',monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
         .spinner { width:20px;height:20px; border:3px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:white; animation:spin 1s linear infinite; }
         @keyframes spin { to{transform:rotate(360deg);} }
         .dashboard-overlay { display:none; position:fixed; top:0;left:0; width:100%;height:100%; background:#0f172a; z-index:3000; overflow-y:auto; }
@@ -228,6 +238,7 @@
             .klinik-qr-copy h3 { justify-content:center; }
             .klinik-qr-actions { justify-content:center; }
             .klinik-qr-box { width:100%; display:flex; flex-direction:column; align-items:center; }
+            .nppbkc-checklist { grid-template-columns:1fr; }
         }
         ::-webkit-scrollbar { width:8px; }
         ::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); }
@@ -348,6 +359,7 @@
             <div class="services-grid">
                 <div class="service-card service-ekspor" onclick="openExportScreening()"><span class="service-badge">Utama</span><div class="service-icon"><i class="fas fa-ship"></i></div><h3>Layanan Ekspor</h3><p>Screening kesiapan dan ketentuan sebelum mengakses Portal Bea Cukai</p></div>
                 <div class="service-card service-impor" onclick="openImportScreening()"><span class="service-badge">Impor</span><div class="service-icon"><i class="fas fa-boxes-stacked"></i></div><h3>Layanan Impor</h3><p>Screening Impor untuk Dipakai sebelum mengakses Portal Bea Cukai</p></div>
+                <div class="service-card service-cukai" onclick="openCukaiForm()"><span class="service-badge">NPPBKC</span><div class="service-icon"><i class="fas fa-stamp"></i></div><h3>Layanan Cukai</h3><p>Form persiapan pengajuan Nomor Pokok Pengusaha Barang Kena Cukai</p></div>
                 <a class="service-card service-informasi" href="fkp/" style="text-decoration:none"><span class="service-badge">FKP 2026</span><div class="service-icon"><i class="fas fa-comments" aria-hidden="true"></i></div><h3>Forum Konsultasi Publik</h3><p>Sampaikan pengalaman, kebutuhan, kendala, dan saran perbaikan pelayanan. Pengisian 3–5 menit.</p></a>
                 <div class="service-card service-buku" onclick="openModal('buku')"><span class="service-badge">Registrasi</span><div class="service-icon"><i class="fas fa-book"></i></div><h3>Buku Tamu</h3><p>Registrasi kunjungan dan pertemuan umum di Kantor Bea Cukai Pangkalpinang</p></div>
                 <div class="service-card service-informasi" onclick="openModal('informasi')"><span class="service-badge">Populer</span><div class="service-icon"><i class="fas fa-info-circle"></i></div><h3>Layanan Informasi</h3><p>Konsultasi umum Bea Cukai, tanya jawab proses kepabeanan, dan informasi tarif</p></div>
@@ -541,6 +553,86 @@
                     <h3 id="importScreeningTitle"></h3>
                     <p id="importScreeningMessage"></p>
                     <div class="screening-result-actions" id="importScreeningActions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORMULIR LAYANAN CUKAI -->
+    <div class="modal-overlay" id="modal-cukai">
+        <div class="modal modal-wide">
+            <div class="modal-header" style="--modal-color:#f97316;--modal-color-dark:#c2410c;--modal-glow:rgba(249,115,22,0.2);">
+                <div class="modal-title"><i class="fas fa-stamp"></i><div><h2>Form Persiapan NPPBKC</h2><small>Layanan Cukai — pemeriksaan kelengkapan pengajuan</small></div></div>
+                <button class="modal-close" onclick="closeModal('cukai')" aria-label="Tutup formulir"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="screening-intro" style="border-color:rgba(249,115,22,0.3);background:rgba(249,115,22,0.1);">
+                    Form ini membantu menyiapkan permohonan Nomor Pokok Pengusaha Barang Kena Cukai berdasarkan
+                    <a href="https://www.beacukai.go.id/pengajuan-nppbkc" target="_blank" rel="noopener noreferrer" style="color:#fdba74;">ketentuan Pengajuan NPPBKC DJBC</a>.
+                    Isian tidak otomatis dikirim ke DJBC dan bukan permohonan resmi.
+                </div>
+
+                <form id="form-nppbkc" onsubmit="checkNppbkcReadiness(event)">
+                    <section class="nppbkc-section" aria-labelledby="nppbkcPemohonTitle">
+                        <h3 class="nppbkc-section-title" id="nppbkcPemohonTitle"><i class="fas fa-building"></i> Data Pemohon dan Usaha</h3>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label" for="nppbkcNama">Nama pemilik/penanggung jawab <span class="required">*</span></label><input class="form-input" id="nppbkcNama" name="nama" required autocomplete="name" placeholder="Nama lengkap"></div>
+                            <div class="form-group"><label class="form-label" for="nppbkcUsaha">Nama orang/badan usaha <span class="required">*</span></label><input class="form-input" id="nppbkcUsaha" name="nama_usaha" required placeholder="Nama badan usaha"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label" for="nppbkcNpwp">NPWP kantor pusat <span class="required">*</span></label><input class="form-input" id="nppbkcNpwp" name="npwp" required inputmode="numeric" placeholder="Nomor NPWP"></div>
+                            <div class="form-group"><label class="form-label" for="nppbkcHp">Nomor HP <span class="required">*</span></label><input class="form-input" id="nppbkcHp" name="hp" required type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label" for="nppbkcEmail">Email <span class="required">*</span></label><input class="form-input" id="nppbkcEmail" name="email" required type="email" autocomplete="email" placeholder="email@perusahaan.com"></div>
+                            <div class="form-group"><label class="form-label" for="nppbkcJenisBkc">Jenis Barang Kena Cukai <span class="required">*</span></label><select class="form-select" id="nppbkcJenisBkc" name="jenis_bkc" required onchange="updateNppbkcPhysicalGuide()"><option value="">Pilih jenis BKC</option><option value="Etil Alkohol">Etil Alkohol (EA)</option><option value="Minuman Mengandung Etil Alkohol">Minuman Mengandung Etil Alkohol (MMEA)</option><option value="Hasil Tembakau">Hasil Tembakau</option></select></div>
+                        </div>
+                        <div class="form-group"><label class="form-label" for="nppbkcJenisUsaha">Jenis kegiatan usaha <span class="required">*</span></label><select class="form-select" id="nppbkcJenisUsaha" name="jenis_usaha" required onchange="updateNppbkcPhysicalGuide()"><option value="">Pilih jenis usaha</option><option value="Pengusaha Pabrik">Pengusaha Pabrik</option><option value="Pengusaha Tempat Penyimpanan">Pengusaha Tempat Penyimpanan</option><option value="Importir BKC">Importir Barang Kena Cukai</option><option value="Penyalur">Penyalur</option><option value="Tempat Penjualan Eceran">Pengusaha Tempat Penjualan Eceran</option></select></div>
+                    </section>
+
+                    <section class="nppbkc-section" aria-labelledby="nppbkcLokasiTitle">
+                        <h3 class="nppbkc-section-title" id="nppbkcLokasiTitle"><i class="fas fa-map-location-dot"></i> Lokasi dan Pemeriksaan</h3>
+                        <div class="form-group"><label class="form-label" for="nppbkcAlamat">Alamat lengkap lokasi usaha <span class="required">*</span></label><textarea class="form-textarea" id="nppbkcAlamat" name="alamat" required placeholder="Alamat lokasi yang dimintakan izin"></textarea></div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label" for="nppbkcLuas">Luas lokasi (m²)</label><input class="form-input" id="nppbkcLuas" name="luas_lokasi" type="number" min="0" step="0.01" placeholder="Contoh: 300"></div>
+                            <div class="form-group"><label class="form-label" for="nppbkcJarak">Jarak dari sekolah/RS/tempat ibadah (meter)</label><input class="form-input" id="nppbkcJarak" name="jarak_fasilitas" type="number" min="0" step="1" placeholder="Khusus importir, penyalur, atau TPE"></div>
+                        </div>
+                        <div class="form-group"><label class="form-label" for="nppbkcFisik">Kesiapan persyaratan fisik lokasi <span class="required">*</span></label><select class="form-select" id="nppbkcFisik" name="fisik_siap" required><option value="">Pilih kondisi</option><option value="yes">Sudah memenuhi ketentuan sesuai jenis usaha</option><option value="no">Belum atau masih perlu diperiksa</option></select><div class="nppbkc-guide" id="nppbkcPhysicalGuide">Pilih jenis usaha dan jenis BKC untuk melihat panduan fisik utama.</div></div>
+                        <div class="nppbkc-checklist">
+                            <label class="nppbkc-check"><input type="checkbox" name="denah_dalam"> Gambar denah dalam lokasi sudah tersedia</label>
+                            <label class="nppbkc-check"><input type="checkbox" name="denah_situasi"> Gambar denah situasi sekitar lokasi sudah tersedia</label>
+                        </div>
+                        <div class="form-row" style="margin-top:1rem;">
+                            <div class="form-group"><label class="form-label" for="nppbkcBaStatus">Status pemeriksaan lokasi <span class="required">*</span></label><select class="form-select" id="nppbkcBaStatus" name="ba_status" required><option value="">Pilih status</option><option value="not_requested">Belum mengajukan pemeriksaan lokasi</option><option value="requested">Sudah mengajukan, menunggu pemeriksaan/BA</option><option value="ready">Berita Acara Pemeriksaan Lokasi sudah terbit</option></select></div>
+                            <div class="form-group"><label class="form-label" for="nppbkcBaDate">Tanggal Berita Acara</label><input class="form-input" id="nppbkcBaDate" name="ba_date" type="date"><div class="screening-note">Berita Acara Pemeriksaan Lokasi berlaku tiga bulan.</div></div>
+                        </div>
+                    </section>
+
+                    <section class="nppbkc-section" aria-labelledby="nppbkcDokumenTitle">
+                        <h3 class="nppbkc-section-title" id="nppbkcDokumenTitle"><i class="fas fa-folder-open"></i> Kelengkapan Administrasi dan Dokumen</h3>
+                        <div class="nppbkc-checklist">
+                            <label class="nppbkc-check"><input type="checkbox" name="izin_usaha"> Izin usaha dari instansi terkait sudah tersedia</label>
+                            <label class="nppbkc-check"><input type="checkbox" name="data_registrasi"> Data registrasi Pengusaha BKC sudah tersedia</label>
+                            <label class="nppbkc-check"><input type="checkbox" name="surat_pernyataan"> Surat pernyataan bermeterai dan tanggung jawab kegiatan sudah tersedia</label>
+                            <label class="nppbkc-check"><input type="checkbox" name="surat_pemaparan"> Surat kesiapan memaparkan proses bisnis sudah tersedia</label>
+                            <label class="nppbkc-check"><input type="checkbox" name="daftar_mesin"> Daftar mesin pembuat/pengemas tersedia (wajib untuk Pengusaha Pabrik)</label>
+                            <label class="nppbkc-check"><input type="checkbox" name="daftar_penyalur"> Daftar penyalur pembeli tersedia (wajib untuk Pabrik Hasil Tembakau)</label>
+                        </div>
+                        <div class="form-group" style="margin-top:1rem;"><label class="form-label" for="nppbkcProsesBisnis">Ringkasan proses bisnis <span class="required">*</span></label><textarea class="form-textarea" id="nppbkcProsesBisnis" name="proses_bisnis" required placeholder="Jelaskan profil, proses usaha/produksi, SOP, kapasitas, produk, serta kesiapan pemaparan"></textarea></div>
+                    </section>
+
+                    <button type="submit" class="btn-submit" style="--modal-color:#f97316;--modal-color-dark:#c2410c;--modal-glow:rgba(249,115,22,0.25);"><i class="fas fa-clipboard-check"></i> Periksa Kelengkapan NPPBKC</button>
+                </form>
+
+                <div class="screening-result" id="nppbkcResult" role="status" aria-live="polite">
+                    <h3 id="nppbkcResultTitle"></h3>
+                    <p id="nppbkcResultMessage"></p>
+                    <pre class="nppbkc-result-preview" id="nppbkcSummary"></pre>
+                    <div class="screening-result-actions">
+                        <button class="screening-action primary" type="button" onclick="copyNppbkcSummary()"><i class="fas fa-copy"></i> Salin Ringkasan</button>
+                        <button class="screening-action" type="button" onclick="downloadNppbkcSummary()"><i class="fas fa-download"></i> Unduh Ringkasan</button>
+                        <a class="screening-action" href="https://www.beacukai.go.id/pengajuan-nppbkc" target="_blank" rel="noopener noreferrer"><i class="fas fa-book-open"></i> Ketentuan Resmi</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1525,6 +1617,7 @@
     const TATA_LAKSANA_EKSPOR_URL = 'https://www.beacukai.go.id/tata-laksana-ekspor';
     const PORTAL_IMPOR_URL = 'https://portal.beacukai.go.id/portal/login';
     const IMPOR_UNTUK_DIPAKAI_URL = 'https://www.beacukai.go.id/impor-untuk-dipakai';
+    const NPPBKC_GUIDE_URL = 'https://www.beacukai.go.id/pengajuan-nppbkc';
     const ADMIN_PIN = 'bcadmin2026';
     let isAdminLoggedIn = false;
     let currentTicketNumber = '';
@@ -1545,6 +1638,7 @@
     let skmPieChartInst = null;
     let mediaSosialChartInst = null;
     let trenMediaChartInst = null;
+    let lastNppbkcSummary = '';
 
     function jsonpRequest(url) {
         return new Promise(function(resolve, reject) {
@@ -2956,6 +3050,8 @@
             openModal('ekspor');
         } else if (requestedService === 'impor') {
             openModal('impor');
+        } else if (requestedService === 'cukai') {
+            openModal('cukai');
         } else if (requestedService === 'klinik-ekspor') {
             openModal('klinik');
         }
@@ -3086,6 +3182,133 @@
         return links;
     }
 
+    function openCukaiForm() {
+        const directUrl = new URL(window.location.href);
+        directUrl.searchParams.set('layanan', 'cukai');
+        window.history.pushState({ layanan: 'cukai' }, '', directUrl);
+        openModal('cukai');
+    }
+
+    function updateNppbkcPhysicalGuide() {
+        const businessType = document.getElementById('nppbkcJenisUsaha').value;
+        const exciseType = document.getElementById('nppbkcJenisBkc').value;
+        const guide = document.getElementById('nppbkcPhysicalGuide');
+        let message = 'Pilih jenis usaha dan jenis BKC untuk melihat panduan fisik utama.';
+
+        if (businessType === 'Pengusaha Pabrik') {
+            const areaGuides = {
+                'Etil Alkohol': 'luas pabrik umumnya minimal 5.000 m², dengan pengecualian tertentu untuk bahan bakar nabati',
+                'Minuman Mengandung Etil Alkohol': 'luas pabrik minimal 300 m²',
+                'Hasil Tembakau': 'luas pabrik minimal 200 m², kecuali Hasil Pengolahan Tembakau Lainnya'
+            };
+            message = 'Pabrik harus terpisah dengan pembatas permanen, dapat dimasuki dari jalan umum, serta memiliki area bahan baku, produksi/pengemasan, penyimpanan hasil, dan penyimpanan BKC yang telah dilunasi cukainya. ' + (areaGuides[exciseType] || 'Periksa ketentuan luas sesuai jenis BKC.') + '.';
+        } else if (businessType === 'Pengusaha Tempat Penyimpanan') {
+            message = 'Tempat Penyimpanan harus terpisah, dapat dimasuki dari jalan umum, dan memenuhi ketentuan luas, tangki/fasilitas ukur, gudang permanen, pagar, serta laboratorium sesuai ketentuan dan pengecualian yang berlaku.';
+        } else if (businessType === 'Importir BKC' || businessType === 'Penyalur') {
+            message = 'Tempat usaha harus terpisah dengan pembatas permanen, dapat dimasuki dari jalan umum, dan umumnya berjarak minimal 100 meter dari sekolah, rumah sakit, atau tempat ibadah kecuali telah memiliki izin usaha terkait.';
+        } else if (businessType === 'Tempat Penjualan Eceran') {
+            message = 'Tempat Penjualan Eceran harus memenuhi pemisahan dan akses lokasi serta umumnya berjarak minimal 100 meter dari sekolah, rumah sakit, atau tempat ibadah, dengan pengecualian lokasi/izin tertentu.';
+        }
+
+        guide.textContent = message;
+    }
+
+    function checkNppbkcReadiness(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const data = new FormData(form);
+        const businessType = data.get('jenis_usaha');
+        const exciseType = data.get('jenis_bkc');
+        const missing = [];
+
+        if (data.get('fisik_siap') !== 'yes') missing.push('Persyaratan fisik lokasi belum dinyatakan siap');
+        if (!data.has('denah_dalam')) missing.push('Gambar denah dalam lokasi');
+        if (!data.has('denah_situasi')) missing.push('Gambar denah situasi sekitar lokasi');
+        if (data.get('ba_status') !== 'ready') missing.push('Berita Acara Pemeriksaan Lokasi');
+        if (!data.has('izin_usaha')) missing.push('Izin usaha dari instansi terkait');
+        if (!data.has('data_registrasi')) missing.push('Data registrasi Pengusaha BKC');
+        if (!data.has('surat_pernyataan')) missing.push('Surat pernyataan bermeterai');
+        if (!data.has('surat_pemaparan')) missing.push('Surat kesiapan pemaparan proses bisnis');
+        if (businessType === 'Pengusaha Pabrik' && !data.has('daftar_mesin')) missing.push('Daftar mesin pembuat/pengemas BKC');
+        if (businessType === 'Pengusaha Pabrik' && exciseType === 'Hasil Tembakau' && !data.has('daftar_penyalur')) missing.push('Daftar penyalur pembeli hasil tembakau');
+
+        const baDateValue = data.get('ba_date');
+        let baStatusText = 'Belum dicantumkan';
+        if (baDateValue) {
+            const baDate = new Date(baDateValue + 'T00:00:00');
+            const expiryDate = new Date(baDate);
+            expiryDate.setMonth(expiryDate.getMonth() + 3);
+            baStatusText = 'Terbit ' + formatIndonesianDate(baDate) + '; berlaku sampai sekitar ' + formatIndonesianDate(expiryDate);
+            if (new Date() > expiryDate) missing.push('Berita Acara Pemeriksaan Lokasi telah melewati masa berlaku tiga bulan');
+        } else if (data.get('ba_status') === 'ready') {
+            missing.push('Tanggal Berita Acara Pemeriksaan Lokasi');
+        }
+
+        const result = document.getElementById('nppbkcResult');
+        const title = document.getElementById('nppbkcResultTitle');
+        const message = document.getElementById('nppbkcResultMessage');
+        const summary = document.getElementById('nppbkcSummary');
+        result.className = 'screening-result active ' + (missing.length === 0 ? 'ready' : 'review');
+        title.textContent = missing.length === 0 ? 'Persiapan awal NPPBKC lengkap' : 'Masih ada kelengkapan yang perlu disiapkan';
+        message.textContent = missing.length === 0
+            ? 'Form menunjukkan kesiapan awal untuk melanjutkan proses permohonan NPPBKC. Tetap cocokkan dokumen dan kondisi lokasi dengan ketentuan resmi serta arahan Kantor Bea dan Cukai yang mengawasi.'
+            : 'Lengkapi ' + missing.length + ' poin berikut sebelum mengajukan permohonan resmi: ' + missing.join('; ') + '.';
+
+        const lines = [
+            'RINGKASAN PERSIAPAN PENGAJUAN NPPBKC',
+            'Dibuat: ' + new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + ' WIB',
+            '',
+            'Nama penanggung jawab: ' + data.get('nama'),
+            'Nama usaha: ' + data.get('nama_usaha'),
+            'NPWP kantor pusat: ' + data.get('npwp'),
+            'Kontak: ' + data.get('hp') + ' | ' + data.get('email'),
+            'Jenis usaha: ' + businessType,
+            'Jenis BKC: ' + exciseType,
+            'Alamat lokasi: ' + data.get('alamat'),
+            'Luas lokasi: ' + (data.get('luas_lokasi') || '-') + ' m²',
+            'Jarak fasilitas sensitif: ' + (data.get('jarak_fasilitas') || '-') + ' meter',
+            'Status Berita Acara: ' + baStatusText,
+            'Ringkasan proses bisnis: ' + data.get('proses_bisnis'),
+            '',
+            missing.length === 0 ? 'STATUS: Persiapan awal lengkap' : 'STATUS: Perlu dilengkapi',
+            missing.length === 0 ? 'Tidak ada kekurangan yang terdeteksi dari isian.' : 'Kekurangan:\n- ' + missing.join('\n- '),
+            '',
+            'Sumber ketentuan: ' + NPPBKC_GUIDE_URL,
+            'Catatan: Ringkasan ini bukan permohonan atau keputusan resmi DJBC.'
+        ];
+        lastNppbkcSummary = lines.join('\n');
+        summary.textContent = lastNppbkcSummary;
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function formatIndonesianDate(date) {
+        return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+    }
+
+    async function copyNppbkcSummary() {
+        if (!lastNppbkcSummary) return;
+        try {
+            await navigator.clipboard.writeText(lastNppbkcSummary);
+            showToast('Ringkasan NPPBKC berhasil disalin', 'success');
+        } catch (error) {
+            showToast('Ringkasan belum dapat disalin. Gunakan tombol unduh.', 'warning');
+        }
+    }
+
+    function downloadNppbkcSummary() {
+        if (!lastNppbkcSummary) return;
+        const blob = new Blob([lastNppbkcSummary], { type: 'text/plain;charset=utf-8' });
+        const downloadUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = 'Ringkasan-Persiapan-NPPBKC.txt';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(downloadUrl);
+        showToast('Ringkasan NPPBKC berhasil diunduh', 'success');
+    }
+
     function openKlinikEkspor() {
         const directUrl = new URL(window.location.href);
         directUrl.searchParams.set('layanan', 'klinik-ekspor');
@@ -3162,7 +3385,7 @@
     function closeModal(type) {
         document.getElementById('modal-' + type).classList.remove('active');
         document.body.style.overflow = 'auto';
-        if (type === 'klinik' || type === 'ekspor' || type === 'impor') {
+        if (type === 'klinik' || type === 'ekspor' || type === 'impor' || type === 'cukai') {
             const currentUrl = new URL(window.location.href);
             const expectedService = type === 'klinik' ? 'klinik-ekspor' : type;
             if (currentUrl.searchParams.get('layanan') === expectedService) {
@@ -3177,22 +3400,32 @@
         const klinikModal = document.getElementById('modal-klinik');
         const eksporModal = document.getElementById('modal-ekspor');
         const imporModal = document.getElementById('modal-impor');
+        const cukaiModal = document.getElementById('modal-cukai');
         if (requestedService === 'ekspor') {
             openModal('ekspor');
             if (klinikModal) klinikModal.classList.remove('active');
             if (imporModal) imporModal.classList.remove('active');
+            if (cukaiModal) cukaiModal.classList.remove('active');
         } else if (requestedService === 'impor') {
             openModal('impor');
             if (klinikModal) klinikModal.classList.remove('active');
             if (eksporModal) eksporModal.classList.remove('active');
+            if (cukaiModal) cukaiModal.classList.remove('active');
+        } else if (requestedService === 'cukai') {
+            openModal('cukai');
+            if (klinikModal) klinikModal.classList.remove('active');
+            if (eksporModal) eksporModal.classList.remove('active');
+            if (imporModal) imporModal.classList.remove('active');
         } else if (requestedService === 'klinik-ekspor') {
             openModal('klinik');
             if (eksporModal) eksporModal.classList.remove('active');
             if (imporModal) imporModal.classList.remove('active');
+            if (cukaiModal) cukaiModal.classList.remove('active');
         } else {
             if (klinikModal) klinikModal.classList.remove('active');
             if (eksporModal) eksporModal.classList.remove('active');
             if (imporModal) imporModal.classList.remove('active');
+            if (cukaiModal) cukaiModal.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
     });
