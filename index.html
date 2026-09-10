@@ -359,7 +359,7 @@
             <div class="services-grid">
                 <div class="service-card service-ekspor" onclick="openExportScreening()"><span class="service-badge">Utama</span><div class="service-icon"><i class="fas fa-ship"></i></div><h3>Layanan Ekspor</h3><p>Screening kesiapan dan ketentuan sebelum mengakses Portal Bea Cukai</p></div>
                 <div class="service-card service-impor" onclick="openImportScreening()"><span class="service-badge">Impor</span><div class="service-icon"><i class="fas fa-boxes-stacked"></i></div><h3>Layanan Impor</h3><p>Screening Impor untuk Dipakai sebelum mengakses Portal Bea Cukai</p></div>
-                <div class="service-card service-cukai" onclick="openCukaiForm()"><span class="service-badge">NPPBKC</span><div class="service-icon"><i class="fas fa-stamp"></i></div><h3>Layanan Cukai</h3><p>Form persiapan pengajuan Nomor Pokok Pengusaha Barang Kena Cukai</p></div>
+                <div class="service-card service-cukai" onclick="openCukaiForm()"><span class="service-badge">NPPBKC</span><div class="service-icon"><i class="fas fa-stamp"></i></div><h3>Layanan Cukai</h3><p>Permohonan pendataan awal Nomor Pokok Pengusaha Barang Kena Cukai</p></div>
                 <a class="service-card service-informasi" href="fkp/" style="text-decoration:none"><span class="service-badge">FKP 2026</span><div class="service-icon"><i class="fas fa-comments" aria-hidden="true"></i></div><h3>Forum Konsultasi Publik</h3><p>Sampaikan pengalaman, kebutuhan, kendala, dan saran perbaikan pelayanan. Pengisian 3–5 menit.</p></a>
                 <div class="service-card service-buku" onclick="openModal('buku')"><span class="service-badge">Registrasi</span><div class="service-icon"><i class="fas fa-book"></i></div><h3>Buku Tamu</h3><p>Registrasi kunjungan dan pertemuan umum di Kantor Bea Cukai Pangkalpinang</p></div>
                 <div class="service-card service-informasi" onclick="openModal('informasi')"><span class="service-badge">Populer</span><div class="service-icon"><i class="fas fa-info-circle"></i></div><h3>Layanan Informasi</h3><p>Konsultasi umum Bea Cukai, tanya jawab proses kepabeanan, dan informasi tarif</p></div>
@@ -562,14 +562,14 @@
     <div class="modal-overlay" id="modal-cukai">
         <div class="modal modal-wide">
             <div class="modal-header" style="--modal-color:#f97316;--modal-color-dark:#c2410c;--modal-glow:rgba(249,115,22,0.2);">
-                <div class="modal-title"><i class="fas fa-stamp"></i><div><h2>Form Persiapan NPPBKC</h2><small>Layanan Cukai — pemeriksaan kelengkapan pengajuan</small></div></div>
+                <div class="modal-title"><i class="fas fa-stamp"></i><div><h2>Permohonan Pendataan Awal NPPBKC</h2><small>Layanan Cukai — pemeriksaan kelengkapan pengajuan</small></div></div>
                 <button class="modal-close" onclick="closeModal('cukai')" aria-label="Tutup formulir"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <div class="screening-intro" style="border-color:rgba(249,115,22,0.3);background:rgba(249,115,22,0.1);">
-                    Form ini membantu menyiapkan permohonan Nomor Pokok Pengusaha Barang Kena Cukai berdasarkan
+                    Formulir ini merupakan pengajuan permohonan pendataan awal Nomor Pokok Pengusaha Barang Kena Cukai berdasarkan
                     <a href="https://www.beacukai.go.id/pengajuan-nppbkc" target="_blank" rel="noopener noreferrer" style="color:#fdba74;">ketentuan Pengajuan NPPBKC DJBC</a>.
-                    Isian tidak otomatis dikirim ke DJBC dan bukan permohonan resmi.
+                    Pendataan awal tidak menggantikan permohonan resmi. Dokumen kelengkapan wajib disampaikan ke Kantor Bea Cukai Pangkalpinang dan baru dicatat sebagai permohonan resmi setelah diterima serta diverifikasi oleh petugas kantor.
                 </div>
 
                 <form id="form-nppbkc" onsubmit="checkNppbkcReadiness(event)">
@@ -621,7 +621,12 @@
                         <div class="form-group" style="margin-top:1rem;"><label class="form-label" for="nppbkcProsesBisnis">Ringkasan proses bisnis <span class="required">*</span></label><textarea class="form-textarea" id="nppbkcProsesBisnis" name="proses_bisnis" required placeholder="Jelaskan profil, proses usaha/produksi, SOP, kapasitas, produk, serta kesiapan pemaparan"></textarea></div>
                     </section>
 
-                    <button type="submit" class="btn-submit" style="--modal-color:#f97316;--modal-color-dark:#c2410c;--modal-glow:rgba(249,115,22,0.25);"><i class="fas fa-clipboard-check"></i> Periksa Kelengkapan NPPBKC</button>
+                    <label class="nppbkc-check" style="margin-bottom:1rem;border-color:rgba(249,115,22,0.35);background:rgba(249,115,22,0.08);">
+                        <input type="checkbox" name="persetujuan_pendataan_awal" required>
+                        Saya memahami bahwa pengiriman formulir ini hanya mencatat permohonan pendataan awal. Seluruh dokumen kelengkapan wajib disampaikan ke Kantor Bea Cukai Pangkalpinang, dan permohonan baru tercatat resmi setelah dokumen diterima serta diverifikasi oleh petugas kantor.
+                    </label>
+
+                    <button type="submit" class="btn-submit" style="--modal-color:#f97316;--modal-color-dark:#c2410c;--modal-glow:rgba(249,115,22,0.25);"><i class="fas fa-clipboard-check"></i> Periksa Kelengkapan &amp; Lanjutkan</button>
                 </form>
 
                 <div class="screening-result" id="nppbkcResult" role="status" aria-live="polite">
@@ -629,6 +634,7 @@
                     <p id="nppbkcResultMessage"></p>
                     <pre class="nppbkc-result-preview" id="nppbkcSummary"></pre>
                     <div class="screening-result-actions">
+                        <button class="screening-action primary" id="nppbkcSubmitInitial" type="button" onclick="submitNppbkcInitialRequest()"><i class="fas fa-paper-plane"></i> Ajukan Pendataan Awal</button>
                         <button class="screening-action primary" type="button" onclick="copyNppbkcSummary()"><i class="fas fa-copy"></i> Salin Ringkasan</button>
                         <button class="screening-action" type="button" onclick="downloadNppbkcSummary()"><i class="fas fa-download"></i> Unduh Ringkasan</button>
                         <a class="screening-action" href="https://www.beacukai.go.id/pengajuan-nppbkc" target="_blank" rel="noopener noreferrer"><i class="fas fa-book-open"></i> Ketentuan Resmi</a>
@@ -997,11 +1003,11 @@
     <div class="ticket-overlay" id="ticketOverlay" onclick="closeTicket()"></div>
     <div class="ticket-display" id="ticketDisplay" style="display:none;">
         <div class="ticket-icon"><i class="fas fa-check"></i></div>
-        <h3 style="color:var(--white);margin-bottom:0.5rem;">Pendaftaran Berhasil!</h3>
-        <p class="ticket-info">Nomor Tiket Anda:</p>
+        <h3 id="ticketTitle" style="color:var(--white);margin-bottom:0.5rem;">Pendaftaran Berhasil!</h3>
+        <p class="ticket-info" id="ticketNumberLabel">Nomor Tiket Anda:</p>
         <div class="ticket-number" id="ticketNumber">BC-20260430-001</div>
         <div class="ticket-qr" id="ticketQR"><div id="ticketQRContainer"></div></div>
-        <p class="ticket-info">Screenshot atau foto nomor tiket ini<br>untuk mengecek status layanan</p>
+        <p class="ticket-info" id="ticketGuidance">Screenshot atau foto nomor tiket ini<br>untuk mengecek status layanan</p>
         <button class="btn-submit" style="margin-top:1.5rem;max-width:200px;" onclick="closeTicket()"><i class="fas fa-check"></i> Selesai</button>
     </div>
 
@@ -2009,6 +2015,13 @@
         document.getElementById('adminFilterTanggalBuku').value = today;
         initQRCode();
         openRequestedService();
+        const nppbkcForm = document.getElementById('form-nppbkc');
+        if (nppbkcForm) {
+            nppbkcForm.addEventListener('input', function() {
+                lastNppbkcSummary = '';
+                document.getElementById('nppbkcResult').className = 'screening-result';
+            });
+        }
         setTimeout(initCharts, 500);
         renderDetailInformasiTable();
         loadDashboardData();
@@ -2802,7 +2815,7 @@
             const actualIndex = start + index;
             const status = row.status || 'Diterima';
             const statusClass = getStatusClass(status);
-            const layananLabels = { 'buku': 'Buku Tamu', 'informasi': 'Layanan Info', 'pengaduan': 'Pengaduan', 'klinik': 'Klinik Ekspor', 'janji': 'Janji Temu', 'ppid': 'PPID' };
+            const layananLabels = { 'buku': 'Buku Tamu', 'informasi': 'Layanan Info', 'pengaduan': 'Pengaduan', 'klinik': 'Klinik Ekspor', 'janji': 'Janji Temu', 'ppid': 'PPID', 'cukai': 'Pendataan Awal Cukai' };
 
             html += '<tr><td style="padding:0.75rem;">' + (actualIndex + 1) + '</td>' +
                 '<td style="padding:0.75rem;">' + (getDateKey(row.tanggal || row.timestamp) || '-') + '</td>' +
@@ -2981,7 +2994,7 @@
 
     function renderTiketResult(data, container) {
         const statusClass = getStatusClass(data.data.status || 'Diproses');
-        const layananLabels = { 'buku': 'Buku Tamu', 'informasi': 'Layanan Informasi', 'pengaduan': 'Pengaduan', 'klinik': 'Klinik Ekspor', 'janji': 'Janji Temu', 'ppid': 'PPID' };
+        const layananLabels = { 'buku': 'Buku Tamu', 'informasi': 'Layanan Informasi', 'pengaduan': 'Pengaduan', 'klinik': 'Klinik Ekspor', 'janji': 'Janji Temu', 'ppid': 'PPID', 'cukai': 'Pendataan Awal Cukai' };
         container.innerHTML = '<div class="cek-tiket-result found"><i class="fas fa-check-circle" style="font-size:2rem;color:var(--success);margin-bottom:0.5rem;"></i><h4 style="color:var(--success);">Tiket Ditemukan!</h4>' +
             '<p style="color:rgba(255,255,255,0.9);margin:0.5rem 0;"><strong>Layanan:</strong> ' + (layananLabels[data.layanan] || data.layanan) + '</p>' +
             '<p style="color:rgba(255,255,255,0.9);margin:0.5rem 0;"><strong>Nomor Tiket:</strong> <span style="color:var(--gold);font-family:monospace;">' + (data.data.id_tiket || '-') + '</span></p>' +
@@ -2993,7 +3006,7 @@
 
     function renderLocalTiketResult(data, container) {
         const statusClass = getStatusClass(data.status || 'Menunggu Sinkronisasi');
-        const layananLabels = { 'buku': 'Buku Tamu', 'informasi': 'Layanan Informasi', 'pengaduan': 'Pengaduan', 'klinik': 'Klinik Ekspor', 'janji': 'Janji Temu', 'ppid': 'PPID' };
+        const layananLabels = { 'buku': 'Buku Tamu', 'informasi': 'Layanan Informasi', 'pengaduan': 'Pengaduan', 'klinik': 'Klinik Ekspor', 'janji': 'Janji Temu', 'ppid': 'PPID', 'cukai': 'Pendataan Awal Cukai' };
         container.innerHTML = '<div class="cek-tiket-result found"><i class="fas fa-check-circle" style="font-size:2rem;color:var(--success);margin-bottom:0.5rem;"></i><h4 style="color:var(--success);">Tiket Ditemukan (Lokal)</h4>' +
             '<p style="color:rgba(255,255,255,0.9);margin:0.5rem 0;"><strong>Layanan:</strong> ' + (layananLabels[data.layanan] || data.layanan || '-') + '</p>' +
             '<p style="color:rgba(255,255,255,0.9);margin:0.5rem 0;"><strong>Nomor Tiket:</strong> <span style="color:var(--gold);font-family:monospace;">' + (data.id_tiket || data.ticketNumber || '-') + '</span></p>' +
@@ -3251,8 +3264,13 @@
         result.className = 'screening-result active ' + (missing.length === 0 ? 'ready' : 'review');
         title.textContent = missing.length === 0 ? 'Persiapan awal NPPBKC lengkap' : 'Masih ada kelengkapan yang perlu disiapkan';
         message.textContent = missing.length === 0
-            ? 'Form menunjukkan kesiapan awal untuk melanjutkan proses permohonan NPPBKC. Tetap cocokkan dokumen dan kondisi lokasi dengan ketentuan resmi serta arahan Kantor Bea dan Cukai yang mengawasi.'
-            : 'Lengkapi ' + missing.length + ' poin berikut sebelum mengajukan permohonan resmi: ' + missing.join('; ') + '.';
+            ? 'Isian siap dikirim sebagai permohonan pendataan awal. Setelah memperoleh nomor referensi, seluruh dokumen kelengkapan tetap wajib disampaikan ke Kantor Bea Cukai Pangkalpinang untuk diterima, diverifikasi, dan dicatat sebagai permohonan resmi.'
+            : 'Pendataan awal tetap dapat dikirim, tetapi lengkapi ' + missing.length + ' poin berikut sebelum menyampaikan dokumen untuk pencatatan resmi di kantor: ' + missing.join('; ') + '.';
+
+        const submitInitialButton = document.getElementById('nppbkcSubmitInitial');
+        submitInitialButton.innerHTML = missing.length === 0
+            ? '<i class="fas fa-paper-plane"></i> Ajukan Pendataan Awal'
+            : '<i class="fas fa-paper-plane"></i> Kirim Pendataan Awal (Belum Lengkap)';
 
         const lines = [
             'RINGKASAN PERSIAPAN PENGAJUAN NPPBKC',
@@ -3270,11 +3288,11 @@
             'Status Berita Acara: ' + baStatusText,
             'Ringkasan proses bisnis: ' + data.get('proses_bisnis'),
             '',
-            missing.length === 0 ? 'STATUS: Persiapan awal lengkap' : 'STATUS: Perlu dilengkapi',
+            missing.length === 0 ? 'STATUS KELENGKAPAN: Persiapan awal lengkap' : 'STATUS KELENGKAPAN: Perlu dilengkapi',
             missing.length === 0 ? 'Tidak ada kekurangan yang terdeteksi dari isian.' : 'Kekurangan:\n- ' + missing.join('\n- '),
             '',
             'Sumber ketentuan: ' + NPPBKC_GUIDE_URL,
-            'Catatan: Ringkasan ini bukan permohonan atau keputusan resmi DJBC.'
+            'Catatan: Data ini merupakan permohonan pendataan awal. Permohonan resmi baru dicatat setelah dokumen diterima dan diverifikasi oleh Kantor Bea Cukai Pangkalpinang.'
         ];
         lastNppbkcSummary = lines.join('\n');
         summary.textContent = lastNppbkcSummary;
@@ -3307,6 +3325,70 @@
         link.remove();
         URL.revokeObjectURL(downloadUrl);
         showToast('Ringkasan NPPBKC berhasil diunduh', 'success');
+    }
+
+    async function submitNppbkcInitialRequest() {
+        const form = document.getElementById('form-nppbkc');
+        if (!form.reportValidity()) return;
+        if (!lastNppbkcSummary) {
+            showToast('Periksa kelengkapan formulir terlebih dahulu.', 'warning');
+            return;
+        }
+
+        const button = document.getElementById('nppbkcSubmitInitial');
+        const originalContent = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<div class="spinner"></div> Mengirim Pendataan...';
+
+        const formData = new FormData(form);
+        const checkboxNames = ['denah_dalam', 'denah_situasi', 'izin_usaha', 'data_registrasi', 'surat_pernyataan', 'surat_pemaparan', 'daftar_mesin', 'daftar_penyalur', 'persetujuan_pendataan_awal'];
+        checkboxNames.forEach(function(name) {
+            const field = form.elements[name];
+            formData.set(name, field && field.checked ? 'Ya' : 'Tidak');
+        });
+
+        const ticketNumber = generateTicketNumber();
+        formData.set('action', 'submit');
+        formData.set('layanan', 'cukai');
+        formData.set('timestamp', new Date().toISOString());
+        formData.set('id_tiket', ticketNumber);
+        formData.set('status', 'Pendataan Awal - Menunggu Dokumen');
+        formData.set('ringkasan_kelengkapan', lastNppbkcSummary);
+
+        const completeData = {};
+        formData.forEach(function(value, key) { completeData[key] = value; });
+        formData.set('data', JSON.stringify(completeData));
+        currentTicketNumber = ticketNumber;
+        saveToLocal(formData, ticketNumber);
+
+        try {
+            const plainData = {};
+            formData.forEach(function(value, key) { plainData[key] = value; });
+            const response = await apiFetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(plainData).toString()
+            });
+            const result = await response.json();
+            if (result.success) {
+                removeFromLocal(ticketNumber);
+                showToast('Pendataan awal berhasil dicatat. Referensi: ' + ticketNumber, 'success');
+            } else {
+                showToast('Pendataan tersimpan lokal dan akan disinkronkan ulang.', 'warning');
+            }
+        } catch (error) {
+            console.log('Pendataan awal Cukai tersimpan lokal:', error);
+            showToast('Pendataan tersimpan lokal dan akan disinkronkan ulang.', 'warning');
+        }
+
+        closeModal('cukai');
+        showTicket(ticketNumber, 'cukai');
+        form.reset();
+        updateNppbkcPhysicalGuide();
+        document.getElementById('nppbkcResult').className = 'screening-result';
+        lastNppbkcSummary = '';
+        button.disabled = false;
+        button.innerHTML = originalContent;
     }
 
     function openKlinikEkspor() {
@@ -3514,6 +3596,11 @@
 
     function showTicket(number, type) {
         document.getElementById('ticketNumber').textContent = number;
+        document.getElementById('ticketTitle').textContent = type === 'cukai' ? 'Pendataan Awal Berhasil Dicatat!' : 'Pendaftaran Berhasil!';
+        document.getElementById('ticketNumberLabel').textContent = type === 'cukai' ? 'Nomor Referensi Pendataan Awal:' : 'Nomor Tiket Anda:';
+        document.getElementById('ticketGuidance').innerHTML = type === 'cukai'
+            ? 'Simpan nomor referensi ini. Dokumen kelengkapan wajib disampaikan ke Kantor Bea Cukai Pangkalpinang.<br>Permohonan resmi dicatat setelah dokumen diterima dan diverifikasi petugas.'
+            : 'Screenshot atau foto nomor tiket ini<br>untuk mengecek status layanan';
         document.getElementById('ticketOverlay').classList.add('active');
         document.getElementById('ticketDisplay').style.display = 'block';
 

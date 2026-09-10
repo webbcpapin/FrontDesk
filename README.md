@@ -229,8 +229,8 @@ Link langsung screening:
 https://webbcpapin.github.io/FrontDesk/?layanan=impor
 ```
 
-### I. Form Persiapan Layanan Cukai
-Layanan Cukai berada pada urutan ketiga setelah Ekspor dan Impor. Form membantu memeriksa kesiapan pengajuan NPPBKC berdasarkan ketentuan DJBC, lalu menyediakan ringkasan yang dapat disalin atau diunduh tanpa menyimpan data pemohon.
+### I. Permohonan Pendataan Awal Layanan Cukai
+Layanan Cukai berada pada urutan ketiga setelah Ekspor dan Impor. Form membantu memeriksa kesiapan pengajuan NPPBKC berdasarkan ketentuan DJBC, kemudian mencatat permohonan pendataan awal dan memberikan nomor referensi. Dokumen kelengkapan tetap wajib disampaikan ke Kantor Bea Cukai Pangkalpinang; permohonan baru dicatat resmi setelah dokumen diterima dan diverifikasi petugas kantor.
 
 Link langsung formulir:
 ```

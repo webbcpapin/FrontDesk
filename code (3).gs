@@ -411,7 +411,7 @@ function getDashboardData() {
     }
 
     // Count total layanan
-    const sheets = ['BukuTamu', 'LayananInformasi', 'Pengaduan', 'KlinikEkspor', 'JanjiTemu', 'PPID'];
+    const sheets = ['BukuTamu', 'LayananInformasi', 'Pengaduan', 'KlinikEkspor', 'JanjiTemu', 'PPID', 'PendataanAwalCukai'];
     let totalLayanan = 0;
     sheets.forEach(function(sheetName) {
       const sheet = ss.getSheetByName(sheetName);
@@ -503,8 +503,8 @@ function getAgendaData() {
 function cekTiket(searchTerm) {
   try {
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sheets = ['BukuTamu', 'LayananInformasi', 'Pengaduan', 'KlinikEkspor', 'JanjiTemu', 'PPID'];
-    const layananNames = { 'BukuTamu': 'buku', 'LayananInformasi': 'informasi', 'Pengaduan': 'pengaduan', 'KlinikEkspor': 'klinik', 'JanjiTemu': 'janji', 'PPID': 'ppid' };
+    const sheets = ['BukuTamu', 'LayananInformasi', 'Pengaduan', 'KlinikEkspor', 'JanjiTemu', 'PPID', 'PendataanAwalCukai'];
+    const layananNames = { 'BukuTamu': 'buku', 'LayananInformasi': 'informasi', 'Pengaduan': 'pengaduan', 'KlinikEkspor': 'klinik', 'JanjiTemu': 'janji', 'PPID': 'ppid', 'PendataanAwalCukai': 'cukai' };
 
     for (const sheetName of sheets) {
       const sheet = ss.getSheetByName(sheetName);
@@ -547,8 +547,8 @@ function getHistory(hp) {
     }
 
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sheets = ['BukuTamu', 'LayananInformasi', 'Pengaduan', 'KlinikEkspor', 'JanjiTemu', 'PPID'];
-    const layananNames = { 'BukuTamu': 'buku', 'LayananInformasi': 'informasi', 'Pengaduan': 'pengaduan', 'KlinikEkspor': 'klinik', 'JanjiTemu': 'janji', 'PPID': 'ppid' };
+    const sheets = ['BukuTamu', 'LayananInformasi', 'Pengaduan', 'KlinikEkspor', 'JanjiTemu', 'PPID', 'PendataanAwalCukai'];
+    const layananNames = { 'BukuTamu': 'buku', 'LayananInformasi': 'informasi', 'Pengaduan': 'pengaduan', 'KlinikEkspor': 'klinik', 'JanjiTemu': 'janji', 'PPID': 'ppid', 'PendataanAwalCukai': 'cukai' };
     const reusableFields = ['hp', 'nama', 'email', 'instansi', 'alamat', 'pekerjaan', 'nik', 'npwp', 'nama_usaha'];
     const matches = [];
 
@@ -755,6 +755,7 @@ function getSheetName(layanan) {
     'klinik': 'KlinikEkspor',
     'janji': 'JanjiTemu',
     'ppid': 'PPID',
+    'cukai': 'PendataanAwalCukai',
     'agenda': 'Agenda',
     'skm': 'SKM',
     'mediasosial': 'MediaSosial'
@@ -770,6 +771,7 @@ function getLayananBySheetName(sheetName) {
     'KlinikEkspor': 'klinik',
     'JanjiTemu': 'janji',
     'PPID': 'ppid',
+    'PendataanAwalCukai': 'cukai',
     'Agenda': 'agenda',
     'SKM': 'skm',
     'MediaSosial': 'mediasosial'
@@ -785,6 +787,7 @@ function getHeaders(layanan) {
     'klinik': ['timestamp', 'id_tiket', 'nama', 'hp', 'nama_usaha', 'email', 'domisili', 'alamat', 'tahap_umkm', 'jenis_produk', 'keperluan', 'deskripsi', 'status'],
     'janji': ['timestamp', 'id_tiket', 'nama', 'hp', 'instansi', 'email', 'bertemu_dengan', 'keperluan', 'tanggal', 'waktu', 'status'],
     'ppid': ['timestamp', 'id_tiket', 'nama', 'hp', 'nik', 'npwp', 'email', 'pekerjaan', 'alamat', 'detail', 'tujuan', 'lampiran', 'status'],
+    'cukai': ['timestamp', 'id_tiket', 'nama', 'hp', 'email', 'nama_usaha', 'npwp', 'jenis_bkc', 'jenis_usaha', 'alamat', 'luas_lokasi', 'jarak_fasilitas', 'fisik_siap', 'denah_dalam', 'denah_situasi', 'ba_status', 'ba_date', 'izin_usaha', 'data_registrasi', 'surat_pernyataan', 'surat_pemaparan', 'daftar_mesin', 'daftar_penyalur', 'proses_bisnis', 'ringkasan_kelengkapan', 'status', 'tanggal_dokumen_diterima', 'nomor_pencatatan_resmi'],
     'agenda': ['timestamp', 'id_tiket', 'tanggal', 'waktu', 'agenda', 'tempat', 'penyelenggara_tamu_undangan', 'pic', 'status'],
     'skm': ['timestamp', 'id_tiket', 'unsur', 'nilai', 'kategori'],
     'mediasosial': ['timestamp', 'id_tiket', 'bulan', 'total', 'feed', 'reels', 'jenis', 'keterangan']
@@ -797,8 +800,8 @@ function getHeaders(layanan) {
 // ============================================
 function setupSpreadsheet() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheets = ['BukuTamu', 'LayananInformasi', 'Pengaduan', 'KlinikEkspor', 'JanjiTemu', 'PPID', 'Agenda', 'SKM', 'MediaSosial'];
-  const layananMap = { 'BukuTamu': 'buku', 'LayananInformasi': 'informasi', 'Pengaduan': 'pengaduan', 'KlinikEkspor': 'klinik', 'JanjiTemu': 'janji', 'PPID': 'ppid', 'Agenda': 'agenda', 'SKM': 'skm', 'MediaSosial': 'mediasosial' };
+  const sheets = ['BukuTamu', 'LayananInformasi', 'Pengaduan', 'KlinikEkspor', 'JanjiTemu', 'PPID', 'PendataanAwalCukai', 'Agenda', 'SKM', 'MediaSosial'];
+  const layananMap = { 'BukuTamu': 'buku', 'LayananInformasi': 'informasi', 'Pengaduan': 'pengaduan', 'KlinikEkspor': 'klinik', 'JanjiTemu': 'janji', 'PPID': 'ppid', 'PendataanAwalCukai': 'cukai', 'Agenda': 'agenda', 'SKM': 'skm', 'MediaSosial': 'mediasosial' };
 
   sheets.forEach(function(sheetName) {
     let sheet = ss.getSheetByName(sheetName);
