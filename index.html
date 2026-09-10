@@ -79,6 +79,7 @@
         .service-card p { color:rgba(255,255,255,0.7); font-size:0.85rem; line-height:1.6; position:relative; z-index:1; }
         .service-badge { position:absolute; top:1rem;right:1rem; background:linear-gradient(135deg, var(--service-color) 0%, var(--service-color-dark) 100%); color:white; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; z-index:2; box-shadow:0 4px 15px var(--service-glow); }
         .service-ekspor { --service-color:#14b8a6; --service-color-dark:#0f766e; --service-glow:rgba(20,184,166,0.4); }
+        .service-impor { --service-color:#6366f1; --service-color-dark:#4338ca; --service-glow:rgba(99,102,241,0.4); }
         .service-buku { --service-color:#06b6d4; --service-color-dark:#0891b2; --service-glow:rgba(6,182,212,0.4); }
         .service-informasi { --service-color:#3b82f6; --service-color-dark:#1d4ed8; --service-glow:rgba(59,130,246,0.4); }
         .service-pengaduan { --service-color:#ef4444; --service-color-dark:#dc2626; --service-glow:rgba(239,68,68,0.4); }
@@ -346,6 +347,7 @@
             <div class="section-title"><h3><i class="fas fa-concierge-bell" style="color:var(--gold);"></i> Layanan Frontdesk</h3><p>Pilih layanan sesuai kebutuhan Anda</p></div>
             <div class="services-grid">
                 <div class="service-card service-ekspor" onclick="openExportScreening()"><span class="service-badge">Utama</span><div class="service-icon"><i class="fas fa-ship"></i></div><h3>Layanan Ekspor</h3><p>Screening kesiapan dan ketentuan sebelum mengakses Portal Bea Cukai</p></div>
+                <div class="service-card service-impor" onclick="openImportScreening()"><span class="service-badge">Impor</span><div class="service-icon"><i class="fas fa-boxes-stacked"></i></div><h3>Layanan Impor</h3><p>Screening Impor untuk Dipakai sebelum mengakses Portal Bea Cukai</p></div>
                 <a class="service-card service-informasi" href="fkp/" style="text-decoration:none"><span class="service-badge">FKP 2026</span><div class="service-icon"><i class="fas fa-comments" aria-hidden="true"></i></div><h3>Forum Konsultasi Publik</h3><p>Sampaikan pengalaman, kebutuhan, kendala, dan saran perbaikan pelayanan. Pengisian 3–5 menit.</p></a>
                 <div class="service-card service-buku" onclick="openModal('buku')"><span class="service-badge">Registrasi</span><div class="service-icon"><i class="fas fa-book"></i></div><h3>Buku Tamu</h3><p>Registrasi kunjungan dan pertemuan umum di Kantor Bea Cukai Pangkalpinang</p></div>
                 <div class="service-card service-informasi" onclick="openModal('informasi')"><span class="service-badge">Populer</span><div class="service-icon"><i class="fas fa-info-circle"></i></div><h3>Layanan Informasi</h3><p>Konsultasi umum Bea Cukai, tanya jawab proses kepabeanan, dan informasi tarif</p></div>
@@ -461,6 +463,84 @@
                     <h3 id="exportScreeningTitle"></h3>
                     <p id="exportScreeningMessage"></p>
                     <div class="screening-result-actions" id="exportScreeningActions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SCREENING LAYANAN IMPOR -->
+    <div class="modal-overlay" id="modal-impor">
+        <div class="modal">
+            <div class="modal-header" style="--modal-color:#6366f1;--modal-color-dark:#4338ca;--modal-glow:rgba(99,102,241,0.2);">
+                <div class="modal-title"><i class="fas fa-boxes-stacked"></i><div><h2>Screening Layanan Impor</h2><small>Pemeriksaan awal Impor untuk Dipakai</small></div></div>
+                <button class="modal-close" onclick="closeModal('impor')" aria-label="Tutup screening"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="screening-intro" style="border-color:rgba(99,102,241,0.3);background:rgba(99,102,241,0.1);">
+                    Jawab pertanyaan berikut berdasarkan kondisi importasi Anda. Screening ini mengacu pada
+                    <a href="https://www.beacukai.go.id/impor-untuk-dipakai" target="_blank" rel="noopener noreferrer" style="color:#a5b4fc;">Impor untuk Dipakai DJBC</a>
+                    dan merupakan panduan awal, bukan penetapan resmi kepabeanan.
+                </div>
+                <form id="form-screening-impor" onsubmit="submitImportScreening(event)">
+                    <fieldset class="screening-question">
+                        <legend>1. Apakah barang dimasukkan ke Daerah Pabean untuk dipakai, dimiliki, atau dikuasai oleh orang yang berdomisili di Indonesia?</legend>
+                        <div class="screening-options">
+                            <label class="screening-option"><input type="radio" name="import_activity" value="yes" required> Ya, sesuai tujuan Impor untuk Dipakai</label>
+                            <label class="screening-option"><input type="radio" name="import_activity" value="no"> Tidak atau belum yakin</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="screening-question">
+                        <legend>2. Apakah barang termasuk kategori yang tata cara pengeluarannya diatur tersendiri?</legend>
+                        <div class="screening-options">
+                            <label class="screening-option"><input type="radio" name="import_exception" value="none" required> Tidak termasuk kategori khusus</label>
+                            <label class="screening-option"><input type="radio" name="import_exception" value="special"> Ya: barang pindahan; barang penumpang, awak, atau pelintas batas; barang kiriman non-PIB; rush handling; bantuan bencana; atau kategori khusus lainnya</label>
+                            <label class="screening-option"><input type="radio" name="import_exception" value="unsure"> Belum yakin</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="screening-question">
+                        <legend>3. Apakah PIB dan dokumen pelengkap sudah dapat disiapkan?</legend>
+                        <div class="screening-options">
+                            <label class="screening-option"><input type="radio" name="import_documents" value="yes" required> Ya, termasuk invoice, packing list, B/L atau AWB, identifikasi barang, dan dokumen persyaratan impor</label>
+                            <label class="screening-option"><input type="radio" name="import_documents" value="no"> Belum lengkap atau belum yakin</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="screening-question">
+                        <legend>4. Bagaimana status ketentuan larangan dan/atau pembatasan (lartas) barang?</legend>
+                        <div class="screening-options">
+                            <label class="screening-option"><input type="radio" name="import_lartas" value="ready" required> Barang bukan lartas atau seluruh ketentuan lartas sudah dipenuhi dan siap diberitahukan dalam PIB</label>
+                            <label class="screening-option"><input type="radio" name="import_lartas" value="not_ready"> Belum dipenuhi atau belum diperiksa</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="screening-question">
+                        <legend>5. Apakah Anda siap melakukan self-assessment pungutan impor?</legend>
+                        <div class="screening-options">
+                            <label class="screening-option"><input type="radio" name="import_payment" value="yes" required> Ya, siap menghitung dan menyelesaikan Bea Masuk, Cukai, dan/atau PDRI berdasarkan PIB</label>
+                            <label class="screening-option"><input type="radio" name="import_payment" value="no"> Belum atau memerlukan pendampingan</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="screening-question">
+                        <legend>6. Apakah persyaratan formal pendaftaran PIB sudah siap?</legend>
+                        <select class="form-select" name="import_formal" required>
+                            <option value="">Pilih kondisi</option>
+                            <option value="ready">Pungutan/jaminan dan lartas siap; barang telah ditimbun serta memiliki inward manifest</option>
+                            <option value="exception">Saya menggunakan pengecualian yang berlaku bagi AEO, MITA Kepabeanan, atau PIB Berkala</option>
+                            <option value="not_ready">Belum siap atau belum yakin</option>
+                        </select>
+                        <p class="screening-note">Pemeriksaan dan penjaluran impor ditetapkan secara selektif berdasarkan manajemen risiko.</p>
+                    </fieldset>
+
+                    <button type="submit" class="btn-submit" style="--modal-color:#6366f1;--modal-color-dark:#4338ca;--modal-glow:rgba(99,102,241,0.25);"><i class="fas fa-clipboard-check"></i> Lihat Hasil Screening</button>
+                </form>
+
+                <div class="screening-result" id="importScreeningResult" role="status" aria-live="polite">
+                    <h3 id="importScreeningTitle"></h3>
+                    <p id="importScreeningMessage"></p>
+                    <div class="screening-result-actions" id="importScreeningActions"></div>
                 </div>
             </div>
         </div>
@@ -1443,6 +1523,8 @@
     const KLINIK_EKSPOR_URL = 'https://webbcpapin.github.io/FrontDesk/?layanan=klinik-ekspor';
     const PORTAL_EKSPOR_URL = 'https://portal.beacukai.go.id/portal/login';
     const TATA_LAKSANA_EKSPOR_URL = 'https://www.beacukai.go.id/tata-laksana-ekspor';
+    const PORTAL_IMPOR_URL = 'https://portal.beacukai.go.id/portal/login';
+    const IMPOR_UNTUK_DIPAKAI_URL = 'https://www.beacukai.go.id/impor-untuk-dipakai';
     const ADMIN_PIN = 'bcadmin2026';
     let isAdminLoggedIn = false;
     let currentTicketNumber = '';
@@ -2872,6 +2954,8 @@
         const requestedService = new URLSearchParams(window.location.search).get('layanan');
         if (requestedService === 'ekspor') {
             openModal('ekspor');
+        } else if (requestedService === 'impor') {
+            openModal('impor');
         } else if (requestedService === 'klinik-ekspor') {
             openModal('klinik');
         }
@@ -2936,6 +3020,68 @@
         }
         if (showClinic) {
             links += '<button class="screening-action" type="button" onclick="closeModal(\'ekspor\');openKlinikEkspor()"><i class="fas fa-hand-holding-usd"></i> Klinik Ekspor</button>';
+        }
+        return links;
+    }
+
+    function openImportScreening() {
+        const directUrl = new URL(window.location.href);
+        directUrl.searchParams.set('layanan', 'impor');
+        window.history.pushState({ layanan: 'impor' }, '', directUrl);
+        openModal('impor');
+    }
+
+    function submitImportScreening(event) {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const importActivity = data.get('import_activity');
+        const importException = data.get('import_exception');
+        const importDocuments = data.get('import_documents');
+        const importLartas = data.get('import_lartas');
+        const importPayment = data.get('import_payment');
+        const importFormal = data.get('import_formal');
+        const result = document.getElementById('importScreeningResult');
+        const title = document.getElementById('importScreeningTitle');
+        const message = document.getElementById('importScreeningMessage');
+        const actions = document.getElementById('importScreeningActions');
+
+        result.className = 'screening-result active';
+        actions.innerHTML = '';
+
+        if (importActivity !== 'yes') {
+            result.classList.add('info');
+            title.textContent = 'Perlu memastikan jenis importasi';
+            message.textContent = 'Alur ini ditujukan untuk barang yang dimasukkan ke Daerah Pabean untuk dipakai, dimiliki, atau dikuasai oleh orang yang berdomisili di Indonesia. Pastikan jenis layanan yang sesuai sebelum menggunakan Portal Bea Cukai.';
+            actions.innerHTML = importScreeningLinks(false, true);
+        } else if (importException !== 'none') {
+            result.classList.add('info');
+            title.textContent = importException === 'unsure' ? 'Perlu konfirmasi kategori barang' : 'Gunakan tata cara impor yang sesuai';
+            message.textContent = importException === 'unsure'
+                ? 'Pastikan barang tidak termasuk kategori yang diatur tersendiri, seperti barang pindahan, barang penumpang, barang kiriman non-PIB, rush handling, bantuan bencana, atau kategori khusus lainnya.'
+                : 'Berdasarkan jawaban Anda, barang berpotensi menggunakan tata cara pengeluaran tersendiri dan bukan alur PIB Impor untuk Dipakai pada screening ini.';
+            actions.innerHTML = importScreeningLinks(false, true);
+        } else if (importDocuments !== 'yes' || importLartas !== 'ready' || importPayment !== 'yes' || importFormal === 'not_ready') {
+            result.classList.add('review');
+            title.textContent = 'Lengkapi persiapan impor';
+            message.textContent = 'Sebelum masuk ke Portal Bea Cukai, lengkapi PIB dan dokumen pelengkap, pastikan ketentuan lartas terpenuhi, siapkan perhitungan serta penyelesaian pungutan impor, dan penuhi persyaratan formal pendaftaran PIB.';
+            actions.innerHTML = importScreeningLinks(false, true);
+        } else {
+            result.classList.add('ready');
+            title.textContent = 'Siap melanjutkan ke Portal Bea Cukai';
+            message.textContent = 'Jawaban Anda menunjukkan kesiapan awal untuk mengajukan PIB Impor untuk Dipakai. Lanjutkan ke Portal Bea Cukai dan ikuti penjaluran serta pemeriksaan yang ditetapkan berdasarkan manajemen risiko.';
+            actions.innerHTML = importScreeningLinks(true, false);
+        }
+
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function importScreeningLinks(showPortal, showConsultation) {
+        let links = '<a class="screening-action" href="' + IMPOR_UNTUK_DIPAKAI_URL + '" target="_blank" rel="noopener noreferrer"><i class="fas fa-book-open"></i> Ketentuan Resmi</a>';
+        if (showPortal) {
+            links = '<a class="screening-action primary" href="' + PORTAL_IMPOR_URL + '" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i> Buka Portal Bea Cukai</a>' + links;
+        }
+        if (showConsultation) {
+            links += '<button class="screening-action" type="button" onclick="closeModal(\'impor\');openModal(\'informasi\')"><i class="fas fa-circle-info"></i> Layanan Informasi</button>';
         }
         return links;
     }
@@ -3016,9 +3162,9 @@
     function closeModal(type) {
         document.getElementById('modal-' + type).classList.remove('active');
         document.body.style.overflow = 'auto';
-        if (type === 'klinik' || type === 'ekspor') {
+        if (type === 'klinik' || type === 'ekspor' || type === 'impor') {
             const currentUrl = new URL(window.location.href);
-            const expectedService = type === 'klinik' ? 'klinik-ekspor' : 'ekspor';
+            const expectedService = type === 'klinik' ? 'klinik-ekspor' : type;
             if (currentUrl.searchParams.get('layanan') === expectedService) {
                 currentUrl.searchParams.delete('layanan');
                 window.history.replaceState({}, '', currentUrl);
@@ -3030,15 +3176,23 @@
         const requestedService = new URLSearchParams(window.location.search).get('layanan');
         const klinikModal = document.getElementById('modal-klinik');
         const eksporModal = document.getElementById('modal-ekspor');
+        const imporModal = document.getElementById('modal-impor');
         if (requestedService === 'ekspor') {
             openModal('ekspor');
             if (klinikModal) klinikModal.classList.remove('active');
+            if (imporModal) imporModal.classList.remove('active');
+        } else if (requestedService === 'impor') {
+            openModal('impor');
+            if (klinikModal) klinikModal.classList.remove('active');
+            if (eksporModal) eksporModal.classList.remove('active');
         } else if (requestedService === 'klinik-ekspor') {
             openModal('klinik');
             if (eksporModal) eksporModal.classList.remove('active');
+            if (imporModal) imporModal.classList.remove('active');
         } else {
             if (klinikModal) klinikModal.classList.remove('active');
             if (eksporModal) eksporModal.classList.remove('active');
+            if (imporModal) imporModal.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
     });

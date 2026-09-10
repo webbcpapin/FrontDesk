@@ -221,6 +221,14 @@ Link langsung screening:
 https://webbcpapin.github.io/FrontDesk/?layanan=ekspor
 ```
 
+### H. Screening Layanan Impor
+Layanan Impor berada pada urutan kedua setelah Layanan Ekspor. Pengguna menjalani screening awal berdasarkan ketentuan Impor untuk Dipakai DJBC sebelum tombol menuju Portal Bea Cukai ditampilkan.
+
+Link langsung screening:
+```
+https://webbcpapin.github.io/FrontDesk/?layanan=impor
+```
+
 ---
 
 ## 👥 Panduan Penggunaan
