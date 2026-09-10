@@ -78,6 +78,7 @@
         .service-card h3 { font-size:1.25rem; color:var(--white); margin-bottom:0.5rem; font-weight:700; position:relative; z-index:1; }
         .service-card p { color:rgba(255,255,255,0.7); font-size:0.85rem; line-height:1.6; position:relative; z-index:1; }
         .service-badge { position:absolute; top:1rem;right:1rem; background:linear-gradient(135deg, var(--service-color) 0%, var(--service-color-dark) 100%); color:white; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; z-index:2; box-shadow:0 4px 15px var(--service-glow); }
+        .service-ekspor { --service-color:#14b8a6; --service-color-dark:#0f766e; --service-glow:rgba(20,184,166,0.4); }
         .service-buku { --service-color:#06b6d4; --service-color-dark:#0891b2; --service-glow:rgba(6,182,212,0.4); }
         .service-informasi { --service-color:#3b82f6; --service-color-dark:#1d4ed8; --service-glow:rgba(59,130,246,0.4); }
         .service-pengaduan { --service-color:#ef4444; --service-color-dark:#dc2626; --service-glow:rgba(239,68,68,0.4); }
@@ -149,6 +150,25 @@
         .btn-submit { width:100%; padding:1rem; background:linear-gradient(135deg, var(--modal-color) 0%, var(--modal-color-dark) 100%); color:white; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:all 0.3s; display:flex; align-items:center; justify-content:center; gap:0.5rem; box-shadow:0 4px 15px var(--modal-glow); }
         .btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 25px var(--modal-glow); }
         .btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+        .screening-intro { margin-bottom:1.25rem; padding:1rem; border:1px solid rgba(20,184,166,0.28); border-radius:14px; background:rgba(20,184,166,0.09); color:rgba(255,255,255,0.8); font-size:0.87rem; line-height:1.65; }
+        .screening-intro a { color:#5eead4; font-weight:700; }
+        .screening-question { margin-bottom:1.1rem; padding:1rem; border:1px solid rgba(255,255,255,0.1); border-radius:14px; background:rgba(255,255,255,0.035); }
+        .screening-question legend { padding:0 0.35rem; color:var(--white); font-size:0.9rem; font-weight:700; line-height:1.5; }
+        .screening-options { display:grid; gap:0.55rem; margin-top:0.65rem; }
+        .screening-option { display:flex; align-items:flex-start; gap:0.65rem; padding:0.7rem 0.8rem; border:1px solid rgba(255,255,255,0.09); border-radius:10px; color:rgba(255,255,255,0.78); font-size:0.84rem; line-height:1.45; cursor:pointer; transition:all 0.2s; }
+        .screening-option:hover { border-color:rgba(20,184,166,0.55); background:rgba(20,184,166,0.08); }
+        .screening-option input { margin-top:0.2rem; accent-color:#14b8a6; }
+        .screening-note { margin-top:0.65rem; color:rgba(255,255,255,0.58); font-size:0.78rem; line-height:1.5; }
+        .screening-result { display:none; margin-top:1.25rem; padding:1.25rem; border-radius:16px; border:1px solid rgba(255,255,255,0.14); line-height:1.6; }
+        .screening-result.active { display:block; animation:fadeIn 0.3s ease; }
+        .screening-result.ready { background:rgba(16,185,129,0.12); border-color:rgba(16,185,129,0.45); }
+        .screening-result.review { background:rgba(245,158,11,0.12); border-color:rgba(245,158,11,0.45); }
+        .screening-result.info { background:rgba(59,130,246,0.12); border-color:rgba(59,130,246,0.45); }
+        .screening-result h3 { margin-bottom:0.45rem; font-size:1.08rem; }
+        .screening-result p { color:rgba(255,255,255,0.78); font-size:0.86rem; }
+        .screening-result-actions { display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem; }
+        .screening-action { display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; min-height:44px; padding:0.75rem 1rem; border:1px solid rgba(255,255,255,0.2); border-radius:10px; color:white; background:rgba(255,255,255,0.08); text-decoration:none; font-size:0.84rem; font-weight:700; cursor:pointer; }
+        .screening-action.primary { background:linear-gradient(135deg,#14b8a6 0%,#0f766e 100%); border-color:#14b8a6; }
         .spinner { width:20px;height:20px; border:3px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:white; animation:spin 1s linear infinite; }
         @keyframes spin { to{transform:rotate(360deg);} }
         .dashboard-overlay { display:none; position:fixed; top:0;left:0; width:100%;height:100%; background:#0f172a; z-index:3000; overflow-y:auto; }
@@ -325,6 +345,7 @@
         <section class="services-section">
             <div class="section-title"><h3><i class="fas fa-concierge-bell" style="color:var(--gold);"></i> Layanan Frontdesk</h3><p>Pilih layanan sesuai kebutuhan Anda</p></div>
             <div class="services-grid">
+                <div class="service-card service-ekspor" onclick="openExportScreening()"><span class="service-badge">Utama</span><div class="service-icon"><i class="fas fa-ship"></i></div><h3>Layanan Ekspor</h3><p>Screening kesiapan dan ketentuan sebelum mengakses Portal Bea Cukai</p></div>
                 <a class="service-card service-informasi" href="fkp/" style="text-decoration:none"><span class="service-badge">FKP 2026</span><div class="service-icon"><i class="fas fa-comments" aria-hidden="true"></i></div><h3>Forum Konsultasi Publik</h3><p>Sampaikan pengalaman, kebutuhan, kendala, dan saran perbaikan pelayanan. Pengisian 3–5 menit.</p></a>
                 <div class="service-card service-buku" onclick="openModal('buku')"><span class="service-badge">Registrasi</span><div class="service-icon"><i class="fas fa-book"></i></div><h3>Buku Tamu</h3><p>Registrasi kunjungan dan pertemuan umum di Kantor Bea Cukai Pangkalpinang</p></div>
                 <div class="service-card service-informasi" onclick="openModal('informasi')"><span class="service-badge">Populer</span><div class="service-icon"><i class="fas fa-info-circle"></i></div><h3>Layanan Informasi</h3><p>Konsultasi umum Bea Cukai, tanya jawab proses kepabeanan, dan informasi tarif</p></div>
@@ -370,6 +391,79 @@
             <p> 2026 <span class="gold">Bea Cukai Pangkalpinang</span> | Kementerian Keuangan RI</p>
             <p style="margin-top:0.5rem;font-size:0.75rem;">Jalan Yos Sudarso No. 177, Pangkalpinang 33115 | Telp: (0717) 421986</p>
         </footer>
+    </div>
+
+    <!-- MODAL SCREENING LAYANAN EKSPOR -->
+    <div class="modal-overlay" id="modal-ekspor">
+        <div class="modal">
+            <div class="modal-header" style="--modal-color:#14b8a6;--modal-color-dark:#0f766e;--modal-glow:rgba(20,184,166,0.2);">
+                <div class="modal-title"><i class="fas fa-ship"></i><div><h2>Screening Layanan Ekspor</h2><small>Pemeriksaan awal sebelum menuju Portal Bea Cukai</small></div></div>
+                <button class="modal-close" onclick="closeModal('ekspor')" aria-label="Tutup screening"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="screening-intro">
+                    Jawab pertanyaan berikut berdasarkan kondisi pengiriman Anda. Screening ini mengacu pada
+                    <a href="https://www.beacukai.go.id/tata-laksana-ekspor" target="_blank" rel="noopener noreferrer">Tata Laksana Ekspor DJBC</a>
+                    dan merupakan panduan awal, bukan penetapan resmi kepabeanan.
+                </div>
+                <form id="form-screening-ekspor" onsubmit="submitExportScreening(event)">
+                    <fieldset class="screening-question">
+                        <legend>1. Apakah barang akan dikeluarkan dari Daerah Pabean Indonesia?</legend>
+                        <div class="screening-options">
+                            <label class="screening-option"><input type="radio" name="export_activity" value="yes" required> Ya, barang akan dikirim ke luar Daerah Pabean</label>
+                            <label class="screening-option"><input type="radio" name="export_activity" value="no"> Tidak atau belum yakin</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="screening-question">
+                        <legend>2. Apakah barang termasuk pengecualian kewajiban pemberitahuan PEB berikut?</legend>
+                        <div class="screening-options">
+                            <label class="screening-option"><input type="radio" name="peb_exception" value="none" required> Tidak termasuk salah satu pengecualian</label>
+                            <label class="screening-option"><input type="radio" name="peb_exception" value="passenger"> Barang pribadi penumpang</label>
+                            <label class="screening-option"><input type="radio" name="peb_exception" value="crew"> Barang awak sarana pengangkut</label>
+                            <label class="screening-option"><input type="radio" name="peb_exception" value="border"> Barang pelintas batas</label>
+                            <label class="screening-option"><input type="radio" name="peb_exception" value="postal"> Barang kiriman melalui pos dengan berat tidak melebihi 100 kg</label>
+                            <label class="screening-option"><input type="radio" name="peb_exception" value="unsure"> Belum yakin</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="screening-question">
+                        <legend>3. Apakah barang sudah memenuhi persyaratan dan dokumen pelengkap yang diperlukan?</legend>
+                        <div class="screening-options">
+                            <label class="screening-option"><input type="radio" name="document_ready" value="yes" required> Ya, barang dan dokumen pelengkap sudah siap</label>
+                            <label class="screening-option"><input type="radio" name="document_ready" value="no"> Belum lengkap atau belum yakin</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="screening-question">
+                        <legend>4. Apakah Anda siap menyampaikan PEB dengan jenis, jumlah, dan dokumen yang benar?</legend>
+                        <div class="screening-options">
+                            <label class="screening-option"><input type="radio" name="declaration_ready" value="yes" required> Ya, saya memahami dan siap menyampaikan data yang benar</label>
+                            <label class="screening-option"><input type="radio" name="declaration_ready" value="no"> Belum atau memerlukan pendampingan</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="screening-question">
+                        <legend>5. Apakah barang masuk salah satu kondisi yang dapat diperiksa fisik secara selektif?</legend>
+                        <select class="form-select" name="physical_risk" required>
+                            <option value="">Pilih kondisi</option>
+                            <option value="none">Tidak termasuk kondisi khusus di bawah</option>
+                            <option value="special">Ya: akan diimpor kembali, diekspor kembali, mendapat fasilitas, atau dikenakan Bea Keluar</option>
+                            <option value="unsure">Belum yakin</option>
+                        </select>
+                        <p class="screening-note">Pemeriksaan fisik juga dapat dilakukan berdasarkan informasi perpajakan atau hasil analisis unit pengawasan.</p>
+                    </fieldset>
+
+                    <button type="submit" class="btn-submit" style="--modal-color:#14b8a6;--modal-color-dark:#0f766e;--modal-glow:rgba(20,184,166,0.25);"><i class="fas fa-clipboard-check"></i> Lihat Hasil Screening</button>
+                </form>
+
+                <div class="screening-result" id="exportScreeningResult" role="status" aria-live="polite">
+                    <h3 id="exportScreeningTitle"></h3>
+                    <p id="exportScreeningMessage"></p>
+                    <div class="screening-result-actions" id="exportScreeningActions"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- CEK TIKET MODAL -->
@@ -1347,6 +1441,8 @@
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbx4jwleT70GEw0VWCRCW2QkPw-bRH4qkkwwjcbjWpsfqLBs8Shbw1tm62rip3M25fOK/exec';
     const SKM_URL = 'https://forms.office.com/Pages/ResponsePage.aspx?id=ZrNv7SKD80aRXsTQN6RUqUHW-Z1OdaZHlGb3jAd0e1VUOVo1S1E3R0VVSTZJU0ZYSEk5TUdJMUJHMSQlQCNjPTEkJUAjdD1n';
     const KLINIK_EKSPOR_URL = 'https://webbcpapin.github.io/FrontDesk/?layanan=klinik-ekspor';
+    const PORTAL_EKSPOR_URL = 'https://portal.beacukai.go.id/portal/login';
+    const TATA_LAKSANA_EKSPOR_URL = 'https://www.beacukai.go.id/tata-laksana-ekspor';
     const ADMIN_PIN = 'bcadmin2026';
     let isAdminLoggedIn = false;
     let currentTicketNumber = '';
@@ -2774,9 +2870,74 @@
 
     function openRequestedService() {
         const requestedService = new URLSearchParams(window.location.search).get('layanan');
-        if (requestedService === 'klinik-ekspor') {
+        if (requestedService === 'ekspor') {
+            openModal('ekspor');
+        } else if (requestedService === 'klinik-ekspor') {
             openModal('klinik');
         }
+    }
+
+    function openExportScreening() {
+        const directUrl = new URL(window.location.href);
+        directUrl.searchParams.set('layanan', 'ekspor');
+        window.history.pushState({ layanan: 'ekspor' }, '', directUrl);
+        openModal('ekspor');
+    }
+
+    function submitExportScreening(event) {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const exportActivity = data.get('export_activity');
+        const pebException = data.get('peb_exception');
+        const documentReady = data.get('document_ready');
+        const declarationReady = data.get('declaration_ready');
+        const physicalRisk = data.get('physical_risk');
+        const result = document.getElementById('exportScreeningResult');
+        const title = document.getElementById('exportScreeningTitle');
+        const message = document.getElementById('exportScreeningMessage');
+        const actions = document.getElementById('exportScreeningActions');
+
+        result.className = 'screening-result active';
+        actions.innerHTML = '';
+
+        if (exportActivity !== 'yes') {
+            result.classList.add('info');
+            title.textContent = 'Perlu memastikan jenis kegiatan';
+            message.textContent = 'Layanan ekspor ditujukan untuk kegiatan mengeluarkan barang dari Daerah Pabean. Pelajari ketentuan resmi atau konsultasikan kebutuhan Anda sebelum menggunakan Portal Bea Cukai.';
+            actions.innerHTML = exportScreeningLinks(false, true);
+        } else if (pebException !== 'none') {
+            result.classList.add('info');
+            title.textContent = pebException === 'unsure' ? 'Perlu konfirmasi pengecualian PEB' : 'Barang berpotensi dikecualikan dari PEB';
+            message.textContent = pebException === 'unsure'
+                ? 'Pastikan terlebih dahulu apakah barang termasuk barang pribadi penumpang, barang awak sarana pengangkut, barang pelintas batas, atau kiriman pos sampai dengan 100 kg.'
+                : 'Berdasarkan jawaban Anda, barang termasuk kategori yang disebut sebagai pengecualian kewajiban memberitahukan PEB. Konfirmasikan penerapannya pada ketentuan resmi atau petugas Bea Cukai.';
+            actions.innerHTML = exportScreeningLinks(false, true);
+        } else if (documentReady !== 'yes' || declarationReady !== 'yes') {
+            result.classList.add('review');
+            title.textContent = 'Lengkapi persiapan ekspor';
+            message.textContent = 'Sebelum masuk ke Portal Bea Cukai, pastikan barang memenuhi persyaratan, dokumen pelengkap telah siap, dan data PEB mengenai jenis serta jumlah barang dapat disampaikan dengan benar.';
+            actions.innerHTML = exportScreeningLinks(false, true);
+        } else {
+            result.classList.add('ready');
+            title.textContent = 'Siap melanjutkan ke Portal Bea Cukai';
+            message.textContent = physicalRisk === 'none'
+                ? 'Jawaban Anda menunjukkan kesiapan awal untuk menyampaikan PEB. Lanjutkan ke Portal Bea Cukai dan ikuti proses penelitian dokumen serta ketentuan yang berlaku.'
+                : 'Jawaban Anda menunjukkan kesiapan awal untuk menyampaikan PEB. Perhatikan bahwa barang dapat menjalani pemeriksaan fisik secara selektif berdasarkan manajemen risiko.';
+            actions.innerHTML = exportScreeningLinks(true, false);
+        }
+
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function exportScreeningLinks(showPortal, showClinic) {
+        let links = '<a class="screening-action" href="' + TATA_LAKSANA_EKSPOR_URL + '" target="_blank" rel="noopener noreferrer"><i class="fas fa-book-open"></i> Ketentuan Resmi</a>';
+        if (showPortal) {
+            links = '<a class="screening-action primary" href="' + PORTAL_EKSPOR_URL + '" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i> Buka Portal Bea Cukai</a>' + links;
+        }
+        if (showClinic) {
+            links += '<button class="screening-action" type="button" onclick="closeModal(\'ekspor\');openKlinikEkspor()"><i class="fas fa-hand-holding-usd"></i> Klinik Ekspor</button>';
+        }
+        return links;
     }
 
     function openKlinikEkspor() {
@@ -2855,9 +3016,10 @@
     function closeModal(type) {
         document.getElementById('modal-' + type).classList.remove('active');
         document.body.style.overflow = 'auto';
-        if (type === 'klinik') {
+        if (type === 'klinik' || type === 'ekspor') {
             const currentUrl = new URL(window.location.href);
-            if (currentUrl.searchParams.get('layanan') === 'klinik-ekspor') {
+            const expectedService = type === 'klinik' ? 'klinik-ekspor' : 'ekspor';
+            if (currentUrl.searchParams.get('layanan') === expectedService) {
                 currentUrl.searchParams.delete('layanan');
                 window.history.replaceState({}, '', currentUrl);
             }
@@ -2867,10 +3029,16 @@
     window.addEventListener('popstate', function() {
         const requestedService = new URLSearchParams(window.location.search).get('layanan');
         const klinikModal = document.getElementById('modal-klinik');
-        if (requestedService === 'klinik-ekspor') {
+        const eksporModal = document.getElementById('modal-ekspor');
+        if (requestedService === 'ekspor') {
+            openModal('ekspor');
+            if (klinikModal) klinikModal.classList.remove('active');
+        } else if (requestedService === 'klinik-ekspor') {
             openModal('klinik');
-        } else if (klinikModal) {
-            klinikModal.classList.remove('active');
+            if (eksporModal) eksporModal.classList.remove('active');
+        } else {
+            if (klinikModal) klinikModal.classList.remove('active');
+            if (eksporModal) eksporModal.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
     });

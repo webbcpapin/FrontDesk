@@ -213,6 +213,14 @@ https://webbcpapin.github.io/FrontDesk/?layanan=klinik-ekspor
 - QR Code dapat diunduh sebagai PNG melalui tombol **Unduh QR Code**
 - Link dapat disalin melalui tombol **Salin Link**
 
+### G. Screening Layanan Ekspor
+Layanan Ekspor berada pada urutan pertama di halaman utama. Pengguna menjalani screening awal berdasarkan Tata Laksana Ekspor DJBC sebelum tombol menuju Portal Bea Cukai ditampilkan.
+
+Link langsung screening:
+```
+https://webbcpapin.github.io/FrontDesk/?layanan=ekspor
+```
+
 ---
 
 ## 👥 Panduan Penggunaan
