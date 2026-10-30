@@ -229,9 +229,33 @@
         .footer { background:rgba(15,23,42,0.8); border-top:1px solid var(--glass-border); padding:2rem; text-align:center; margin-top:3rem; backdrop-filter:blur(10px); }
         .footer p { color:rgba(255,255,255,0.6); font-size:0.85rem; }
         .footer .gold { color:var(--gold); font-weight:600; }
+        .reports-section { max-width:1400px; margin:0 auto; padding:2rem; scroll-margin-top:100px; }
+        .reports-heading { display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; flex-wrap:wrap; margin-bottom:1.25rem; }
+        .reports-heading h3 { font-size:1.5rem; margin-bottom:0.35rem; }
+        .reports-heading p { color:rgba(255,255,255,0.68); font-size:0.9rem; }
+        .reports-toolbar { display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem; }
+        .reports-search,.reports-filter { min-height:44px; padding:0.7rem 0.9rem; border:1px solid rgba(255,255,255,0.18); border-radius:10px; background:rgba(255,255,255,0.07); color:white; font:inherit; }
+        .reports-search { flex:1; min-width:220px; }
+        .reports-filter option { background:#1e293b; color:white; }
+        .reports-search:focus,.reports-filter:focus { outline:2px solid var(--gold); outline-offset:2px; }
+        .reports-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; }
+        .report-card { padding:1.25rem; background:rgba(255,255,255,0.07); border:1px solid var(--glass-border); border-radius:16px; backdrop-filter:blur(10px); }
+        .report-card[hidden] { display:none; }
+        .report-type { display:inline-flex; align-items:center; gap:0.4rem; padding:0.35rem 0.65rem; border-radius:999px; background:rgba(212,175,55,0.15); color:var(--gold); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
+        .report-card h4 { margin:0.8rem 0 0.35rem; font-size:1.05rem; line-height:1.45; }
+        .report-period { color:rgba(255,255,255,0.64); font-size:0.84rem; margin-bottom:1rem; }
+        .report-links { display:grid; gap:0.55rem; }
+        .report-link { display:flex; align-items:center; justify-content:space-between; gap:0.75rem; padding:0.7rem 0.8rem; color:white; text-decoration:none; background:rgba(15,23,42,0.55); border:1px solid rgba(255,255,255,0.1); border-radius:10px; font-size:0.84rem; transition:all 0.2s; }
+        .report-link:hover { border-color:var(--gold); transform:translateY(-1px); }
+        .report-link span { display:flex; align-items:center; gap:0.55rem; }
+        .report-link i { color:var(--gold); }
+        .reports-empty { display:none; padding:1.25rem; color:rgba(255,255,255,0.7); text-align:center; }
+        .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
         @media (max-width:768px) {
             .hero h2 { font-size:1.75rem; } .services-grid { grid-template-columns:1fr; } .form-row { grid-template-columns:1fr; }
             .header { padding:0.75rem 1rem; } .brand-text h1 { font-size:1rem; } .dashboard-grid { grid-template-columns:1fr; }
+            .header-actions { gap:0.4rem; } .header-actions .btn-header { padding:0.55rem 0.7rem; font-size:0.72rem; }
+            .header-actions .btn-header i { display:none; } .reports-section { padding:1rem; }
             .hero-stats { gap:1rem; } .dashboard-nav { justify-content:center; } .dashboard-header { flex-direction:column; align-items:stretch; }
             .klinik-qr-section { padding:0 1rem 1rem; }
             .klinik-qr-card { grid-template-columns:1fr; padding:1.5rem; text-align:center; }
@@ -332,6 +356,7 @@
             <div class="brand-text"><h1>BEA CUKAI PANGKALPINANG</h1><p>Sistem Layanan Frontdesk Terintegrasi</p></div>
         </div>
         <div class="header-actions">
+            <button class="btn-header btn-dashboard" type="button" onclick="document.getElementById('laporan-publik').scrollIntoView({behavior:'smooth'})"><i class="fas fa-file-pdf"></i> Laporan Publik</button>
             <button class="btn-header btn-cek-tiket" onclick="openCekTiket()"><i class="fas fa-ticket-alt"></i> Cek Tiket</button>
             <button class="btn-header btn-dashboard public-dashboard-trigger" onclick="openDashboard()"><i class="fas fa-chart-line"></i> Dashboard</button>
             <button class="btn-header btn-admin" onclick="openAdminLogin()"><i class="fas fa-user-shield"></i> Admin</button>
@@ -400,6 +425,49 @@
                 <div id="mainQRCode" style="width:200px;height:200px;margin:0 auto;background:white;border-radius:16px;padding:10px;"><div id="mainQRContainer"></div></div>
                 <p style="color:var(--gold);margin-top:1rem;font-size:0.9rem;"><i class="fas fa-hand-pointer"></i> Klik untuk membuka link survey</p>
             </div>
+        </section>
+        <section class="reports-section" id="laporan-publik" aria-labelledby="reportsTitle">
+            <div class="reports-heading">
+                <div><h3 id="reportsTitle"><i class="fas fa-folder-open" style="color:var(--gold);"></i> Laporan Publik</h3><p>Dokumen laporan layanan informasi, survei kepuasan masyarakat, dan media sosial tahun 2026.</p></div>
+            </div>
+            <div class="reports-toolbar">
+                <label class="sr-only" for="reportSearch">Cari laporan</label>
+                <input class="reports-search" id="reportSearch" type="search" placeholder="Cari judul atau periode laporan..." oninput="filterPublicReports()">
+                <label class="sr-only" for="reportCategory">Filter kategori</label>
+                <select class="reports-filter" id="reportCategory" onchange="filterPublicReports()">
+                    <option value="all">Semua kategori</option>
+                    <option value="informasi">Layanan informasi</option>
+                    <option value="skm">Survei kepuasan masyarakat</option>
+                    <option value="media">Media sosial</option>
+                </select>
+            </div>
+            <div class="reports-grid" id="reportsGrid">
+                <article class="report-card" data-category="skm">
+                    <span class="report-type"><i class="fas fa-star"></i> SKM</span><h4>Lampiran Laporan Survei Kepuasan Masyarakat</h4><p class="report-period">Triwulan III 2026</p>
+                    <div class="report-links"><a class="report-link" href="arsip-laporan/lampiran-skm-triwulan-iii-2026.pdf" target="_blank" rel="noopener"><span><i class="fas fa-file-pdf"></i> Buka lampiran laporan</span><i class="fas fa-arrow-up-right-from-square"></i></a></div>
+                </article>
+                <article class="report-card" data-category="informasi">
+                    <span class="report-type"><i class="fas fa-circle-info"></i> Layanan Informasi</span><h4>Laporan Layanan Informasi</h4><p class="report-period">Juli 2026</p>
+                    <div class="report-links"><a class="report-link" href="arsip-laporan/laporan-layanan-informasi-juli-2026.pdf" target="_blank" rel="noopener"><span><i class="fas fa-file-pdf"></i> Laporan utama</span><i class="fas fa-arrow-up-right-from-square"></i></a><a class="report-link" href="arsip-laporan/lampiran-layanan-informasi-juli-2026.pdf" target="_blank" rel="noopener"><span><i class="fas fa-paperclip"></i> Lampiran laporan</span><i class="fas fa-arrow-up-right-from-square"></i></a></div>
+                </article>
+                <article class="report-card" data-category="informasi">
+                    <span class="report-type"><i class="fas fa-circle-info"></i> Layanan Informasi</span><h4>Laporan Layanan Informasi</h4><p class="report-period">Agustus 2026</p>
+                    <div class="report-links"><a class="report-link" href="arsip-laporan/laporan-layanan-informasi-agustus-2026.pdf" target="_blank" rel="noopener"><span><i class="fas fa-file-pdf"></i> Laporan utama</span><i class="fas fa-arrow-up-right-from-square"></i></a><a class="report-link" href="arsip-laporan/lampiran-layanan-informasi-agustus-2026.pdf" target="_blank" rel="noopener"><span><i class="fas fa-paperclip"></i> Lampiran laporan</span><i class="fas fa-arrow-up-right-from-square"></i></a></div>
+                </article>
+                <article class="report-card" data-category="media">
+                    <span class="report-type"><i class="fas fa-share-nodes"></i> Media Sosial</span><h4>Laporan Pengelolaan Media Sosial Resmi Kantor</h4><p class="report-period">Juli 2026</p>
+                    <div class="report-links"><a class="report-link" href="arsip-laporan/laporan-media-sosial-juli-2026.pdf" target="_blank" rel="noopener"><span><i class="fas fa-file-pdf"></i> Buka laporan</span><i class="fas fa-arrow-up-right-from-square"></i></a></div>
+                </article>
+                <article class="report-card" data-category="media">
+                    <span class="report-type"><i class="fas fa-share-nodes"></i> Media Sosial</span><h4>Laporan Pengelolaan Media Sosial Resmi Kantor</h4><p class="report-period">Agustus 2026</p>
+                    <div class="report-links"><a class="report-link" href="arsip-laporan/laporan-media-sosial-agustus-2026.pdf" target="_blank" rel="noopener"><span><i class="fas fa-file-pdf"></i> Buka laporan</span><i class="fas fa-arrow-up-right-from-square"></i></a></div>
+                </article>
+                <article class="report-card" data-category="media">
+                    <span class="report-type"><i class="fas fa-share-nodes"></i> Media Sosial</span><h4>Laporan Pengelolaan Media Sosial Resmi Kantor</h4><p class="report-period">September 2026</p>
+                    <div class="report-links"><a class="report-link" href="arsip-laporan/laporan-media-sosial-september-2026.pdf" target="_blank" rel="noopener"><span><i class="fas fa-file-pdf"></i> Buka laporan</span><i class="fas fa-arrow-up-right-from-square"></i></a></div>
+                </article>
+            </div>
+            <p class="reports-empty" id="reportsEmpty" role="status">Tidak ada laporan yang cocok dengan pencarian Anda.</p>
         </section>
         <footer class="footer">
             <p> 2026 <span class="gold">Bea Cukai Pangkalpinang</span> | Kementerian Keuangan RI</p>
@@ -1613,6 +1681,20 @@
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Operasi berhasil</span></div>
 
     <script>
+    function filterPublicReports() {
+        var query = (document.getElementById('reportSearch').value || '').trim().toLocaleLowerCase('id');
+        var category = document.getElementById('reportCategory').value;
+        var cards = Array.prototype.slice.call(document.querySelectorAll('#reportsGrid .report-card'));
+        var visibleCount = 0;
+        cards.forEach(function(card) {
+            var matchesQuery = !query || card.textContent.toLocaleLowerCase('id').includes(query);
+            var matchesCategory = category === 'all' || card.getAttribute('data-category') === category;
+            card.hidden = !(matchesQuery && matchesCategory);
+            if (!card.hidden) visibleCount += 1;
+        });
+        document.getElementById('reportsEmpty').style.display = visibleCount ? 'none' : 'block';
+    }
+
     // ============================================
     // CONFIGURATION - GANTI DENGAN URL WEBAPP ANDA
     // ============================================
